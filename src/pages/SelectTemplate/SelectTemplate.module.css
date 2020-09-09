@@ -1,0 +1,36 @@
+.cards__container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.tabs__container {
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: #fff;
+    overflow: hidden;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.tab {
+    flex-grow: 1;
+    list-style: none;
+    font-weight: 300;
+    letter-spacing: 1px;
+    padding: 20px 0;
+    border-right: 1px solid #ccc;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.tab:last-child {
+    border-right: none;
+}
+
+.tab__active {
+    background: #1F2C4F;
+    color: #fff;
+}

@@ -1,0 +1,29 @@
+.container {
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 15px;
+}
+
+.logo {
+    width: 70px;
+    height: 37px;
+}
+
+.header__item {
+    margin-right: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 3px 0;
+    transition: color 0.15s;
+}
+
+.header__item:hover {
+    border-bottom: 1px solid #ccc;
+    color: #8a8a8a;
+}
+
+.create__btn {
+    border-radius: 25px;
+}

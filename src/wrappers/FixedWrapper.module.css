@@ -1,0 +1,18 @@
+.container {
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+.wrapper {
+    box-sizing: border-box;
+}
+
+@media (max-width: 1370px) {
+    .container {
+        margin: 0;
+    }
+
+    .wrapper > div {
+        padding: 0 4vw;
+    }
+}

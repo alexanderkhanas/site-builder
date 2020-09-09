@@ -1,0 +1,98 @@
+
+.button {
+    background: #1F2C4F;
+    color: #fff;
+    padding: 16px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+    flex-grow: 1;
+    font-size: 14px;
+    font-weight: lighter;
+    font-family: "Montserrat", sans-serif;
+    letter-spacing: 1px;
+}
+
+.button:hover {
+    background: #1F2C4F;
+}
+
+.button__round {
+    border-radius: 50%;
+    padding: 13px;
+}
+
+.button__sm {
+    padding: 6px 10px;
+}
+
+.button__md {
+    padding: 9px 15px;
+    font-size: 17px;
+}
+
+.button__lg {
+    padding: 11px 19px;
+    font-size: 20px;
+}
+
+.button__xl {
+    padding: 13px 24px;
+    font-size: 20px;
+}
+
+.icon {
+    font-size: 20px;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.secondary {
+    background: none;
+    color: #000;
+}
+
+.secondary:hover {
+    background: none;
+    color: #8a8a8a;
+}
+
+.disabled {
+    background: #2bbd86a8;
+    cursor: default;
+}
+
+.disabled:hover {
+    background: #2bbd86a8;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+@media (max-width: 450px) {
+    .button {
+        padding: 14px 17px;
+    }
+    .button__sm {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .button__md {
+        padding: 7px 12px;
+        font-size: 14px;
+    }
+
+    .button__lg {
+        padding: 9px 17px;
+        font-size: 18px;
+    }
+
+    .button__xl {
+        padding: 11px 2px;
+        font-size: 18px;
+    }
+}
