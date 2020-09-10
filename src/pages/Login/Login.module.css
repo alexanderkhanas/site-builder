@@ -1,0 +1,72 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    min-height: 500px;
+}
+
+.inner {
+    padding: 50px 60px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    width:100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 600px;
+    border-radius: 15px;
+}
+
+.form__container {
+    min-width: 300px;
+}
+
+.title {
+    margin-bottom: 30px;
+}
+
+.input__container {
+    margin-bottom: 20px;
+}
+
+.icon {
+    margin-right: 8px;
+}
+
+.logo {
+    width: 180px;
+    height: 120px;
+}
+
+.submit__container {
+    display: flex;
+    align-items: center;
+}
+
+.submit__button {
+    margin-right: 30px;
+}
+
+.register__link {
+    font-size: 14px;
+    letter-spacing: normal;
+}
+
+.actions__container {
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.action__title {
+    margin-right: 15px;
+    font-size: 12px;
+}
+
+.social__icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+    border-radius:6px;
+}

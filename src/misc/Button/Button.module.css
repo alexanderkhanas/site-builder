@@ -60,12 +60,12 @@
 }
 
 .disabled {
-    background: #2bbd86a8;
+    background: #51608a;
     cursor: default;
 }
 
 .disabled:hover {
-    background: #2bbd86a8;
+    background: #51608a;
 }
 
 .capitalize {

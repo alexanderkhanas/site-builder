@@ -17,6 +17,8 @@
     font-size: 14px;
     padding: 3px 0;
     transition: color 0.15s;
+    color: #000;
+    text-transform: uppercase;
 }
 
 .header__item:hover {
@@ -26,4 +28,10 @@
 
 .create__btn {
     border-radius: 25px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        display: none;
+    }
 }

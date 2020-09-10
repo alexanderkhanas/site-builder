@@ -1,45 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import s from "./SelectTemplate.module.css";
 import Header from "../../misc/Header/Header";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import TemplateCard from "../../misc/TemplateCard/TemplateCard";
 import FixedWrapper from "../../wrappers/FixedWrapper";
+import {
+  getDirectionsAction,
+  getTemplatesAction,
+} from "../../store/actions/createSiteActions";
+import { connect } from "react-redux";
+import classnames from "classnames";
 
-const SelectTemplate = () => {
+const SelectTemplate = ({
+  getDirections,
+  getTemplates,
+  directions,
+  templates,
+}) => {
+  const [selectedDirection, setSelectedDirection] = useState(
+    templates[0] || {}
+  );
+  const onDirectionSelect = (direction) => {
+    setSelectedDirection(direction);
+  };
+
+  useEffect(() => {
+    const { id } = selectedDirection;
+    if (id && !templates[id]) {
+      getTemplates(id);
+    }
+  }, [directions, selectedDirection]);
+
+  useEffect(() => {
+    getDirections();
+  }, []);
+
+  useEffect(() => {
+    setSelectedDirection(directions[0] || {});
+  }, [directions]);
+
+  console.log("templates ===", templates);
   return (
     <FixedWrapper>
       <div className={s.container}>
-        <Tabs>
-          <TabList className={s.tabs__container}>
-            {["Стоматологія", "СТО", "Лікарі", "IT"].map((item) => (
-              <Tab
-                className={s.tab}
-                selectedClassName={s.tab__active}
-                key={item}
-              >
-                {item}
-              </Tab>
-            ))}
-          </TabList>
-          <TabPanel className={s.cards__container}>
-            {[...Array(4)].map((_, i) => (
-              <TemplateCard key={i} title="title" desc="desc" />
-            ))}
-          </TabPanel>
-          <TabPanel className={s.cards__container}>
-            {[...Array(3)].map((_, i) => (
-              <TemplateCard key={i} title="title" desc="desc" />
-            ))}
-          </TabPanel>
-          <TabPanel className={s.cards__container}>
-            {[...Array(5)].map((_, i) => (
-              <TemplateCard key={i} title="title" desc="desc" />
-            ))}
-          </TabPanel>
-        </Tabs>
+        <div className={s.tabs__container}>
+          {directions.map((direction, i) => (
+            <span
+              className={classnames(s.tab, {
+                [s.tab__active]: selectedDirection.id === direction.id,
+              })}
+              onClick={() => setSelectedDirection(direction)}
+              key={direction.id}
+            >
+              {direction.name}
+            </span>
+          ))}
+        </div>
+        <div className={s.cards__container}>
+          {templates[selectedDirection.id]?.map((template) => (
+            <TemplateCard {...{ template }} key={template.id} />
+          ))}
+        </div>
       </div>
     </FixedWrapper>
   );
 };
 
-export default SelectTemplate;
+const mapStateToProps = (state) => ({
+  directions: state.createSite.directions,
+  templates: state.createSite.templates,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getDirections: () => dispatch(getDirectionsAction()),
+  getTemplates: (id) => dispatch(getTemplatesAction(id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectTemplate);
