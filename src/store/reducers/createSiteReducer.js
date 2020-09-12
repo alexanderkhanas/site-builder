@@ -1,8 +1,13 @@
-import { SET_DIRECTIONS, SET_TEMPLATES } from "../actions/actionTypes";
+import {
+  SET_DIRECTIONS,
+  SET_ELEMENTS,
+  SET_TEMPLATES,
+} from "../actions/actionTypes";
 
 const initialState = {
   directions: [],
   templates: {},
+  sections: [],
 };
 
 export default (state = initialState, action) => {
@@ -19,6 +24,11 @@ export default (state = initialState, action) => {
           ...state.templates,
           [action.directionId]: action.templates,
         },
+      };
+    case SET_ELEMENTS:
+      return {
+        ...state,
+        sections: action.elements,
       };
     default:
       return state;

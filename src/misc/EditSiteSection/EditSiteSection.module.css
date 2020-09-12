@@ -1,0 +1,32 @@
+.overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #40404040;
+    z-index: 10;
+}
+
+
+.container {
+    width: 100%;
+    height: 100%;
+    max-width: 700px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #fff;
+    padding: 40px 50px;
+    overflow: auto;
+    z-index: 11;
+}
+
+.title {
+    margin-bottom: 30px;
+}
+
+.field__container {
+    margin-bottom: 20px;
+}
+

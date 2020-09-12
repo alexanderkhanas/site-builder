@@ -144,6 +144,4 @@ const mapDispatchToProps = (dispatch) => ({
   login: (data, isRemember) => dispatch(loginAction(data, isRemember)),
 });
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(routerHOC)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(routerHOC);

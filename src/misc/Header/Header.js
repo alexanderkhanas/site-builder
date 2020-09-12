@@ -2,8 +2,10 @@ import React from "react";
 import s from "./Header.module.css";
 import Button from "../Button/Button";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-const Header = () => {
+const Header = ({ user }) => {
+  console.log("user ===", user);
   return (
     <div className={s.container}>
       <img
@@ -37,4 +39,8 @@ const Header = () => {
   );
 };
 
-export default Header;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps, null)(Header);

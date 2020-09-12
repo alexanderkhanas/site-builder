@@ -6,17 +6,21 @@ import TemplateCard from "../../misc/TemplateCard/TemplateCard";
 import FixedWrapper from "../../wrappers/FixedWrapper";
 import {
   getDirectionsAction,
+  getSingleTemplateAction,
   getTemplatesAction,
 } from "../../store/actions/createSiteActions";
 import { connect } from "react-redux";
 import classnames from "classnames";
+import { useHistory } from "react-router";
 
 const SelectTemplate = ({
   getDirections,
   getTemplates,
+  getSingleTemplate,
   directions,
   templates,
 }) => {
+  const history = useHistory();
   const [selectedDirection, setSelectedDirection] = useState(
     templates[0] || {}
   );
@@ -57,9 +61,16 @@ const SelectTemplate = ({
           ))}
         </div>
         <div className={s.cards__container}>
-          {templates[selectedDirection.id]?.map((template) => (
-            <TemplateCard {...{ template }} key={template.id} />
-          ))}
+          {templates[selectedDirection.id]?.map((template) => {
+            const { id } = template;
+            return (
+              <TemplateCard
+                onSubmit={() => history.push(`/create-site/${id}`)}
+                {...{ template }}
+                key={id}
+              />
+            );
+          })}
         </div>
       </div>
     </FixedWrapper>

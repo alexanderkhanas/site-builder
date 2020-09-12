@@ -25,7 +25,7 @@ const Input = ({
           [s.error__container]: isError,
         })}
       >
-        <Icon className={`${s.icon} ${iconClass}`} />
+        {!!Icon && <Icon className={`${s.icon} ${iconClass}`} />}
         {!isTextarea ? (
           <input
             {...{ type }}
