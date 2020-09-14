@@ -23,3 +23,17 @@ export const fetchSingleTemplate = (id) => {
 export const postSite = (data) => {
   return _axios.post("/site-create", data);
 };
+
+export const postImage = (image) => {
+  return _axios.post("/upload-img", image);
+};
+
+export const fetchRefreshedText = (templateId, lang, type) => {
+  return _axios.get(
+    `/refresh-text?lang=${lang}&templateId=${templateId}&type=${type}`
+  );
+};
+
+export const fetchSectionVariations = (sectionId) => {
+  return _axios.get(`/category/${sectionId}`);
+};

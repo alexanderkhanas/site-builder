@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import s from "./CreateSite.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper";
 import SiteSection from "../../misc/SiteSection/SiteSection";
@@ -13,10 +13,16 @@ import Button from "../../misc/Button/Button";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Input from "../../misc/Input/Input";
 import InputFile from "../../misc/InputFile/InputFile";
+import { uploadImageAction } from "../../store/actions/userActions";
 
-const CreateSite = ({ getSingleTemplate, sections, createSite }) => {
+const CreateSite = ({
+  getSingleTemplate,
+  sections,
+  createSite,
+  uploadImage,
+}) => {
   const { id } = useParams();
-  const [sectionsValues, setSectionsValues] = useState({});
+  const [sectionsValues, setSectionsValues] = useState([]);
   const [activeSections, setActiveSections] = useState([]);
   const [editingState, setEditingState] = useState({
     section: {},
@@ -34,7 +40,7 @@ const CreateSite = ({ getSingleTemplate, sections, createSite }) => {
     setBaseData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const onLogoLoad = ([image]) => {
+  const onLogoLoad = async ([image]) => {
     setBaseData((prev) => ({ ...prev, logo: image }));
   };
 
@@ -57,14 +63,16 @@ const CreateSite = ({ getSingleTemplate, sections, createSite }) => {
     );
   };
 
+  const replaceBlock = (section) => {};
+
   const onEdit = (categoryID, key, value) => {
     const section = sections.filter(
       (section) => section.categoryID === categoryID
     )[0];
-    if (!section["element "][0].parameters) {
-      section["element "][0].parameters = [{}];
+    if (!section.element.parameters) {
+      section.element.parameters = {};
     }
-    section["element "][0].parameters[0][key] = value;
+    section.element.parameters[key] = value;
     setSectionsValues((prev) => [
       ...sections.filter((section) => section.categoryID !== categoryID),
       section,
@@ -81,7 +89,7 @@ const CreateSite = ({ getSingleTemplate, sections, createSite }) => {
         )[0];
       })
       .map((sectionValues) => {
-        return sectionValues["element "][0];
+        return sectionValues.element;
       });
     console.log("elements ===", elements);
     createSite({ ...baseData, elements, phone: +baseData.phone });
@@ -95,7 +103,7 @@ const CreateSite = ({ getSingleTemplate, sections, createSite }) => {
     setSectionsValues(
       sections.map((section) => ({
         ...section,
-        "element ": { ...section["element "], parameters: [{}] },
+        element: { ...section.element, parameters: [{}] },
       }))
     );
   }, [sections]);
@@ -104,10 +112,21 @@ const CreateSite = ({ getSingleTemplate, sections, createSite }) => {
     console.log("sectionsValues ===", sectionsValues);
   }, [sectionsValues]);
 
+  const activeEditingValue = useMemo(() => {
+    return sectionsValues.find((section) => {
+      return section.categoryID === editingState.section.categoryID;
+    });
+  }, [sectionsValues, editingState]);
+
+  console.log("active editing value ===", activeEditingValue);
+
+  console.log("sections ===", sections);
+
   return (
     <FixedWrapper>
       {editingState.isEditing && (
         <EditSiteSection
+          values={activeEditingValue.element.parameters}
           hide={hideEditingModal}
           section={editingState.section}
           {...{ onEdit }}
@@ -180,6 +199,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getSingleTemplate: (id) => dispatch(getSingleTemplateAction(id)),
   createSite: (siteData) => dispatch(createSiteAction(siteData)),
+  uploadImage: (imageFormData) => dispatch(uploadImageAction(imageFormData)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateSite);

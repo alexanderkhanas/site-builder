@@ -30,7 +30,11 @@ const InputFile = ({
         if (type === "image") {
           setImagesPreview(temp);
         }
-        onChange(temp);
+      };
+      reader.onloadend = () => {
+        if (i === Array.from(files).length - 1) {
+          onChange(temp);
+        }
       };
       reader.readAsDataURL(file);
     });

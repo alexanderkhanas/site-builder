@@ -1,4 +1,4 @@
-import { fetchUser, loginRequest } from "../api/api";
+import { fetchUser, loginRequest, postImage } from "../api/api";
 import { SET_USER } from "./actionTypes";
 
 export const loginAction = (data, isRemember) => {
@@ -22,5 +22,15 @@ export const getUserAction = () => {
       dispatch({ type: SET_USER, user });
     }
     return response?.status === 200;
+  };
+};
+
+export const uploadImageAction = (imageFormData) => {
+  return async (dispatch) => {
+    const response = await postImage(imageFormData);
+    console.log("image response ===", response?.data);
+    if (response.status === 200) {
+    }
+    return response?.data;
   };
 };

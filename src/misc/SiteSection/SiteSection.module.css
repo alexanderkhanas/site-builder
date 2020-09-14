@@ -1,6 +1,14 @@
 .container {
     margin: 0 0 15px 0;
+    transition: 0.2s;
+    box-shadow: 5px 5px 20px #40404000;
 }
+
+.container__active {
+    /*outline: 1px solid green;*/
+    box-shadow: 5px 5px 20px #40404020;
+}
+
 
 .element {
     padding: 20px 40px;

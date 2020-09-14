@@ -30,3 +30,7 @@
     margin-bottom: 20px;
 }
 
+.refresh__icon {
+    margin-right: 10px;
+    cursor: pointer;
+}

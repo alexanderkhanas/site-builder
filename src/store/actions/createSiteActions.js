@@ -1,5 +1,7 @@
 import {
   fetchDirections,
+  fetchRefreshedText,
+  fetchSectionVariations,
   fetchSingleTemplate,
   fetchTemplates,
   postSite,
@@ -46,5 +48,12 @@ export const createSiteAction = (siteData) => {
   return async (dispatch) => {
     const response = await postSite(siteData);
     console.log("response ===", response.data);
+  };
+};
+
+export const getSectionVariationsAction = (sectionId) => {
+  return async (dispatch) => {
+    const response = await fetchSectionVariations(sectionId);
+    console.log("response data ===", response?.data);
   };
 };
