@@ -1,0 +1,18 @@
+.carousel__img {
+    width: 100vw;
+    height: 80vh;
+    object-fit: cover;
+    position: relative;
+    opacity: 0.7;
+}
+
+.carousel__img::after {
+    content: "";
+    width: 100vw;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 80vh;
+    background: #40404005;
+    z-index: 20;
+}

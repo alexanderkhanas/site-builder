@@ -6,9 +6,15 @@
     padding: 20px 15px;
 }
 
+.left__container {
+    display: flex;
+    align-items: center;
+}
+
 .logo {
     width: 70px;
     height: 37px;
+    margin-right: 40px;
 }
 
 .header__item {

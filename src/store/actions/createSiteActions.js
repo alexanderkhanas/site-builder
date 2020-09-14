@@ -7,7 +7,12 @@ import {
   postSite,
 } from "../api/api";
 import { getToken } from "../../utils/utils";
-import { SET_DIRECTIONS, SET_ELEMENTS, SET_TEMPLATES } from "./actionTypes";
+import {
+  SET_DIRECTIONS,
+  SET_ELEMENTS,
+  SET_SECTIONS_VARIATIONS,
+  SET_TEMPLATES,
+} from "./actionTypes";
 
 export const getDirectionsAction = () => {
   return async (dispatch) => {
@@ -55,5 +60,13 @@ export const getSectionVariationsAction = (sectionId) => {
   return async (dispatch) => {
     const response = await fetchSectionVariations(sectionId);
     console.log("response data ===", response?.data);
+    if (response.status === 200) {
+      const { elements } = response.data;
+      dispatch({
+        type: SET_SECTIONS_VARIATIONS,
+        variations: elements,
+        sectionId,
+      });
+    }
   };
 };

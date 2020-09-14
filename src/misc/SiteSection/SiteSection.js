@@ -6,16 +6,11 @@ import classnames from "classnames";
 const SiteSection = ({
   section,
   addSection,
-  replaceBlock,
   removeSection,
   isActive,
   showEditingModal,
 }) => {
   const { categoryParameters, categoryID, element } = section || {};
-
-  const onReplaceClick = () => {
-    replaceBlock(section);
-  };
 
   const onCheckboxChange = () => {
     if (isActive) {
@@ -47,12 +42,6 @@ const SiteSection = ({
                 size="sm"
                 onClick={onEditClick}
                 className={s.element__button}
-              />
-              <Button
-                title="Замінити блок"
-                className={s.element__button}
-                isSecondary
-                size="sm"
               />
               <Button
                 title="Демо"

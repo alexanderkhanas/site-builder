@@ -4,6 +4,7 @@ import FixedWrapper from "../../wrappers/FixedWrapper";
 import SiteSection from "../../misc/SiteSection/SiteSection";
 import {
   createSiteAction,
+  getSectionVariationsAction,
   getSingleTemplateAction,
 } from "../../store/actions/createSiteActions";
 import { connect } from "react-redux";
@@ -20,6 +21,8 @@ const CreateSite = ({
   sections,
   createSite,
   uploadImage,
+  getSectionVariations,
+  sectionsVariations,
 }) => {
   const { id } = useParams();
   const [sectionsValues, setSectionsValues] = useState([]);
@@ -45,7 +48,11 @@ const CreateSite = ({
   };
 
   const showEditingModal = (section) => {
+    const { categoryID } = section;
     setEditingState({ section, isEditing: true });
+    if (!sectionsVariations[categoryID]) {
+      getSectionVariations(categoryID);
+    }
   };
 
   const hideEditingModal = () => {
@@ -63,7 +70,20 @@ const CreateSite = ({
     );
   };
 
-  const replaceBlock = (section) => {};
+  const setSectionVariation = (section, element) => {
+    const changedSections = sectionsValues.map((sectionValue) => {
+      return sectionValue.categoryID === section.categoryID
+        ? {
+            ...sectionValue,
+            element: {
+              ...element,
+              parameters: sectionValue.element.parameters,
+            },
+          }
+        : sectionValue;
+    });
+    setSectionsValues(changedSections);
+  };
 
   const onEdit = (categoryID, key, value) => {
     const section = sections.filter(
@@ -103,14 +123,10 @@ const CreateSite = ({
     setSectionsValues(
       sections.map((section) => ({
         ...section,
-        element: { ...section.element, parameters: [{}] },
+        element: { ...section.element, parameters: {} },
       }))
     );
   }, [sections]);
-
-  useEffect(() => {
-    console.log("sectionsValues ===", sectionsValues);
-  }, [sectionsValues]);
 
   const activeEditingValue = useMemo(() => {
     return sectionsValues.find((section) => {
@@ -118,18 +134,15 @@ const CreateSite = ({
     });
   }, [sectionsValues, editingState]);
 
-  console.log("active editing value ===", activeEditingValue);
-
-  console.log("sections ===", sections);
-
   return (
     <FixedWrapper>
       {editingState.isEditing && (
         <EditSiteSection
           values={activeEditingValue.element.parameters}
           hide={hideEditingModal}
-          section={editingState.section}
+          section={activeEditingValue}
           {...{ onEdit }}
+          {...{ setSectionVariation }}
         />
       )}
       <h1 className={s.title}>Створення сайту</h1>
@@ -170,7 +183,7 @@ const CreateSite = ({
         </TabPanel>
         <TabPanel>
           <div className={s.sections}>
-            {sections.map((section) => (
+            {sectionsValues.map((section) => (
               <SiteSection
                 isActive={
                   !!activeSections.filter(
@@ -194,12 +207,15 @@ const CreateSite = ({
 
 const mapStateToProps = (state) => ({
   sections: state.createSite.sections,
+  sectionsVariations: state.createSite.sectionsVariations,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getSingleTemplate: (id) => dispatch(getSingleTemplateAction(id)),
   createSite: (siteData) => dispatch(createSiteAction(siteData)),
   uploadImage: (imageFormData) => dispatch(uploadImageAction(imageFormData)),
+  getSectionVariations: (sectionId) =>
+    dispatch(getSectionVariationsAction(sectionId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateSite);

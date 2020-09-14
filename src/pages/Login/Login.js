@@ -131,7 +131,7 @@ const formikHOC = withFormik({
       isRemember
     );
     if (isSuccess) {
-      history.push("/");
+      history.push("/profile");
     }
     console.log("isSuccess ===", isSuccess);
   },

@@ -4,8 +4,8 @@ export const loginRequest = (data) => {
   return _axios.post("/getToken", data);
 };
 
-export const fetchUser = (data) => {
-  return _axios.post("/user", data);
+export const fetchUser = () => {
+  return _axios.get("/getUserByToken");
 };
 
 export const fetchDirections = (token) => {

@@ -15,10 +15,9 @@ export const loginAction = (data, isRemember) => {
 
 export const getUserAction = () => {
   return async (dispatch) => {
-    const response = fetchUser();
+    const response = await fetchUser();
     if (response?.status === 200) {
-      const { user, token } = response.data;
-      localStorage.setItem("_token", token);
+      const { user } = response.data;
       dispatch({ type: SET_USER, user });
     }
     return response?.status === 200;

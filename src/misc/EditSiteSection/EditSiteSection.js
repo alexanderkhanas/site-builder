@@ -2,13 +2,22 @@ import React, { useEffect, useState } from "react";
 import s from "./EditSiteSection.module.css";
 import Input from "../Input/Input";
 import InputFile from "../InputFile/InputFile";
+import classnames from "classnames";
 import { uploadImageAction } from "../../store/actions/userActions";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
 import { FiRefreshCw } from "react-icons/all";
 import { fetchRefreshedText } from "../../store/api/api";
 
-const EditSiteSection = ({ section, onEdit, hide, uploadImage, values }) => {
+const EditSiteSection = ({
+  section,
+  setSectionVariation,
+  onEdit,
+  hide,
+  uploadImage,
+  values,
+  sectionsVariations,
+}) => {
   const [inputsTypes, setInputsTypes] = useState({});
   const { id } = useParams();
 
@@ -43,10 +52,26 @@ const EditSiteSection = ({ section, onEdit, hide, uploadImage, values }) => {
     });
     setInputsTypes(temp);
   }, [section]);
+
   return (
     <>
       <div className={s.container}>
+        <h2 className={s.title}>Обрати вигляд</h2>
+        <div className={s.variations__container}>
+          {sectionsVariations[section.categoryID]?.map((variation) => (
+            <img
+              key={variation.id}
+              src={`https://dent.eco/${variation.thumbnail}`}
+              alt="loading"
+              onClick={() => setSectionVariation(section, variation)}
+              className={classnames(s.variation, {
+                [s.variation__active]: variation.id === section.element.id,
+              })}
+            />
+          ))}
+        </div>
         <h2 className={s.title}>Редагування блоку</h2>
+
         <div />
         {inputsTypes.text?.map(({ name, id, key }) => (
           <Input
@@ -80,8 +105,12 @@ const EditSiteSection = ({ section, onEdit, hide, uploadImage, values }) => {
   );
 };
 
+const mapStateToProps = (state) => ({
+  sectionsVariations: state.createSite.sectionsVariations,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   uploadImage: (imageFormData) => dispatch(uploadImageAction(imageFormData)),
 });
 
-export default connect(null, mapDispatchToProps)(EditSiteSection);
+export default connect(mapStateToProps, mapDispatchToProps)(EditSiteSection);
