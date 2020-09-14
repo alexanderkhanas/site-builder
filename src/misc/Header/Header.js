@@ -31,9 +31,9 @@ const Header = ({ user }) => {
           <Link className={s.header__item} to="/reviews">
             ВІДГУКИ
           </Link>
-          <Link className={s.header__item} to="/ua/dashboard">
+          <a className={s.header__item} to="/ua/dashboard">
             ПАНЕЛЬ УПРАВЛІННЯ
-          </Link>
+          </a>
         </div>
       </div>
       <div className={s.action__container}>

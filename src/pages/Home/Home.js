@@ -29,6 +29,10 @@ const Home = () => {
           alt="loading"
         />
       </Carousel>
+      <div className={s.section}>
+        <h3>ШАБЛОНИ</h3>
+        <div></div>
+      </div>
     </div>
   );
 };
