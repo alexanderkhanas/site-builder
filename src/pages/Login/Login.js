@@ -2,14 +2,13 @@ import React from "react";
 import s from "./Login.module.css";
 import { withFormik } from "formik";
 import { connect } from "react-redux";
-import FixedWrapper from "../../wrappers/FixedWrapper";
+import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import Input from "../../misc/Input/Input";
 import { FiKey, FiUser } from "react-icons/all";
 import Button from "../../misc/Button/Button";
 import Checkbox from "../../misc/Checkbox/Checkbox";
 import { Link } from "react-router-dom";
 import { loginAction } from "../../store/actions/userActions";
-import { compose } from "recompose";
 import { withRouter } from "react-router";
 
 const Login = ({
@@ -83,13 +82,13 @@ const Login = ({
           </div>
           <div className={s.actions__container}>
             <span className={s.action__title}>Або увійти за допомогою</span>
-            <a href="https://dent.eco/ua/auth/google">
+            <a href="https://topfractal.com/ua/auth/google">
               <img
                 src={require("../../assets/google.png")}
                 className={s.social__icon}
               />
             </a>
-            <a href="https://dent.eco/ua/redirect">
+            <a href="https://topfractal.com/ua/redirect">
               <img
                 src={require("../../assets/facebook.png")}
                 className={s.social__icon}

@@ -30,7 +30,7 @@ const SiteSection = ({
       <div className={s.element}>
         <div className={s.element__main__container}>
           <img
-            src={`https://dent.eco/${element.thumbnail}`}
+            src={`https://topfractal.com/${element.thumbnail}`}
             alt="loading"
             className={s.element__img}
           />
@@ -49,7 +49,7 @@ const SiteSection = ({
                 isLink
                 target="_blank"
                 size="sm"
-                href={`https://dent.eco/${element.url}`}
+                href={`https://topfractal.com/${element.url}`}
               />
             </div>
           </div>

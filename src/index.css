@@ -27,27 +27,7 @@ button:focus {
   outline: none;
 }
 
-.BrainhubCarousel__arrows {
-  background-color: #00000000 !important;
-  position: absolute !important;
-  z-index: 100 !important;
+.fallback {
+  height: 100vh;
+  width: 100vw;
 }
-
-.BrainhubCarousel__arrowRight {
-  right: 0 !important;
-}
-
-.BrainhubCarousel__arrows:hover:enabled,
-.BrainhubCarousel__arrows:hover {
-  background-color: #00000000 !important;
-}
-
-.BrainhubCarousel__trackContainer {
-  width: 100vw !important;
-}
-
-.BrainhubCarouselItem {
-  width: 100vw !important;max-width: 100vw !important;
-
-}
-

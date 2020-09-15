@@ -53,6 +53,8 @@ const EditSiteSection = ({
     setInputsTypes(temp);
   }, [section]);
 
+  console.log("");
+
   return (
     <>
       <div className={s.container}>
@@ -61,7 +63,7 @@ const EditSiteSection = ({
           {sectionsVariations[section.categoryID]?.map((variation) => (
             <img
               key={variation.id}
-              src={`https://dent.eco/${variation.thumbnail}`}
+              src={`https://topfractal.com/${variation.thumbnail}`}
               alt="loading"
               onClick={() => setSectionVariation(section, variation)}
               className={classnames(s.variation, {
@@ -77,6 +79,23 @@ const EditSiteSection = ({
           <Input
             containerClass={s.field__container}
             label={name}
+            value={values[key]}
+            key={id}
+            onChange={({ target: { value } }) => {
+              onEdit(section.categoryID, key, value);
+            }}
+          >
+            <FiRefreshCw
+              onClick={() => onRefreshClick(key)}
+              className={s.refresh__icon}
+            />
+          </Input>
+        ))}
+        {inputsTypes.textarea?.map(({ name, id, key }) => (
+          <Input
+            containerClass={s.field__container}
+            label={name}
+            isTextarea
             value={values[key]}
             key={id}
             onChange={({ target: { value } }) => {

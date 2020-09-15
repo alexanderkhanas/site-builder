@@ -1,0 +1,54 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 32%;
+    background: #fff;
+    justify-content: space-between;
+    padding-bottom: 30px;
+    transition: 0.2s;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+}
+
+.header {
+    padding: 30px;
+    background: #51608a;
+}
+
+.header__primary {
+    background: #1F2C4F;
+
+}
+
+.title {
+    font-weight: 300;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.price {
+    text-align: center;
+    color: #fff;
+}
+
+.main__content {
+    padding: 20px 30px;
+}
+
+.desc {
+    margin-bottom: 15px;
+}
+
+.button__container {
+    display: flex;
+    margin-left: 30px;
+}
+
+.button {
+    height: 50px;
+    max-width: 150px;
+
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import s from "./CreateSite.module.css";
-import FixedWrapper from "../../wrappers/FixedWrapper";
+import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import SiteSection from "../../misc/SiteSection/SiteSection";
 import {
   createSiteAction,
@@ -127,6 +127,8 @@ const CreateSite = ({
       }))
     );
   }, [sections]);
+
+  console.log("sections values ===", sectionsValues);
 
   const activeEditingValue = useMemo(() => {
     return sectionsValues.find((section) => {

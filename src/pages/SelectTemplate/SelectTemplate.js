@@ -3,7 +3,7 @@ import s from "./SelectTemplate.module.css";
 import Header from "../../misc/Header/Header";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import TemplateCard from "../../misc/TemplateCard/TemplateCard";
-import FixedWrapper from "../../wrappers/FixedWrapper";
+import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import {
   getDirectionsAction,
   getSingleTemplateAction,
@@ -16,7 +16,7 @@ import { useHistory } from "react-router";
 const SelectTemplate = ({
   getDirections,
   getTemplates,
-  getSingleTemplate,
+  homeContent,
   directions,
   templates,
 }) => {
@@ -27,6 +27,8 @@ const SelectTemplate = ({
   const onDirectionSelect = (direction) => {
     setSelectedDirection(direction);
   };
+
+  const { select, demo } = homeContent;
 
   useEffect(() => {
     const { id } = selectedDirection;
@@ -43,7 +45,6 @@ const SelectTemplate = ({
     setSelectedDirection(directions[0] || {});
   }, [directions]);
 
-  console.log("templates ===", templates);
   return (
     <FixedWrapper>
       <div className={s.container}>
@@ -65,6 +66,8 @@ const SelectTemplate = ({
             const { id } = template;
             return (
               <TemplateCard
+                selectText={select}
+                demoText={demo}
                 onSubmit={() => history.push(`/create-site/${id}`)}
                 {...{ template }}
                 key={id}
@@ -80,6 +83,7 @@ const SelectTemplate = ({
 const mapStateToProps = (state) => ({
   directions: state.createSite.directions,
   templates: state.createSite.templates,
+  homeContent: state.content.home.page_content,
 });
 
 const mapDispatchToProps = (dispatch) => ({

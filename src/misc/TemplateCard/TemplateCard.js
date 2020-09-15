@@ -2,15 +2,15 @@ import React from "react";
 import s from "./TemplateCard.module.css";
 import Button from "../Button/Button";
 
-const TemplateCard = ({ onSubmit, template }) => {
-  const { name, img, demo } = template;
+const TemplateCard = ({ onSubmit, template, demoText, selectText }) => {
+  const { name, img, demo, desc } = template;
   return (
     <div className={s.container}>
       <img
         className={s.img}
         src={
           img
-            ? `https://dent.eco/${img}`
+            ? `https://topfractal.com/${img}`
             : "https://designshack.net/wp-content/uploads/placeholder-image.png"
         }
         alt="loading"
@@ -18,12 +18,13 @@ const TemplateCard = ({ onSubmit, template }) => {
       <div className={s.footer}>
         <div className={s.footer__info}>
           <h4 className={s.footer__title}>{name}</h4>
+          {!!desc && <p className={s.footer__desc}>{desc}</p>}
         </div>
         <div className={s.buttons__container}>
-          <Button title="Обрати" className={s.button} onClick={onSubmit} />
+          <Button title={selectText} className={s.button} onClick={onSubmit} />
           {!!demo && (
             <Button
-              title="Демо"
+              title={demoText}
               isLink
               href={demo}
               target="_blank"

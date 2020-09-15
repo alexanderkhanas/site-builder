@@ -37,3 +37,7 @@ export const fetchRefreshedText = (templateId, lang, type) => {
 export const fetchSectionVariations = (sectionId) => {
   return _axios.get(`/category/${sectionId}`);
 };
+
+export const fetchHomeContent = (lang) => {
+  return _axios.get(`/home-page`);
+};

@@ -1,3 +1,29 @@
+.container {
+    padding-bottom: 100px;
+}
+
+.carousel__img__container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.carousel__content {
+    position: absolute;
+    left: 50px;
+}
+
+.carousel__title {
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.carousel__text {
+    font-weight: 300;
+    color: #ccc;
+}
+
 .carousel__img {
     width: 100vw;
     height: 80vh;
@@ -15,4 +41,26 @@
     height: 80vh;
     background: #40404005;
     z-index: 20;
+}
+
+.section {
+    margin-top: 80px;
+}
+
+.section__title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 300;
+    font-size: 30px;
+}
+
+.templates__container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.services__container {
+    display: flex;
+    flex-wrap: wrap;
 }

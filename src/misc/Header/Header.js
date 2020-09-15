@@ -31,7 +31,7 @@ const Header = ({ user }) => {
           <Link className={s.header__item} to="/reviews">
             ВІДГУКИ
           </Link>
-          <a className={s.header__item} to="/ua/dashboard">
+          <a className={s.header__item} href="/ua/dashboard">
             ПАНЕЛЬ УПРАВЛІННЯ
           </a>
         </div>
