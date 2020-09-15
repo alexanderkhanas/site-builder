@@ -15,7 +15,7 @@ const EditSiteSection = ({
   onEdit,
   hide,
   uploadImage,
-  values,
+  values = {},
   sectionsVariations,
 }) => {
   const [inputsTypes, setInputsTypes] = useState({});
@@ -53,8 +53,6 @@ const EditSiteSection = ({
     setInputsTypes(temp);
   }, [section]);
 
-  console.log("");
-
   return (
     <>
       <div className={s.container}>
@@ -74,50 +72,51 @@ const EditSiteSection = ({
         </div>
         <h2 className={s.title}>Редагування блоку</h2>
 
-        <div />
-        {inputsTypes.text?.map(({ name, id, key }) => (
-          <Input
-            containerClass={s.field__container}
-            label={name}
-            value={values[key]}
-            key={id}
-            onChange={({ target: { value } }) => {
+        {section.categoryParameters.map((parameter) => {
+          const { type, name, key, id } = parameter;
+          const inputProps = {
+            containerClass: s.field__container,
+            label: name,
+            value: values[key],
+            key: id,
+            onChange: ({ target: { value } }) => {
               onEdit(section.categoryID, key, value);
-            }}
-          >
-            <FiRefreshCw
-              onClick={() => onRefreshClick(key)}
-              className={s.refresh__icon}
-            />
-          </Input>
-        ))}
-        {inputsTypes.textarea?.map(({ name, id, key }) => (
-          <Input
-            containerClass={s.field__container}
-            label={name}
-            isTextarea
-            value={values[key]}
-            key={id}
-            onChange={({ target: { value } }) => {
-              onEdit(section.categoryID, key, value);
-            }}
-          >
-            <FiRefreshCw
-              onClick={() => onRefreshClick(key)}
-              className={s.refresh__icon}
-            />
-          </Input>
-        ))}
-        {inputsTypes.img?.map(({ name, id, key }) => (
-          <InputFile
-            containerClass={s.field__container}
-            type="image"
-            accept="image/*"
-            label={name}
-            onChange={(files) => onImageLoad(files, key)}
-            key={id}
-          />
-        ))}
+            },
+            isTextarea: type === "textarea",
+            type: type.startsWith("color") ? "color" : "text",
+          };
+          if (
+            type === "text" ||
+            type === "textarea" ||
+            type === "color1" ||
+            type === "color2" ||
+            type === "color3"
+          ) {
+            return (
+              <Input {...inputProps}>
+                {inputProps.type !== "color" && (
+                  <FiRefreshCw
+                    onClick={() => onRefreshClick(key)}
+                    className={s.refresh__icon}
+                  />
+                )}
+              </Input>
+            );
+          }
+          if (type === "img") {
+            return (
+              <InputFile
+                containerClass={s.field__container}
+                type="image"
+                accept="image/*"
+                label={name}
+                onChange={(files) => onImageLoad(files, key)}
+                key={id}
+              />
+            );
+          }
+          return <div />;
+        })}
       </div>
       <div className={s.overlay} onClick={hide} />
     </>

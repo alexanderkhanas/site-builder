@@ -23,7 +23,9 @@ export const registerAction = (data) => {
     const response = await registerRequest(data);
     console.log("response ===", response);
     if (response?.data) {
-      dispatch({ type: SET_USER, user: response.data });
+      const { user, token } = response.data;
+      localStorage.setItem("_token", token);
+      dispatch({ type: SET_USER, user });
     }
     return response?.status === 200;
   };

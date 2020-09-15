@@ -10,7 +10,7 @@ const SiteSection = ({
   isActive,
   showEditingModal,
 }) => {
-  const { categoryParameters, categoryID, element } = section || {};
+  const { categoryParameters, categoryID, element, required } = section || {};
 
   const onCheckboxChange = () => {
     if (isActive) {
@@ -54,18 +54,20 @@ const SiteSection = ({
             </div>
           </div>
         </div>
-        <div className={s.checkbox__container}>
-          <input
-            onChange={onCheckboxChange}
-            checked={isActive}
-            type="checkbox"
-            id={`${categoryID}checkbox`}
-          />
-          <label
-            htmlFor={`${categoryID}checkbox`}
-            style={{ width: "10px", height: "10px" }}
-          />
-        </div>
+        {!required && (
+          <div className={s.checkbox__container}>
+            <input
+              onChange={onCheckboxChange}
+              checked={isActive}
+              type="checkbox"
+              id={`${categoryID}checkbox`}
+            />
+            <label
+              htmlFor={`${categoryID}checkbox`}
+              style={{ width: "10px", height: "10px" }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

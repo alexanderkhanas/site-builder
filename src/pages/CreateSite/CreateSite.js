@@ -86,32 +86,49 @@ const CreateSite = ({
   };
 
   const onEdit = (categoryID, key, value) => {
-    const section = sections.filter(
+    const editedSection = sectionsValues.filter(
       (section) => section.categoryID === categoryID
     )[0];
-    if (!section.element.parameters) {
-      section.element.parameters = {};
-    }
-    section.element.parameters[key] = value;
+    console.log("edit section ===", editedSection);
+    // if (!editedSection.element.parameters) {
+    //   editedSection.element.parameters = {};
+    // }
+    editedSection.element.parameters[key] = value;
     setSectionsValues((prev) => [
-      ...sections.filter((section) => section.categoryID !== categoryID),
-      section,
+      ...sectionsValues.map((section) =>
+        section.categoryID !== categoryID ? section : editedSection
+      ),
     ]);
-
-    console.log("section ===", section);
   };
 
   const onSubmit = () => {
+    let headerIndex = null;
+    const menu = [];
     const elements = sectionsValues
       .filter((sectionValues) => {
         return !!activeSections.filter(
           ({ categoryID }) => categoryID === sectionValues.categoryID
         )[0];
       })
-      .map((sectionValues) => {
-        return sectionValues.element;
+      .map(({ element }, i) => {
+        console.log("element ===", element);
+        const { link, name } = element;
+        if (Object.keys(element.parameters).includes("menu")) {
+          headerIndex = i;
+        }
+        if (link) {
+          menu.push({ link, name });
+        }
+        /* "menu": [
+            {
+                "link": "#about",
+                "name": "Про нас"
+            }, */
+
+        return element;
       });
-    console.log("elements ===", elements);
+    console.log("header index ===", headerIndex);
+    elements[headerIndex].parameters.menu = menu;
     createSite({ ...baseData, elements, phone: +baseData.phone });
   };
 
@@ -120,15 +137,23 @@ const CreateSite = ({
   }, []);
 
   useEffect(() => {
-    setSectionsValues(
-      sections.map((section) => ({
+    const temp = sections.map((section) => {
+      const parameters = {};
+      section.categoryParameters.forEach(({ key, value }) => {
+        parameters[key] = value;
+      });
+      return {
         ...section,
-        element: { ...section.element, parameters: {} },
-      }))
-    );
+        element: { ...section.element, parameters },
+      };
+    });
+    console.log("temp ===", temp);
+    setSectionsValues(temp);
   }, [sections]);
 
-  console.log("sections values ===", sectionsValues);
+  useEffect(() => {
+    console.log("sections values ===", sectionsValues);
+  }, [sectionsValues]);
 
   const activeEditingValue = useMemo(() => {
     return sectionsValues.find((section) => {
