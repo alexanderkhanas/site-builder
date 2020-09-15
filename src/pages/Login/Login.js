@@ -85,12 +85,14 @@ const Login = ({
             <a href="https://topfractal.com/ua/auth/google">
               <img
                 src={require("../../assets/google.png")}
+                alt="loading"
                 className={s.social__icon}
               />
             </a>
             <a href="https://topfractal.com/ua/redirect">
               <img
                 src={require("../../assets/facebook.png")}
+                alt="loading"
                 className={s.social__icon}
               />
             </a>

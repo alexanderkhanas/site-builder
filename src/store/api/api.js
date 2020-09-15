@@ -4,6 +4,10 @@ export const loginRequest = (data) => {
   return _axios.post("/getToken", data);
 };
 
+export const registerRequest = (data) => {
+  return _axios.post("/createUser", data);
+};
+
 export const fetchUser = () => {
   return _axios.get("/getUserByToken");
 };

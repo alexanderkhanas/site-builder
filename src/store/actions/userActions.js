@@ -1,4 +1,9 @@
-import { fetchUser, loginRequest, postImage } from "../api/api";
+import {
+  fetchUser,
+  loginRequest,
+  postImage,
+  registerRequest,
+} from "../api/api";
 import { SET_USER } from "./actionTypes";
 
 export const loginAction = (data, isRemember) => {
@@ -8,6 +13,17 @@ export const loginAction = (data, isRemember) => {
       const { user, token } = response.data;
       localStorage.setItem("_token", token);
       dispatch({ type: SET_USER, user });
+    }
+    return response?.status === 200;
+  };
+};
+
+export const registerAction = (data) => {
+  return async (dispatch) => {
+    const response = await registerRequest(data);
+    console.log("response ===", response);
+    if (response?.data) {
+      dispatch({ type: SET_USER, user: response.data });
     }
     return response?.status === 200;
   };

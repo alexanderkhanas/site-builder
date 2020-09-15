@@ -5,6 +5,7 @@ import Header from "./misc/Header/Header";
 import { connect } from "react-redux";
 import { getUserAction } from "./store/actions/userActions";
 import { getHomeContentAction } from "./store/actions/contentActions";
+import Register from "./pages/Register/Register";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const CreateSite = lazy(() => import("./pages/CreateSite/CreateSite"));
@@ -28,6 +29,7 @@ function App({ getUser, getContent }) {
           <Route exact path="/" component={Home} />
           <Route path="/select-template" component={SelectTemplate} />
           <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
           <Route path="/create-site/:id" component={CreateSite} />
           <Route path="/profile" component={Profile} />
         </Switch>
