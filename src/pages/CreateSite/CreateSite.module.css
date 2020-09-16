@@ -30,6 +30,11 @@
     color: #fff;
 }
 
+.refresh__icon {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
 .form {
     padding: 40px 30px;
     background: #fff;

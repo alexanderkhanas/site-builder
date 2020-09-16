@@ -52,3 +52,16 @@
 .variation__active {
     outline: 2px solid #1F2C4F;
 }
+
+.add__button {
+    width: 50px;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.icon {
+    font-size: 25px;
+    height: 25px;
+}

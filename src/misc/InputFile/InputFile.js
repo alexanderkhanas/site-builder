@@ -33,6 +33,7 @@ const InputFile = ({
       };
       reader.onloadend = () => {
         if (i === Array.from(files).length - 1) {
+          console.log("temp ===", temp);
           onChange(temp);
         }
       };

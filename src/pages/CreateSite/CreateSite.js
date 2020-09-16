@@ -15,6 +15,9 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Input from "../../misc/Input/Input";
 import InputFile from "../../misc/InputFile/InputFile";
 import { uploadImageAction } from "../../store/actions/userActions";
+import { FiRefreshCw } from "react-icons/all";
+import { fetchRefreshedText } from "../../store/api/api";
+import PhoneNumberInput from "../../misc/PhoneNumberinput/PhoneNumberInput";
 
 const CreateSite = ({
   getSingleTemplate,
@@ -32,7 +35,7 @@ const CreateSite = ({
     isEditing: false,
   });
   const [baseData, setBaseData] = useState({
-    site_name: "",
+    organizationName: "",
     templateId: +id,
     phone: null,
     adress: "",
@@ -90,15 +93,43 @@ const CreateSite = ({
       (section) => section.categoryID === categoryID
     )[0];
     console.log("edit section ===", editedSection);
-    // if (!editedSection.element.parameters) {
-    //   editedSection.element.parameters = {};
-    // }
     editedSection.element.parameters[key] = value;
+    if (key === "reviews" || key === "reviewName") {
+      console.log("key +");
+      const { reviews, reviewName } = editedSection.element.parameters;
+      console.log("reviews ===", reviews);
+      console.log("reviewName ===", reviewName);
+      if (reviews?.length < reviewName?.length) {
+        // eslint-disable-next-line no-unused-expressions
+        reviewName?.forEach((_, i) => {
+          if (!reviews[i]) {
+            reviews[i] = "";
+          }
+        });
+      } else if (reviews?.length > reviewName?.length) {
+        console.log("if +");
+        // eslint-disable-next-line no-unused-expressions
+        reviews?.forEach((_, i) => {
+          if (!reviewName[i]) {
+            reviewName[i] = "";
+          }
+        });
+      }
+    }
     setSectionsValues((prev) => [
       ...sectionsValues.map((section) =>
         section.categoryID !== categoryID ? section : editedSection
       ),
     ]);
+  };
+
+  const onRefreshBaseData = async (type) => {
+    const response = await fetchRefreshedText(id, "ua", type);
+    console.log("response ===", response?.data?.text);
+    if (response?.status === 200) {
+      const { desc } = response.data.text;
+      setBaseData((prev) => ({ ...prev, [type]: desc }));
+    }
   };
 
   const onSubmit = () => {
@@ -147,7 +178,6 @@ const CreateSite = ({
         element: { ...section.element, parameters },
       };
     });
-    console.log("temp ===", temp);
     setSectionsValues(temp);
   }, [sections]);
 
@@ -186,12 +216,18 @@ const CreateSite = ({
           <div className={s.form}>
             <Input
               label="Назва сайту"
-              value={baseData.site_name}
-              name="site_name"
+              value={baseData.organizationName}
+              name="organizationName"
+              placeholder="Dent"
               onChange={onBaseInputChange}
               containerClass={s.input__container}
-            />
-            <Input
+            >
+              <FiRefreshCw
+                onClick={() => onRefreshBaseData("organizationName")}
+                className={s.refresh__icon}
+              />
+            </Input>
+            <PhoneNumberInput
               label="Номер телефону"
               value={baseData.phone}
               name="phone"
@@ -202,6 +238,7 @@ const CreateSite = ({
               label="Адреса"
               value={baseData.adress}
               name="adress"
+              placeholder="New York"
               onChange={onBaseInputChange}
               containerClass={s.input__container}
             />
