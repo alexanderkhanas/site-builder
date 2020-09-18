@@ -41,30 +41,13 @@ const EditAdvantagesSection = ({
     return selectedAdvantages.map((advantage) => advantage.parent_id);
   }, [selectedAdvantages]);
 
-  const onAdvantagePriceChange = (child, price) => {
-    const { id } = child;
-    if (selectedAdvantagesIds.includes(id)) {
-      const temp = selectedAdvantages.map((advantage) => {
-        return advantage.id === id ? { ...advantage, price } : advantage;
-      });
-      return onEdit(section.categoryID, "benefitList", temp);
-    }
-    onEdit(section.categoryID, "benefitList", [
-      ...selectedAdvantages,
-      { ...child, price },
-    ]);
-  };
-
   const onAdvantageCheckboxChange = (child, img, value) => {
     const { parent_id: parentId } = child;
     if (value && selectedParentsIds.includes(parentId)) {
       const temp = selectedAdvantages.filter((advantage) => {
         return advantage.parent_id !== parentId;
       });
-      onEdit(section.categoryID, "benefitList", [
-        ...temp,
-        { ...child, img, price: "" },
-      ]);
+      onEdit(section.categoryID, "benefitList", [...temp, { ...child, img }]);
       return;
     }
 
@@ -139,13 +122,6 @@ const EditAdvantagesSection = ({
                             id={`${child.id}checkbox`}
                           />
                         </div>
-                        <Input
-                          placeholder="Ціна послуги (не обов'язково)"
-                          containerClass={s.benefit__input}
-                          onChange={({ target: { value } }) => {
-                            onAdvantagePriceChange(child, value);
-                          }}
-                        />
                       </div>
                     ))}
                   </AccordionItemPanel>

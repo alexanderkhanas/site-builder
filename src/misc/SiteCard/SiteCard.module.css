@@ -1,0 +1,17 @@
+.container {
+    flex-basis: 23%;
+    position: relative;
+    margin-bottom: 50px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top:  30px;
+}
+
+.logo {
+    width: 50%;
+    margin: 0 auto;
+}
+
+
