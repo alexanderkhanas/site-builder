@@ -1,5 +1,6 @@
 import {
   fetchDirections,
+  fetchHeaderImages,
   fetchRefreshedText,
   fetchSectionVariations,
   fetchSingleTemplate,
@@ -10,6 +11,7 @@ import { getToken } from "../../utils/utils";
 import {
   SET_DIRECTIONS,
   SET_ELEMENTS,
+  SET_HEADER_IMAGES,
   SET_SECTIONS_VARIATIONS,
   SET_TEMPLATES,
 } from "./actionTypes";
@@ -40,10 +42,17 @@ export const getTemplatesAction = (directionId) => {
 export const getSingleTemplateAction = (templateId) => {
   return async (dispatch) => {
     const response = await fetchSingleTemplate(templateId);
-    console.log("directions response ===", response?.data);
+    const imagesResponse = await fetchHeaderImages(templateId);
     if (response?.status === 200) {
       const { elements } = response.data;
-      dispatch({ type: SET_ELEMENTS, elements });
+      dispatch({
+        type: SET_ELEMENTS,
+        elements,
+      });
+      dispatch({
+        type: SET_HEADER_IMAGES,
+        headerImages: imagesResponse.data.imgUser,
+      });
     }
     return response?.status === 200;
   };

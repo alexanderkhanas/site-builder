@@ -8,20 +8,19 @@ const Checkbox = ({
   onTitleClick,
   title,
   containerStyle,
+  id,
   ...rest
 }) => {
   return (
-    <div className={classnames(s.container, containerStyle)}>
+    <div className={classnames(s.checkbox__container, containerStyle)}>
       <input
-        type="checkbox"
-        className={s.checkbox}
+        onChange={onChange}
         {...{ checked }}
-        {...{ onChange }}
+        type="checkbox"
+        {...{ id }}
         {...rest}
       />
-      <span onClick={onTitleClick} className={s.title}>
-        {title}
-      </span>
+      <label htmlFor={id} style={{ width: "10px", height: "10px" }} />
     </div>
   );
 };

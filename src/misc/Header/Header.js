@@ -31,9 +31,12 @@ const Header = ({ user }) => {
           <Link className={s.header__item} to="/reviews">
             ВІДГУКИ
           </Link>
-          <a className={s.header__item} href="/ua/dashboard">
-            ПАНЕЛЬ УПРАВЛІННЯ
-          </a>
+          <Link to="/sites" className={s.header__item}>
+            МОЇ САЙТИ
+          </Link>
+          {/*<a className={s.header__item} href="http://panel.topfractal.com/">*/}
+          {/*  ПАНЕЛЬ УПРАВЛІННЯ*/}
+          {/*</a>*/}
         </div>
       </div>
       <div className={s.action__container}>

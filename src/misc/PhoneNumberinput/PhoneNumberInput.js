@@ -5,6 +5,7 @@ import Input from "../Input/Input";
 const PhoneNumberInput = ({
   value,
   onChange,
+  name,
   onFocus = () => {},
   onBlur = () => {},
   children,
@@ -14,6 +15,7 @@ const PhoneNumberInput = ({
     mask="+380-99-999-9999"
     placeholder="+380-99-123-4567"
     maskChar={null}
+    name={name}
     {...{ value }}
     {...{ onFocus }}
     {...{ onBlur }}

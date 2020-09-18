@@ -1,6 +1,7 @@
 import {
   SET_DIRECTIONS,
   SET_ELEMENTS,
+  SET_HEADER_IMAGES,
   SET_SECTIONS_VARIATIONS,
   SET_TEMPLATES,
 } from "../actions/actionTypes";
@@ -10,6 +11,7 @@ const initialState = {
   templates: {},
   sections: [],
   sectionsVariations: {}, //[id]: variation[]
+  headerImages: [],
 };
 
 export default (state = initialState, action) => {
@@ -39,6 +41,11 @@ export default (state = initialState, action) => {
           ...state.sectionsVariations,
           [action.sectionId]: action.variations,
         },
+      };
+    case SET_HEADER_IMAGES:
+      return {
+        ...state,
+        headerImages: action.headerImages,
       };
     default:
       return state;

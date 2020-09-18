@@ -23,6 +23,7 @@ const InputFile = ({
     const temp = [];
 
     Array.from(files).forEach((file, i) => {
+      console.log("file ===", file);
       const reader = new FileReader();
 
       reader.onload = async ({ target: { result } }) => {
@@ -40,6 +41,8 @@ const InputFile = ({
       reader.readAsDataURL(file);
     });
   };
+
+  // const onChange = type === "image"
 
   return (
     <div className={containerClass}>

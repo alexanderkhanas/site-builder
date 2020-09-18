@@ -18,6 +18,8 @@ import { uploadImageAction } from "../../store/actions/userActions";
 import { FiRefreshCw } from "react-icons/all";
 import { fetchRefreshedText } from "../../store/api/api";
 import PhoneNumberInput from "../../misc/PhoneNumberinput/PhoneNumberInput";
+import EditAdvantagesSection from "../../misc/EditAdvantagesSection/EditAdvantagesSection";
+import EditServicesSection from "../../misc/EditServicesSection/EditServicesSection";
 
 const CreateSite = ({
   getSingleTemplate,
@@ -63,7 +65,6 @@ const CreateSite = ({
   };
 
   const addSection = (section) => {
-    console.log("section ===", section.categoryParameters);
     setActiveSections((prev) => [...prev, section]);
   };
 
@@ -92,13 +93,10 @@ const CreateSite = ({
     const editedSection = sectionsValues.filter(
       (section) => section.categoryID === categoryID
     )[0];
-    console.log("edit section ===", editedSection);
+    console.log("editedSection ===", editedSection);
     editedSection.element.parameters[key] = value;
     if (key === "reviews" || key === "reviewName") {
-      console.log("key +");
       const { reviews, reviewName } = editedSection.element.parameters;
-      console.log("reviews ===", reviews);
-      console.log("reviewName ===", reviewName);
       if (reviews?.length < reviewName?.length) {
         // eslint-disable-next-line no-unused-expressions
         reviewName?.forEach((_, i) => {
@@ -107,7 +105,6 @@ const CreateSite = ({
           }
         });
       } else if (reviews?.length > reviewName?.length) {
-        console.log("if +");
         // eslint-disable-next-line no-unused-expressions
         reviews?.forEach((_, i) => {
           if (!reviewName[i]) {
@@ -115,6 +112,8 @@ const CreateSite = ({
           }
         });
       }
+    }
+    if (key === "advantages") {
     }
     setSectionsValues((prev) => [
       ...sectionsValues.map((section) =>
@@ -125,7 +124,6 @@ const CreateSite = ({
 
   const onRefreshBaseData = async (type) => {
     const response = await fetchRefreshedText(id, "ua", type);
-    console.log("response ===", response?.data?.text);
     if (response?.status === 200) {
       const { desc } = response.data.text;
       setBaseData((prev) => ({ ...prev, [type]: desc }));
@@ -142,23 +140,16 @@ const CreateSite = ({
         )[0];
       })
       .map(({ element }, i) => {
-        console.log("element ===", element);
         const { link, name } = element;
+        console.log("element ===", element);
         if (Object.keys(element.parameters).includes("menu")) {
           headerIndex = i;
         }
         if (link) {
-          menu.push({ link, name });
+          menu.push({ link, name: element.parameters.section_name });
         }
-        /* "menu": [
-            {
-                "link": "#about",
-                "name": "Про нас"
-            }, */
-
         return element;
       });
-    console.log("header index ===", headerIndex);
     elements[headerIndex].parameters.menu = menu;
     createSite({ ...baseData, elements, phone: +baseData.phone });
   };
@@ -171,6 +162,10 @@ const CreateSite = ({
     const temp = sections.map((section) => {
       const parameters = {};
       section.categoryParameters.forEach(({ key, value }) => {
+        if (key === "benefitList" || key === "servicesList") {
+          parameters[key] = [];
+          return;
+        }
         parameters[key] = value;
       });
       return {
@@ -185,17 +180,39 @@ const CreateSite = ({
     console.log("sections values ===", sectionsValues);
   }, [sectionsValues]);
 
+  console.log("sections ===", sections);
+
   const activeEditingValue = useMemo(() => {
     return sectionsValues.find((section) => {
       return section.categoryID === editingState.section.categoryID;
     });
   }, [sectionsValues, editingState]);
 
+  const isAdvantagesEditing =
+    activeEditingValue?.element?.link === "#advantages";
+  const isServicesEditing = activeEditingValue?.element?.link === "#services";
+
   return (
     <FixedWrapper>
-      {editingState.isEditing && (
+      {editingState.isEditing && !isAdvantagesEditing && !isServicesEditing && (
         <EditSiteSection
           values={activeEditingValue.element.parameters}
+          hide={hideEditingModal}
+          section={activeEditingValue}
+          {...{ onEdit }}
+          {...{ setSectionVariation }}
+        />
+      )}
+      {editingState.isEditing && isAdvantagesEditing && (
+        <EditAdvantagesSection
+          hide={hideEditingModal}
+          section={activeEditingValue}
+          {...{ onEdit }}
+          {...{ setSectionVariation }}
+        />
+      )}
+      {editingState.isEditing && isServicesEditing && (
+        <EditServicesSection
           hide={hideEditingModal}
           section={activeEditingValue}
           {...{ onEdit }}

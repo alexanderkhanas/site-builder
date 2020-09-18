@@ -12,6 +12,10 @@ export const fetchUser = () => {
   return _axios.get("/getUserByToken");
 };
 
+export const fetchHeaderImages = (templateId) => {
+  return _axios.get(`/get-img?templateId=${templateId}&type=imgList`);
+};
+
 export const fetchDirections = (token) => {
   return _axios.get("/directions");
 };
@@ -44,4 +48,8 @@ export const fetchSectionVariations = (sectionId) => {
 
 export const fetchHomeContent = (lang) => {
   return _axios.get(`/home-page`);
+};
+
+export const fetchUserSites = () => {
+  return _axios.get("/sites");
 };

@@ -7,8 +7,9 @@ import { uploadImageAction } from "../../store/actions/userActions";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
 import { AiOutlinePlus, FiRefreshCw } from "react-icons/all";
-import { fetchRefreshedText } from "../../store/api/api";
+import { fetchRefreshedText, postImage } from "../../store/api/api";
 import Button from "../Button/Button";
+import PhoneNumberInput from "../PhoneNumberinput/PhoneNumberInput";
 
 const EditSiteSection = ({
   section,
@@ -16,22 +17,80 @@ const EditSiteSection = ({
   onEdit,
   hide,
   uploadImage,
-  uploadImages,
   values = {},
   sectionsVariations,
 }) => {
-  const [textareaArrays, setTextareaArrays] = useState({});
-  const [textArrays, setTextArrays] = useState({});
   const { id } = useParams();
 
-  console.log("values ===", values);
+  const addReviewItem = (key) => {
+    onEdit(section.categoryID, key, [
+      ...values.reviews,
+      { name: "", value: "" },
+    ]);
+  };
 
-  const addItem = (name) => {};
+  const addTeamItem = (key) => {
+    onEdit(section.categoryID, key, [...values.teams, { name: "", value: "" }]);
+  };
+
+  const addGroupItem = (key, defaultValue) => {
+    onEdit(section.categoryID, key, [...values[key], defaultValue]);
+  };
 
   const onArrayItemChangeText = (value, index, key) => {
     const temp = [...values[key]];
     temp[index] = value;
     onEdit(section.categoryID, key, temp);
+  };
+
+  const onGroupInputChange = (value, index, key, type) => {
+    const temp = [...values[type]];
+    temp[index][key] = value;
+    onEdit(section.categoryID, type, temp);
+  };
+
+  const onReviewChange = (value, index, key) => {
+    const temp = [...values.reviews];
+    temp[index][key] = value;
+    onEdit(section.categoryID, "reviews", temp);
+  };
+
+  const onTeamChange = (value, index, key) => {
+    const temp = [...values.teams];
+    temp[index][key] = value;
+    onEdit(section.categoryID, "teams", temp);
+  };
+
+  const onTeamImageLoad = async (images, index, key, type) => {
+    const temp = [...values.teams];
+    const formData = new FormData();
+    console.log("type ===", type);
+    images.forEach((image) => {
+      formData.append("imageFile[]", image);
+    });
+    formData.append("type", "teams");
+    const response = await postImage(formData);
+    const { data } = response;
+    temp[index][key] = data?.url[0];
+    if (data?.url) {
+      onEdit(section.categoryID, "teams", temp);
+    }
+  };
+
+  const onSocialImageLoad = async (images, index, key, type) => {
+    const temp = [...values.social];
+    const formData = new FormData();
+    console.log("type ===", type);
+    images.forEach((image) => {
+      formData.append("imageFile[]", image);
+    });
+    formData.append("type", "teams");
+    const response = await postImage(formData);
+    const { data } = response;
+    temp[index][key] = data?.url[0];
+    if (data?.url) {
+      onEdit(section.categoryID, "social", temp);
+    }
   };
 
   const onImageLoad = async (images, type) => {
@@ -42,7 +101,13 @@ const EditSiteSection = ({
     formData.append("type", type);
     const data = await uploadImage(formData);
     if (data?.url) {
-      onEdit(section.categoryID, type, data?.url);
+      onEdit(
+        section.categoryID,
+        type,
+        Array.isArray(data?.url) && data?.url.length === 1
+          ? data?.url[0]
+          : data?.url
+      );
     }
   };
 
@@ -63,12 +128,7 @@ const EditSiteSection = ({
     });
   }, [section]);
 
-  useEffect(() => {
-    Object.keys(textArrays).forEach(([parameterId, textArray]) => {});
-  }, [textArrays]);
-
-  console.log("text area array ===", textareaArrays);
-  console.log("text array ===", textArrays);
+  console.log("values ===", values);
 
   return (
     <>
@@ -89,13 +149,14 @@ const EditSiteSection = ({
         </div>
         <h2 className={s.title}>Редагування блоку</h2>
 
-        {section.categoryParameters.map((parameter) => {
+        {section.categoryParameters.map((parameter, i) => {
           const { type, name, key, id } = parameter;
+          console.log("parameter ===", parameter);
           const inputProps = {
             containerClass: s.field__container,
             label: name,
             value: values[key],
-            key: id,
+            key: `${id}${i}${name}`,
             onChange: ({ target: { value } }) => {
               onEdit(section.categoryID, key, value);
             },
@@ -116,11 +177,12 @@ const EditSiteSection = ({
             type === "textarea" ||
             type === "color1" ||
             type === "color2" ||
-            type === "color3"
+            type === "color3" ||
+            type === "email"
           ) {
             return (
               <Input {...inputProps}>
-                {inputProps.type !== "color" && (
+                {inputProps.type !== "color" && type !== "email" && (
                   <FiRefreshCw
                     onClick={() => onRefreshClick(key)}
                     className={s.refresh__icon}
@@ -128,6 +190,9 @@ const EditSiteSection = ({
                 )}
               </Input>
             );
+          }
+          if (type === "phone") {
+            return <PhoneNumberInput {...inputProps} />;
           }
           if (type === "img" || type === "imgArray") {
             return <InputFile {...imageInputProps} />;
@@ -183,15 +248,133 @@ const EditSiteSection = ({
               </div>
             );
           }
-          if (type === "review") {
-            console.log("values ===", values);
+          if (type === "reviewsArray") {
             return (
               <div className={s.field__container}>
-                {values[type].map((review, i) => (
-                  <div className={s.field__container}>
-                    <Input />
-                  </div>
-                ))}
+                <div className={s.field}>
+                  {values.reviews.map((review, i) => (
+                    <div className={s.field__container} key={`${type}${i}`}>
+                      <Input
+                        containerClass={s.field__container}
+                        isTextarea
+                        onChange={({ target: { value } }) => {
+                          onReviewChange(value, i, "value");
+                        }}
+                        label="Відгук"
+                        value={review.value}
+                      />
+                      <Input
+                        label="Автор відгука"
+                        onChange={({ target: { value } }) => {
+                          onReviewChange(value, i, "name");
+                        }}
+                        value={review.name}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <Button
+                  className={s.add__button}
+                  isRound
+                  onClick={() => {
+                    addGroupItem(key, { name: "", value: "" });
+                  }}
+                >
+                  <AiOutlinePlus className={s.icon} />
+                </Button>
+              </div>
+            );
+          }
+          if (type === "teamArray") {
+            return (
+              <div className={s.field__container}>
+                <div className={s.field}>
+                  {values.teams.map((team, i) => (
+                    <div className={s.field__container} key={`${type}${i}`}>
+                      <InputFile
+                        type="image"
+                        onChange={(value) => {
+                          onTeamImageLoad(value, i, "foto", type);
+                        }}
+                        label="Фото"
+                      />
+                      <Input
+                        containerClass={s.field__container}
+                        isTextarea
+                        onChange={({ target: { value } }) => {
+                          onGroupInputChange(value, i, "value", key);
+                        }}
+                        label="Професія"
+                        value={team.value}
+                      />
+                      <Input
+                        label="Ім'я"
+                        onChange={({ target: { value } }) => {
+                          onGroupInputChange(value, i, "value", key);
+                        }}
+                        value={team.name}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <Button
+                  className={s.add__button}
+                  isRound
+                  onClick={() => {
+                    addGroupItem(key, { name: "", value: "" });
+                  }}
+                >
+                  <AiOutlinePlus className={s.icon} />
+                </Button>
+              </div>
+            );
+          }
+          if (type === "social") {
+            return (
+              <div className={s.field__container}>
+                <h4 className={s.section__subtitle}>Соціальні мережі</h4>
+                <div className={s.field}>
+                  {values.social.map((socialObj, i) => (
+                    <div className={s.field__container} key={`${type}${i}`}>
+                      <InputFile
+                        //{...inputProps}
+                        containerClass={s.field__container}
+                        type="image"
+                        onChange={(value) => {
+                          onSocialImageLoad(value, i, "img", type);
+                        }}
+                        label="Фото"
+                      />
+                      <Input
+                        containerClass={s.field__container}
+                        {...inputProps}
+                        isTextarea
+                        onChange={({ target: { value } }) => {
+                          onGroupInputChange(value, i, "url", key);
+                        }}
+                        label="Посилання на соціальну мережу"
+                        value={socialObj.url}
+                      />
+                      <Input
+                        {...inputProps}
+                        label="Назва"
+                        onChange={({ target: { value } }) => {
+                          onGroupInputChange(value, i, "name", key);
+                        }}
+                        value={socialObj.name}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <Button
+                  className={s.add__button}
+                  isRound
+                  onClick={() => {
+                    addGroupItem(key, { name: "", url: "", img: "" });
+                  }}
+                >
+                  <AiOutlinePlus className={s.icon} />
+                </Button>
               </div>
             );
           }
