@@ -2,12 +2,13 @@ import React from "react";
 import s from "./TariffCard.module.css";
 import classnames from "classnames";
 import Button from "../Button/Button";
+import CardWrapper from "../../wrappers/CardWrapper/CardWrapper";
 
 const TariffCard = ({ isPrimary, tariff, selectText, priceText }) => {
   const { tariff_price: tariffPrices, tariff_text: tariffTexts } = tariff;
   console.log("tariff ===", tariff);
   return (
-    <div className={s.container}>
+    <CardWrapper className={s.container}>
       <div>
         <div
           className={classnames(s.header, { [s.header__primary]: isPrimary })}
@@ -28,7 +29,7 @@ const TariffCard = ({ isPrimary, tariff, selectText, priceText }) => {
       <div className={s.button__container}>
         <Button className={s.button} title={selectText} />
       </div>
-    </div>
+    </CardWrapper>
   );
 };
 

@@ -6,6 +6,8 @@ import {
   fetchSingleTemplate,
   fetchTemplates,
   postSite,
+  fetchEditingSite,
+  deleteSite,
 } from "../api/api";
 import { getToken } from "../../utils/utils";
 import {
@@ -14,7 +16,16 @@ import {
   SET_HEADER_IMAGES,
   SET_SECTIONS_VARIATIONS,
   SET_TEMPLATES,
+  SET_EDITING_SITE,
 } from "./actionTypes";
+
+export const getEditingSiteAction = (id) => {
+  return (dispatch) => {
+    fetchEditingSite(id).then((res) => {
+      dispatch({ type: SET_EDITING_SITE, site: res.data });
+    });
+  };
+};
 
 export const getDirectionsAction = () => {
   return async (dispatch) => {

@@ -1,5 +1,6 @@
 import {
   SET_DIRECTIONS,
+  SET_EDITING_SITE,
   SET_ELEMENTS,
   SET_HEADER_IMAGES,
   SET_SECTIONS_VARIATIONS,
@@ -12,6 +13,7 @@ const initialState = {
   sections: [],
   sectionsVariations: {}, //[id]: variation[]
   headerImages: [],
+  editingSite: {},
 };
 
 export default (state = initialState, action) => {
@@ -46,6 +48,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         headerImages: action.headerImages,
+      };
+    case SET_EDITING_SITE:
+      return {
+        ...state,
+        editingSite: action.site,
       };
     default:
       return state;

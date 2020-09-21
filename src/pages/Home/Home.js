@@ -21,6 +21,8 @@ const Home = ({ getContent, content }) => {
         showThumbs={false}
         infiniteLoop
         useKeyboardArrows
+        autoPlay
+        emulateTouch
       >
         {[...Array(3)].map((_, i) => (
           <div className={s.carousel__img__container}>

@@ -7,6 +7,9 @@ import { getUserAction } from "./store/actions/userActions";
 import { getHomeContentAction } from "./store/actions/contentActions";
 import Register from "./pages/Register/Register";
 import Sites from "./pages/Sites/Sites";
+import Demo from "./pages/Demo/Demo";
+import EditSite from "./pages/EditSite/EditSite";
+import SingleSite from "./pages/SingleSite/SingleSite";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const CreateSite = lazy(() => import("./pages/CreateSite/CreateSite"));
@@ -25,17 +28,22 @@ function App({ getUser, getContent }) {
   return (
     <Router>
       <Header />
-      <Suspense fallback={<div className="fallback" />}>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/select-template" component={SelectTemplate} />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route path="/create-site/:id" component={CreateSite} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/sites" component={Sites} />
-        </Switch>
-      </Suspense>
+      <div className="container">
+        <Suspense fallback={<div className="fallback" />}>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/select-template" component={SelectTemplate} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <Route path="/create-site/:id" component={CreateSite} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/sites" component={Sites} />
+            <Route path="/site/demo/:id" component={Demo} />
+            <Route path="/edit-site/:id" component={EditSite} />
+            <Route path="/site/:id" component={SingleSite} />
+          </Switch>
+        </Suspense>
+      </div>
     </Router>
   );
 }

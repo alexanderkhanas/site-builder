@@ -1,9 +1,21 @@
-.container {
+.container.wrapper{
     flex-basis: 32%;
+    transition: 0.2s;
+    margin-bottom: 20px;
+}
+
+.container.wrapper:hover {
+    transform: translateY(-5px);
+}
+
+@media (max-width: 800px) {
+    .container.wrapper {
+        flex-basis: 47%;
+    }
 }
 
 @media (max-width: 500px) {
-    .container {
+    .container.wrapper{
         flex-basis: 100%;
     }
 }

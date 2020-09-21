@@ -30,6 +30,7 @@
     object-fit: cover;
     position: relative;
     opacity: 0.7;
+    max-height: 600px;
 }
 
 .carousel__img::after {
@@ -63,4 +64,11 @@
 .services__container {
     display: flex;
     flex-wrap: wrap;
+}
+
+@media(max-width: 600px) {
+    .carousel__content {
+        left: 0;
+        margin: 0 20px;
+    }
 }

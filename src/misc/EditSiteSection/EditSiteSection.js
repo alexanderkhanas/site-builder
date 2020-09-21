@@ -6,7 +6,7 @@ import classnames from "classnames";
 import { uploadImageAction } from "../../store/actions/userActions";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
-import { AiOutlinePlus, FiRefreshCw } from "react-icons/all";
+import { AiOutlinePlus, FaTimes, FiRefreshCw } from "react-icons/all";
 import { fetchRefreshedText, postImage } from "../../store/api/api";
 import Button from "../Button/Button";
 import PhoneNumberInput from "../PhoneNumberinput/PhoneNumberInput";
@@ -133,6 +133,7 @@ const EditSiteSection = ({
   return (
     <>
       <div className={s.container}>
+        <FaTimes onClick={hide} className={s.close__button} />
         <h2 className={s.title}>Обрати вигляд</h2>
         <div className={s.variations__container}>
           {sectionsVariations[section.categoryID]?.map((variation) => (
@@ -387,7 +388,7 @@ const EditSiteSection = ({
 };
 
 const mapStateToProps = (state) => ({
-  sectionsVariations: state.createSite.sectionsVariations,
+  sectionsVariations: state.site.sectionsVariations,
 });
 
 const mapDispatchToProps = (dispatch) => ({

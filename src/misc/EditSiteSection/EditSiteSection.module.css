@@ -5,9 +5,15 @@
     top: 0;
     left: 0;
     background: #40404040;
-    z-index: 10;
+    z-index: 21;
 }
 
+.close__button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 20px;
+}
 
 .container {
     width: 100%;
@@ -19,7 +25,8 @@
     background: #fff;
     overflow: auto;
     padding: 40px 50px 100px 50px;
-    z-index: 11;
+    z-index: 22;
+    box-sizing: border-box;
 }
 
 .title {

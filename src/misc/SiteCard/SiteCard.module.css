@@ -1,17 +1,49 @@
 .container {
-    flex-basis: 23%;
+    flex-basis: 31%;
     position: relative;
-    margin-bottom: 50px;
     background: #fff;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding-top:  30px;
+    padding-top: 30px;
+    min-width: 300px;
+    cursor: pointer;
 }
+
 
 .logo {
     width: 50%;
     margin: 0 auto;
+    align-self: center;
+    cursor: pointer;
 }
 
+.main__content {
+    padding:  20px 15px;
+    flex: 1;
+    background: #cccccc20;
+}
 
+.buttons {
+    display: flex;
+    margin-top: 20px;
+}
+
+.button {
+    margin-right:5px;
+}
+
+.secondary__buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.secondary__button {
+    font-size: 25px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.secondary__button:last-child {
+    margin-right: 0;
+}

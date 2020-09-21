@@ -1,5 +1,5 @@
-import { fetchUserSites } from "../api/api";
-import { SET_USER_SITES } from "./actionTypes";
+import { deleteSite, fetchUserSites } from "../api/api";
+import { DELETE_USER_SITES, SET_USER_SITES } from "./actionTypes";
 
 export const getUserSitesAction = () => {
   return async (dispatch) => {
@@ -10,5 +10,16 @@ export const getUserSitesAction = () => {
         sites: response.data.sites,
       });
     }
+  };
+};
+
+export const deleteSiteAction = (id) => {
+  return (dispatch) => {
+    deleteSite(id).then(() => {
+      dispatch({
+        type: DELETE_USER_SITES,
+        id,
+      });
+    });
   };
 };

@@ -53,3 +53,23 @@ export const fetchHomeContent = (lang) => {
 export const fetchUserSites = () => {
   return _axios.get("/sites");
 };
+
+export const fetchSiteDemo = (id) => {
+  return _axios.get(`/site/blocks/${id}`);
+};
+
+export const fetchEditingSite = (id) => {
+  return _axios.get(`/site-data/${id}`);
+};
+
+export const deleteSite = (id) => {
+  return _axios.post(`/site-delete/${id}`, {});
+};
+
+export const fetchSingleSite = (id) => {
+  return _axios.get(`/site/${id}`);
+};
+
+export const patchUser = (user) => {
+  return _axios.post("/update-user", user);
+};

@@ -8,7 +8,7 @@ import {
   getDirectionsAction,
   getSingleTemplateAction,
   getTemplatesAction,
-} from "../../store/actions/createSiteActions";
+} from "../../store/actions/siteActions";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import { useHistory } from "react-router";
@@ -81,8 +81,8 @@ const SelectTemplate = ({
 };
 
 const mapStateToProps = (state) => ({
-  directions: state.createSite.directions,
-  templates: state.createSite.templates,
+  directions: state.site.directions,
+  templates: state.site.templates,
   homeContent: state.content.home.page_content,
 });
 

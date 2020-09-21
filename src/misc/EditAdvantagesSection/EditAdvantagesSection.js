@@ -137,7 +137,7 @@ const EditAdvantagesSection = ({
 };
 
 const mapStateToProps = (state) => ({
-  sectionsVariations: state.createSite.sectionsVariations,
+  sectionsVariations: state.site.sectionsVariations,
 });
 const mapDispatchToProps = (dispatch) => ({});
 

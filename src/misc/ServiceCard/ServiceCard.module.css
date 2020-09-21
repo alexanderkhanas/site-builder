@@ -36,3 +36,9 @@
     margin-top: 30px;
     align-self: center;
 }
+
+@media (max-width: 500px) {
+    .container {
+        margin-right: 0;
+    }
+}

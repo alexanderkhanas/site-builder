@@ -1,6 +1,7 @@
 import {
   fetchUser,
   loginRequest,
+  patchUser,
   postImage,
   registerRequest,
 } from "../api/api";
@@ -49,5 +50,15 @@ export const uploadImageAction = (imageFormData) => {
     if (response.status === 200) {
     }
     return response?.data;
+  };
+};
+
+export const editUserAction = (user) => {
+  return async (dispatch) => {
+    return patchUser(user)
+      .then((response) => {
+        console.log("user ===", response.data);
+      })
+      .catch((e) => false);
   };
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import s from "./CreateSite.module.css";
+import s from "./EditSite.module.css";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import SiteSection from "../../misc/SiteSection/SiteSection";
 import {
@@ -15,24 +15,22 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Input from "../../misc/Input/Input";
 import InputFile from "../../misc/InputFile/InputFile";
 import { uploadImageAction } from "../../store/actions/userActions";
-import { FaCogs, FiRefreshCw } from "react-icons/all";
+import { FiRefreshCw } from "react-icons/all";
 import { fetchRefreshedText } from "../../store/api/api";
 import PhoneNumberInput from "../../misc/PhoneNumberinput/PhoneNumberInput";
 import EditAdvantagesSection from "../../misc/EditAdvantagesSection/EditAdvantagesSection";
 import EditServicesSection from "../../misc/EditServicesSection/EditServicesSection";
+import { getEditingSiteAction } from "../../store/actions/siteActions";
 
-const CreateSite = ({
-  getSingleTemplate,
-  sections,
-  createSite,
-  uploadImage,
+const EditSite = ({
+  getEditingSite,
   getSectionVariations,
   sectionsVariations,
+  site,
 }) => {
   const { id } = useParams();
   const [sectionsValues, setSectionsValues] = useState([]);
   const [activeSections, setActiveSections] = useState([]);
-  const [selectedTab, setSelectedTab] = useState(0);
   const [editingState, setEditingState] = useState({
     section: {},
     isEditing: false,
@@ -94,7 +92,6 @@ const CreateSite = ({
     const editedSection = sectionsValues.filter(
       (section) => section.categoryID === categoryID
     )[0];
-    console.log("editedSection ===", editedSection);
     editedSection.element.parameters[key] = value;
     if (key === "reviews" || key === "reviewName") {
       const { reviews, reviewName } = editedSection.element.parameters;
@@ -130,56 +127,54 @@ const CreateSite = ({
   };
 
   const onSubmit = () => {
-    let headerIndex = null;
-    const menu = [];
-    const elements = sectionsValues
-      .filter((sectionValues) => {
-        return !!activeSections.filter(
-          ({ categoryID }) => categoryID === sectionValues.categoryID
-        )[0];
-      })
-      .map(({ element }, i) => {
-        const { link, name } = element;
-        console.log("element ===", element);
-        if (Object.keys(element.parameters).includes("menu")) {
-          headerIndex = i;
-        }
-        if (link) {
-          menu.push({ link, name: element.parameters.section_name });
-        }
-        return element;
-      });
-    elements[headerIndex].parameters.menu = menu;
-    createSite({ ...baseData, elements, phone: +baseData.phone });
+    // let headerIndex = null;
+    // const menu = [];
+    // const elements = sectionsValues
+    //   .filter((sectionValues) => {
+    //     return !!activeSections.filter(
+    //       ({ categoryID }) => categoryID === sectionValues.categoryID
+    //     )[0];
+    //   })
+    //   .map(({ element }, i) => {
+    //     const { link, name } = element;
+    //     console.log("element ===", element);
+    //     if (Object.keys(element.parameters).includes("menu")) {
+    //       headerIndex = i;
+    //     }
+    //     if (link) {
+    //       menu.push({ link, name: element.parameters.section_name });
+    //     }
+    //     return element;
+    //   });
+    // elements[headerIndex].parameters.menu = menu;
+    // createSite({ ...baseData, elements, phone: +baseData.phone });
   };
 
   useEffect(() => {
-    getSingleTemplate(id);
-  }, []);
-
-  useEffect(() => {
-    const tempActiveSections = [];
-    const temp = sections.map((section) => {
-      const { type } = section.element;
+    console.log("site ===", site);
+    if (!site.elements) return;
+    const { elements } = site;
+    const temp = elements.map((element) => {
       const parameters = {};
-      if (type === "selected" || type === "required") {
-        tempActiveSections.push(section);
-      }
-      section.categoryParameters.forEach(({ key, value }) => {
-        if (key === "benefitList" || key === "servicesList") {
-          parameters[key] = [];
-          return;
-        }
+      element.categoryParameters.forEach(({ key, value }) => {
         parameters[key] = value;
       });
       return {
-        ...section,
-        element: { ...section.element, parameters },
+        ...element,
+        element: { ...element.element, parameters },
       };
     });
-    setActiveSections(tempActiveSections);
+    console.log("temp ===", temp);
     setSectionsValues(temp);
-  }, [sections]);
+  }, [site]);
+
+  useEffect(() => {
+    console.log("sectionsValues ===", sectionsValues);
+  }, [sectionsValues]);
+
+  useEffect(() => {
+    getEditingSite(id);
+  }, []);
 
   const activeEditingValue = useMemo(() => {
     return sectionsValues.find((section) => {
@@ -187,10 +182,10 @@ const CreateSite = ({
     });
   }, [sectionsValues, editingState]);
 
-  const isAdvantagesEditing =
-    activeEditingValue?.element?.link === "#advantages";
-  const isServicesEditing = activeEditingValue?.element?.link === "#services";
+  const isAdvantagesEditing = activeEditingValue?.categoryName === "Переваги";
+  const isServicesEditing = activeEditingValue?.categoryName === "Послуги";
 
+  console.log("activeEditingValue ===", activeEditingValue);
   return (
     <FixedWrapper>
       {editingState.isEditing && !isAdvantagesEditing && !isServicesEditing && (
@@ -218,12 +213,8 @@ const CreateSite = ({
           {...{ setSectionVariation }}
         />
       )}
-      <h1 className={s.title}>Створення сайту</h1>
-      <Tabs
-        selectedIndex={selectedTab}
-        onSelect={setSelectedTab}
-        className={s.inner}
-      >
+      <h1 className={s.title}>Редагування сайту</h1>
+      <Tabs className={s.inner}>
         <TabList className={s.tab__list}>
           <Tab className={s.tab} selectedClassName={s.tab__active}>
             Базова інформація
@@ -262,18 +253,7 @@ const CreateSite = ({
               onChange={onBaseInputChange}
               containerClass={s.input__container}
             />
-            <InputFile
-              containerClass={s.input__container}
-              label="Логотип"
-              onChange={onLogoLoad}
-              type="image"
-            />
-            <Button
-              onClick={() => setSelectedTab(1)}
-              title="Розширені налаштування"
-            >
-              <FaCogs className={s.button__icon} />
-            </Button>
+            <InputFile label="Логотип" onChange={onLogoLoad} type="image" />
           </div>
         </TabPanel>
         <TabPanel>
@@ -293,29 +273,24 @@ const CreateSite = ({
               />
             ))}
           </div>
+          <Button size="lg" title="Створити" onClick={onSubmit} />
         </TabPanel>
       </Tabs>
-      <Button
-        size="lg"
-        title="Створити"
-        className={s.submit__button}
-        onClick={onSubmit}
-      />
     </FixedWrapper>
   );
 };
 
 const mapStateToProps = (state) => ({
-  sections: state.site.sections,
+  site: state.site.editingSite,
   sectionsVariations: state.site.sectionsVariations,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getSingleTemplate: (id) => dispatch(getSingleTemplateAction(id)),
+  getEditingSite: (id) => dispatch(getEditingSiteAction(id)),
   createSite: (siteData) => dispatch(createSiteAction(siteData)),
   uploadImage: (imageFormData) => dispatch(uploadImageAction(imageFormData)),
   getSectionVariations: (sectionId) =>
     dispatch(getSectionVariationsAction(sectionId)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateSite);
+export default connect(mapStateToProps, mapDispatchToProps)(EditSite);

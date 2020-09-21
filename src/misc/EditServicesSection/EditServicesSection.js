@@ -33,16 +33,20 @@ const EditServicesSection = ({
   const [selectedParentsIds, selectedChildrenIds] = useMemo(() => {
     const tempParentsIds = [];
     const tempChildrenIds = [];
-    selectedServices.forEach(({ id, children }) => {
-      tempParentsIds.push(id);
-      children.forEach((child) => {
-        tempChildrenIds.push(child.id);
+    if (selectedServices?.length) {
+      selectedServices.forEach(({ id, children }) => {
+        tempParentsIds.push(id);
+        children.forEach((child) => {
+          tempChildrenIds.push(child.id);
+        });
       });
-    });
+    }
+
     return [tempParentsIds, tempChildrenIds];
   }, [selectedServices]);
 
   const onParentSelected = (parent, isSelected) => {
+    console.log("parent selected");
     if (!isSelected) {
       const filtered = selectedServices.filter((service) => {
         return service.id !== parent.id;
@@ -217,7 +221,7 @@ const EditServicesSection = ({
 };
 
 const mapStateToProps = (state) => ({
-  sectionsVariations: state.createSite.sectionsVariations,
+  sectionsVariations: state.site.sectionsVariations,
 });
 const mapDispatchToProps = (dispatch) => ({});
 

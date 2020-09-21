@@ -10,7 +10,7 @@ const SiteSection = ({
   isActive,
   showEditingModal,
 }) => {
-  const { categoryParameters, categoryID, element, required } = section || {};
+  const { categoryID, element } = section || {};
 
   const onCheckboxChange = () => {
     if (isActive) {
@@ -23,12 +23,20 @@ const SiteSection = ({
     showEditingModal(section);
   };
 
+  const switchCheckbox = () => {
+    if (element.type === "required") return;
+    if (isActive) {
+      return removeSection(section);
+    }
+    addSection(section);
+  };
+
   return (
     <div
       className={classnames(s.container, { [s.container__active]: isActive })}
     >
       <div className={s.element}>
-        <div className={s.element__main__container}>
+        <div className={s.element__main__container} onClick={switchCheckbox}>
           <img
             src={`https://topfractal.com/${element.thumbnail}`}
             alt="loading"
@@ -54,7 +62,7 @@ const SiteSection = ({
             </div>
           </div>
         </div>
-        {!required && (
+        {element.type !== "required" && (
           <div className={s.checkbox__container}>
             <input
               onChange={onCheckboxChange}
