@@ -55,7 +55,7 @@
     font-size: 30px;
 }
 
-.templates__container {
+.cards__container {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -65,6 +65,8 @@
     display: flex;
     flex-wrap: wrap;
 }
+
+
 
 @media(max-width: 600px) {
     .carousel__content {

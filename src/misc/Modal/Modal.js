@@ -2,25 +2,38 @@ import React from "react";
 import s from "./Modal.module.css";
 import { connect } from "react-redux";
 import Button from "../Button/Button";
+import { hideModalAction } from "../../store/actions/assetsActions";
 
-const Modal = ({ title, desc, onResolve, onReject, hide }) => {
+const Modal = ({ title, desc, onResolve, onReject, hide, isVisible }) => {
+  const resolveHandler = () => {
+    onResolve();
+    hide();
+  };
+
+  const rejectHandler = () => {
+    onReject();
+    hide();
+  };
+
   return (
-    <div className={s.container}>
-      <div className={s.inner}>
-        <h3 className={s.title}>{title}</h3>
-        {!!desc && <p className={s.desc}>{desc}</p>}
-        <div className={s.buttons__container}>
-          <Button title="Так" onClick={onResolve} className={s.button} />
-          <Button
-            title="Ні"
-            onClick={onReject}
-            isSecondary
-            className={s.button}
-          />
+    isVisible && (
+      <div className={s.container}>
+        <div className={s.inner}>
+          <h2 className={s.title}>{title}</h2>
+          {!!desc && <p className={s.desc}>{desc}</p>}
+          <div className={s.buttons__container}>
+            <Button title="Так" onClick={resolveHandler} className={s.button} />
+            <Button
+              title="Ні"
+              onClick={rejectHandler}
+              isSecondary
+              className={s.button}
+            />
+          </div>
         </div>
+        <div className={s.overlay} onClick={hide} />
       </div>
-      <div className={s.overlay} onClick={hide} />
-    </div>
+    )
   );
 };
 
@@ -36,6 +49,8 @@ const mapStateToProps = (state) => ({
   onReject: state.assets.modal.onReject,
   isVisible: state.assets.modal.isVisible,
 });
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  hide: () => dispatch(hideModalAction()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Modal);

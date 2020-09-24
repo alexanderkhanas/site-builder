@@ -4,6 +4,7 @@
 
 .desc {
     text-align: center;
+    margin: 30px 0;
 }
 
 .buttons__container {
@@ -21,7 +22,7 @@
 }
 
 .inner {
-    max-width: 700px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 30px 20px;
     background: #fff;
@@ -34,6 +35,6 @@
     right: 0;
     left: 0;
     bottom: 0;
-    background: #40404020;
+    background: #40404040;
     z-index: 0;
 }

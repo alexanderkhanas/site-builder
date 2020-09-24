@@ -40,8 +40,9 @@ const SiteSection = ({
       {...rest}
     >
       <div className={s.element}>
-        <div className={s.element__main__container} onClick={switchCheckbox}>
+        <div className={s.element__main__container}>
           <img
+            onClick={switchCheckbox}
             src={`https://topfractal.com/${element.thumbnail}`}
             alt="loading"
             className={s.element__img}

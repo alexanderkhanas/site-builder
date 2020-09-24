@@ -9,6 +9,7 @@ import { getHomeContentAction } from "../../store/actions/contentActions";
 import { connect } from "react-redux";
 import TariffCard from "../../misc/TariffCard/TariffCard";
 import ServiceCard from "../../misc/ServiceCard/ServiceCard";
+import ReviewCard from "../../misc/ReviewCard/ReviewCard";
 
 const Home = ({ getContent, content }) => {
   const { page_content: pageContent, tariffs, services } = content;
@@ -44,7 +45,7 @@ const Home = ({ getContent, content }) => {
       </Carousel>
       <div className={s.section}>
         <h2 className={s.section__title}>{pageContent.templates}</h2>
-        <FixedWrapper className={s.templates__container}>
+        <FixedWrapper className={s.cards__container}>
           {[...Array(3)].map((_, i) => (
             <TemplateCard
               template={{
@@ -62,7 +63,7 @@ const Home = ({ getContent, content }) => {
       </div>
       <div className={s.section}>
         <h2 className={s.section__title}>{pageContent.benefits}</h2>
-        <FixedWrapper className={s.templates__container}>
+        <FixedWrapper className={s.cards__container}>
           {/*//BenefitsName1 BenefitsText1*/}
           {[...Array(4)].map((_, i) => (
             <AdvantagesCard
@@ -75,7 +76,7 @@ const Home = ({ getContent, content }) => {
       </div>
       <div className={s.section}>
         <h2 className={s.section__title}>{pageContent.tariffs}</h2>
-        <FixedWrapper className={s.templates__container}>
+        <FixedWrapper className={s.cards__container}>
           {[...Array(3)].map(
             (_, i) =>
               tariffs[i + 1] && (
@@ -107,18 +108,15 @@ const Home = ({ getContent, content }) => {
       </div>
       <div className={s.section}>
         <h2 className={s.section__title}>{pageContent.reviews}</h2>
-        {/*<FixedWrapper className={s.services__container}>*/}
-        {/*  {[...Array(3)].map(*/}
-        {/*    (_, i) =>*/}
-        {/*      service && (*/}
-        {/*        <ServiceCard*/}
-        {/*          {...{ service }}*/}
-        {/*          key={service?.id}*/}
-        {/*          selectText={pageContent.select}*/}
-        {/*        />*/}
-        {/*      )*/}
-        {/*  )}*/}
-        {/*</FixedWrapper>*/}
+        <FixedWrapper className={s.cards__container}>
+          {[...Array(3)].map((_, i) => {
+            const review = {
+              name: pageContent[`reviews_name_${i + 1}`],
+              desc: pageContent[`reviews${i + 1}`],
+            };
+            return <ReviewCard {...{ review }} key={review.desc} />;
+          })}
+        </FixedWrapper>
       </div>
     </div>
   );

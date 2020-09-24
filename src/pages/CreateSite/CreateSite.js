@@ -8,7 +8,7 @@ import {
   getSingleTemplateAction,
 } from "../../store/actions/siteActions";
 import { connect } from "react-redux";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import EditSiteSection from "../../misc/EditSiteSection/EditSiteSection";
 import Button from "../../misc/Button/Button";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -21,6 +21,8 @@ import PhoneNumberInput from "../../misc/PhoneNumberinput/PhoneNumberInput";
 import EditAdvantagesSection from "../../misc/EditAdvantagesSection/EditAdvantagesSection";
 import EditServicesSection from "../../misc/EditServicesSection/EditServicesSection";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
 
 const CreateSite = ({
   getSingleTemplate,
@@ -31,6 +33,7 @@ const CreateSite = ({
   sectionsVariations,
 }) => {
   const { id } = useParams();
+  const history = useHistory();
   const [sectionsValues, setSectionsValues] = useState([]);
   const [activeSections, setActiveSections] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
@@ -140,7 +143,7 @@ const CreateSite = ({
     }
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     let headerIndex = null;
     const menu = [];
     const elements = sectionsValues
@@ -161,7 +164,15 @@ const CreateSite = ({
         return element;
       });
     elements[headerIndex].parameters.menu = menu;
-    createSite({ ...baseData, elements, phone: +baseData.phone });
+    const siteId = await createSite({
+      ...baseData,
+      elements,
+      phone: +baseData.phone,
+    });
+    console.log("site id ===", siteId);
+    if (siteId) {
+      history.push(`/site/${siteId}`);
+    }
   };
 
   useEffect(() => {
@@ -173,6 +184,7 @@ const CreateSite = ({
     const temp = sections.map((section) => {
       const { type } = section.element;
       const parameters = {};
+      console.log("section ===", section);
       if (type === "selected" || type === "required") {
         tempActiveSections.push(section);
       }
@@ -189,6 +201,7 @@ const CreateSite = ({
         element: { ...section.element, parameters },
       };
     });
+    console.log("temp ===", temp);
     setActiveSections(tempActiveSections);
     setSectionsValues(temp);
   }, [sections]);
@@ -203,9 +216,10 @@ const CreateSite = ({
     activeEditingValue?.element?.link === "#advantages";
   const isServicesEditing = activeEditingValue?.element?.link === "#services";
 
-  useEffect(() => {
-    console.log("section values ===", sectionsValues);
-  }, [sections]);
+  // useEffect(() => {
+  console.log("section values ===", sectionsValues);
+  console.log("active sections ===", activeSections);
+  // }, [sections]);
 
   return (
     <FixedWrapper>
@@ -293,7 +307,7 @@ const CreateSite = ({
           </div>
         </TabPanel>
         <TabPanel>
-          {!!sectionsValues?.length && (
+          {sectionsValues?.length ? (
             <div className={s.sections}>
               <SiteSection
                 isActive
@@ -312,7 +326,7 @@ const CreateSite = ({
                       style={{ marginBottom: "20px" }}
                     >
                       {sectionsValues
-                        .slice(1, sectionsValues.length - 2)
+                        .slice(1, sectionsValues.length - 1)
                         .map((section, i) => (
                           <Draggable
                             key={section.id}
@@ -320,11 +334,6 @@ const CreateSite = ({
                             index={i + 1}
                           >
                             {(provided, snapshot) => (
-                              // <div
-                              //   ref={provided.innerRef}
-                              //   {...provided.draggableProps}
-                              //   {...provided.dragHandleProps}
-                              // >
                               <SiteSection
                                 isActive={
                                   !!activeSections.filter(
@@ -340,7 +349,6 @@ const CreateSite = ({
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                               />
-                              // </div>
                             )}
                           </Draggable>
                         ))}
@@ -355,6 +363,16 @@ const CreateSite = ({
                 {...{ addSection }}
                 {...{ removeSection }}
                 section={sectionsValues[sectionsValues.length - 1]}
+              />
+            </div>
+          ) : (
+            <div className={s.loader__container}>
+              <Loader
+                type="ThreeDots"
+                color="#404040"
+                height={100}
+                width={100}
+                timeout={3000}
               />
             </div>
           )}

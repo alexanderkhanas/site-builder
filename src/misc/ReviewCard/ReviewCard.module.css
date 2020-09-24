@@ -1,0 +1,39 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.desc__container {
+    padding: 35px 40px 20px 40px;
+    background: #fff;
+    flex-grow: 1;
+}
+
+.title__container {
+    padding: 10px 40px;
+    background: #1F2C4F;
+}
+
+.title {
+    color: #fff;
+    font-weight: 400;
+}
+
+.desc {
+    font-size: 16px;
+    color: #7b7b7b;
+    font-weight: 300;
+    letter-spacing: 0.4px;
+}
+
+.icon {
+    position: absolute;
+    top: -25px;
+    padding: 11px;
+    border-radius: 50%;
+    background: #51608a;
+    align-self: center;
+    font-size: 25px;
+    color: #fff;
+}

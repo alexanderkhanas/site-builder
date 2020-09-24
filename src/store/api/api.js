@@ -28,8 +28,12 @@ export const fetchSingleTemplate = (id) => {
   return _axios.get(`/template/${id}`);
 };
 
-export const postSite = (data) => {
-  return _axios.post("/site-create", data);
+export const postSite = (site) => {
+  return _axios.post("/site-create", site);
+};
+
+export const patchSite = (site) => {
+  return _axios.patch("/site-edit", site);
 };
 
 export const postImage = (image) => {
@@ -55,7 +59,7 @@ export const fetchUserSites = () => {
 };
 
 export const fetchSiteDemo = (id) => {
-  return _axios.get(`/site/blocks/${id}`);
+  return _axios.get(`/site/preview/${id}`);
 };
 
 export const fetchEditingSite = (id) => {

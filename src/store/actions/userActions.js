@@ -60,7 +60,7 @@ export const editUserAction = (user) => {
       .then((response) => {
         console.log("user ===", response.data);
       })
-      .catch((e) => false);
+      .catch(() => false);
   };
 };
 
@@ -68,6 +68,7 @@ export const logoutUserAction = () => {
   return async (dispatch) => {
     logoutUserRequest().then(() => {
       dispatch({ type: SET_USER, user: {} });
+      localStorage.removeItem("_token");
     });
   };
 };

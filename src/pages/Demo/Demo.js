@@ -9,6 +9,7 @@ import Iframe from "../../misc/Iframe/Iframe";
 const Demo = () => {
   const { id } = useParams();
   const contentRef = useRef(null);
+  const [url, setUrl] = useState("");
   const [demoElements, setDemoElements] = useState({});
 
   const mountNode = contentRef?.contentWindow?.document?.body;
@@ -23,34 +24,13 @@ const Demo = () => {
   useEffect(() => {
     fetchSiteDemo(id).then((res) => {
       console.log("res ===", res);
-      // setDemoElements(res.data);
-      _axios.get(`${res.data.skelet}`).then((resolve) => {
-        console.log("resolve ===", resolve);
-        setDemoElements({
-          content: res.data.content,
-          skelet: resolve.data.split("<body>"),
-        });
-      });
+      setUrl(res.data.skelet);
     });
   }, []);
 
   console.log("demo element ===", demoElements);
 
-  return (
-    <div>
-      <Iframe>
-        {demoElements.skelet && (
-          <div
-            dangerouslySetInnerHTML={{
-              __html: `${demoElements.skelet[0]}${demoElements.content.join(
-                ""
-              )}${demoElements.skelet[1]}`,
-            }}
-          />
-        )}
-      </Iframe>
-    </div>
-  );
+  return <div>{!!url && <iframe className={s.iframe} src={url} />}</div>;
 };
 
 export default Demo;

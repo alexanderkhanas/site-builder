@@ -11,6 +11,8 @@ import {
   postService,
   postAdvantage,
   fetchDefaultImages,
+  patchUser,
+  patchSite,
 } from "../api/api";
 import { getToken } from "../../utils/utils";
 import {
@@ -22,6 +24,8 @@ import {
   SET_EDITING_SITE,
   ADD_SERVICE,
   SET_DEFAULT_IMAGES,
+  ADD_USER_SITE,
+  REPLACE_USER_SITE,
 } from "./actionTypes";
 import rootReducer from "../reducers/rootReducer";
 
@@ -77,8 +81,24 @@ export const getSingleTemplateAction = (templateId) => {
 
 export const createSiteAction = (siteData) => {
   return async (dispatch) => {
-    const response = await postSite(siteData);
-    console.log("response ===", response.data);
+    return postSite(siteData)
+      .then((res) => {
+        const { site } = res.data;
+        console.log("response ===", res.data);
+        dispatch({ type: ADD_USER_SITE, site });
+        return site.id;
+      })
+      .catch(() => false);
+  };
+};
+
+export const editSiteAction = (siteData) => {
+  return async (dispatch) => {
+    return patchSite(siteData)
+      .then((res) => {
+        dispatch({ type: REPLACE_USER_SITE, site: res.data.site });
+      })
+      .catch(() => false);
   };
 };
 

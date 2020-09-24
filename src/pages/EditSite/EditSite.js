@@ -4,8 +4,10 @@ import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import SiteSection from "../../misc/SiteSection/SiteSection";
 import {
   createSiteAction,
+  editSiteAction,
   getSectionVariationsAction,
   getSingleTemplateAction,
+  getEditingSiteAction,
 } from "../../store/actions/siteActions";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
@@ -15,20 +17,22 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Input from "../../misc/Input/Input";
 import InputFile from "../../misc/InputFile/InputFile";
 import { uploadImageAction } from "../../store/actions/userActions";
-import { FiRefreshCw } from "react-icons/all";
+import { FaCogs, FiRefreshCw } from "react-icons/all";
 import { fetchRefreshedText } from "../../store/api/api";
 import PhoneNumberInput from "../../misc/PhoneNumberinput/PhoneNumberInput";
 import EditAdvantagesSection from "../../misc/EditAdvantagesSection/EditAdvantagesSection";
 import EditServicesSection from "../../misc/EditServicesSection/EditServicesSection";
-import { getEditingSiteAction } from "../../store/actions/siteActions";
+import Login from "../Login/Login";
 
 const EditSite = ({
   getEditingSite,
   getSectionVariations,
   sectionsVariations,
   site,
+  editSite,
 }) => {
   const { id } = useParams();
+  const [selectedTab, setSelectedTab] = useState(0);
   const [sectionsValues, setSectionsValues] = useState([]);
   const [activeSections, setActiveSections] = useState([]);
   const [editingState, setEditingState] = useState({
@@ -127,44 +131,51 @@ const EditSite = ({
   };
 
   const onSubmit = () => {
-    // let headerIndex = null;
-    // const menu = [];
-    // const elements = sectionsValues
-    //   .filter((sectionValues) => {
-    //     return !!activeSections.filter(
-    //       ({ categoryID }) => categoryID === sectionValues.categoryID
-    //     )[0];
-    //   })
-    //   .map(({ element }, i) => {
-    //     const { link, name } = element;
-    //     console.log("element ===", element);
-    //     if (Object.keys(element.parameters).includes("menu")) {
-    //       headerIndex = i;
-    //     }
-    //     if (link) {
-    //       menu.push({ link, name: element.parameters.section_name });
-    //     }
-    //     return element;
-    //   });
-    // elements[headerIndex].parameters.menu = menu;
-    // createSite({ ...baseData, elements, phone: +baseData.phone });
+    let headerIndex = null;
+    const menu = [];
+    const elements = sectionsValues
+      .filter((sectionValues) => {
+        return !!activeSections.filter(
+          ({ categoryID }) => categoryID === sectionValues.categoryID
+        )[0];
+      })
+      .map(({ element }, i) => {
+        const { link, name } = element;
+        console.log("element ===", element);
+        if (Object.keys(element.parameters).includes("menu")) {
+          headerIndex = i;
+        }
+        if (link) {
+          menu.push({ link, name: element.parameters.section_name });
+        }
+        return element;
+      });
+    console.log("header index ===", headerIndex);
+    elements[headerIndex].parameters.menu = menu;
+    editSite({ ...baseData, elements, phone: +baseData.phone });
   };
 
   useEffect(() => {
-    console.log("site ===", site);
+    const { elements, templateName } = site;
     if (!site.elements) return;
-    const { elements } = site;
-    const temp = elements.map((element) => {
+    setBaseData((prev) => ({ ...prev, organizationName: templateName }));
+    console.log("site ===", site);
+    const tempActiveSections = [];
+    const temp = elements.map((section) => {
+      const { element, categoryParameters } = section;
       const parameters = {};
-      element.categoryParameters.forEach(({ key, value }) => {
+      section.categoryParameters.forEach(({ key, value }) => {
         parameters[key] = value;
       });
+      if (element.type === "selected") {
+        tempActiveSections.push(section);
+      }
       return {
-        ...element,
-        element: { ...element.element, parameters },
+        ...section,
+        element: { ...element, parameters },
       };
     });
-    console.log("temp ===", temp);
+    setActiveSections(tempActiveSections);
     setSectionsValues(temp);
   }, [site]);
 
@@ -185,7 +196,6 @@ const EditSite = ({
   const isAdvantagesEditing = activeEditingValue?.categoryName === "Переваги";
   const isServicesEditing = activeEditingValue?.categoryName === "Послуги";
 
-  console.log("activeEditingValue ===", activeEditingValue);
   return (
     <FixedWrapper>
       {editingState.isEditing && !isAdvantagesEditing && !isServicesEditing && (
@@ -214,7 +224,11 @@ const EditSite = ({
         />
       )}
       <h1 className={s.title}>Редагування сайту</h1>
-      <Tabs className={s.inner}>
+      <Tabs
+        selectedIndex={selectedTab}
+        onSelect={setSelectedTab}
+        className={s.inner}
+      >
         <TabList className={s.tab__list}>
           <Tab className={s.tab} selectedClassName={s.tab__active}>
             Базова інформація
@@ -253,7 +267,18 @@ const EditSite = ({
               onChange={onBaseInputChange}
               containerClass={s.input__container}
             />
-            <InputFile label="Логотип" onChange={onLogoLoad} type="image" />
+            <InputFile
+              label="Логотип"
+              containerClass={s.input__container}
+              onChange={onLogoLoad}
+              type="image"
+            />
+            <Button
+              onClick={() => setSelectedTab(1)}
+              title="Розширені налаштування"
+            >
+              <FaCogs className={s.button__icon} />
+            </Button>
           </div>
         </TabPanel>
         <TabPanel>
@@ -273,8 +298,13 @@ const EditSite = ({
               />
             ))}
           </div>
-          <Button size="lg" title="Створити" onClick={onSubmit} />
         </TabPanel>
+        <Button
+          size="lg"
+          title="Змінити"
+          className={s.submit__button}
+          onClick={onSubmit}
+        />
       </Tabs>
     </FixedWrapper>
   );
@@ -288,6 +318,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getEditingSite: (id) => dispatch(getEditingSiteAction(id)),
   createSite: (siteData) => dispatch(createSiteAction(siteData)),
+  editSite: (siteData) => dispatch(editSiteAction(siteData)),
   uploadImage: (imageFormData) => dispatch(uploadImageAction(imageFormData)),
   getSectionVariations: (sectionId) =>
     dispatch(getSectionVariationsAction(sectionId)),

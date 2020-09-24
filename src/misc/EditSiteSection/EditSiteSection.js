@@ -6,12 +6,14 @@ import classnames from "classnames";
 import { uploadImageAction } from "../../store/actions/userActions";
 import { connect } from "react-redux";
 import { useParams } from "react-router";
-import { AiOutlinePlus, FaTimes, FiRefreshCw } from "react-icons/all";
+import { AiOutlinePlus, BiTrash, FaTimes, FiRefreshCw } from "react-icons/all";
 import { fetchRefreshedText, postImage } from "../../store/api/api";
 import Button from "../Button/Button";
 import PhoneNumberInput from "../PhoneNumberinput/PhoneNumberInput";
 import { getDefaultImagesAction } from "../../store/actions/siteActions";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import ImageZoom from "react-img-zoom";
+import ImageSectionPicker from "../ImageSectionPicker/ImageSectionPicker";
 
 const EditSiteSection = ({
   section,
@@ -26,13 +28,16 @@ const EditSiteSection = ({
 }) => {
   const { id } = useParams();
 
-  // key: boolean
-  const [imageModalState, setImageModalState] = useState({});
-
   const templateImgs = images[id];
 
   const addGroupItem = (key, defaultValue) => {
     onEdit(section.categoryID, key, [...values[key], defaultValue]);
+  };
+
+  const deleteGroupItem = (key, index) => {
+    if (values[key]?.length <= 1) return;
+    const editedArray = [...values[key]].filter((_, i) => i !== index);
+    onEdit(section.categoryID, key, editedArray);
   };
 
   const onArrayItemChangeText = (value, index, key) => {
@@ -112,8 +117,9 @@ const EditSiteSection = ({
   useEffect(() => {
     section.categoryParameters.forEach((parameter) => {
       const { type, key } = parameter;
-      if (type === "img") {
+      if (type === "img" || type === "imgArray") {
         getDefaultImages(id, key);
+        return;
       }
       if (type === "textareaArray" || type === "textArray") {
         onEdit(section.categoryID, key, [""]);
@@ -186,52 +192,18 @@ const EditSiteSection = ({
             return <PhoneNumberInput {...inputProps} />;
           }
           if (type === "img" || type === "imgArray") {
+            // console.log("template imgs ===", tem);
             return (
               <div style={{ margin: "40px 0" }}>
                 <span className={s.label}>{name}</span>
-                <Tabs>
-                  <TabList className={s.tab__list}>
-                    <Tab className={s.tab} selectedClassName={s.tab__active}>
-                      Завантажені
-                    </Tab>
-                    <Tab className={s.tab} selectedClassName={s.tab__active}>
-                      Інші варіанти
-                    </Tab>
-                  </TabList>
-                  <TabPanel className={s.tab__panel}>
-                    {templateImgs &&
-                      templateImgs[key]?.user?.map((img) => {
-                        return (
-                          <img
-                            onClick={() => onEdit(section.categoryID, key, img)}
-                            key={img}
-                            alt="loading"
-                            src={`https://topfractal.com/${img}`}
-                            className={classnames(s.default__image, {
-                              [s.default__image__active]: img === values[key],
-                            })}
-                          />
-                        );
-                      })}
-                  </TabPanel>
-                  <TabPanel className={s.tab__panel}>
-                    {templateImgs &&
-                      templateImgs[key]?.admin?.map((img) => {
-                        return (
-                          <img
-                            onClick={() => onEdit(section.categoryID, key, img)}
-                            key={img}
-                            alt="loading"
-                            src={`https://topfractal.com/${img}`}
-                            className={classnames(s.default__image, {
-                              [s.default__image__active]: img === values[key],
-                            })}
-                          />
-                        );
-                      })}
-                  </TabPanel>
-                </Tabs>
-
+                {!!templateImgs && (
+                  <ImageSectionPicker
+                    onSelect={(img) => onEdit(section.categoryID, key, img)}
+                    activeImage={values[key]}
+                    userImages={templateImgs[key]?.user}
+                    adminImages={templateImgs[key]?.admin}
+                  />
+                )}
                 <InputFile {...imageInputProps} label="" />
               </div>
             );
@@ -292,23 +264,33 @@ const EditSiteSection = ({
               <div className={s.field__container}>
                 <div className={s.field}>
                   {values.reviews.map((review, i) => (
-                    <div className={s.field__container} key={`${type}${i}`}>
-                      <Input
-                        containerClass={s.field__container}
-                        isTextarea
-                        onChange={({ target: { value } }) => {
-                          onReviewChange(value, i, "value");
-                        }}
-                        label="Відгук"
-                        value={review.value}
-                      />
-                      <Input
-                        label="Автор відгука"
-                        onChange={({ target: { value } }) => {
-                          onReviewChange(value, i, "name");
-                        }}
-                        value={review.name}
-                      />
+                    <div className={s.group}>
+                      <div className={s.group__main__content}>
+                        <div className={s.field__container} key={`${type}${i}`}>
+                          <Input
+                            containerClass={s.field__container}
+                            isTextarea
+                            onChange={({ target: { value } }) => {
+                              onReviewChange(value, i, "value");
+                            }}
+                            label="Відгук"
+                            value={review.value}
+                          />
+                          <Input
+                            label="Автор відгука"
+                            onChange={({ target: { value } }) => {
+                              onReviewChange(value, i, "name");
+                            }}
+                            value={review.name}
+                          />
+                        </div>
+                      </div>
+                      <div className={s.delete__icon__container}>
+                        <BiTrash
+                          className={s.delete__icon}
+                          onClick={() => deleteGroupItem(key, i)}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -329,30 +311,38 @@ const EditSiteSection = ({
               <div className={s.field__container}>
                 <div className={s.field}>
                   {values.teams.map((team, i) => (
-                    <div className={s.field__container} key={`${type}${i}`}>
-                      <InputFile
-                        type="image"
-                        onChange={(value) => {
-                          onTeamImageLoad(value, i, "foto", type);
-                        }}
-                        label="Фото"
-                      />
-                      <Input
-                        containerClass={s.field__container}
-                        isTextarea
-                        onChange={({ target: { value } }) => {
-                          onGroupInputChange(value, i, "value", key);
-                        }}
-                        label="Професія"
-                        value={team.value}
-                      />
-                      <Input
-                        label="Ім'я"
-                        onChange={({ target: { value } }) => {
-                          onGroupInputChange(value, i, "value", key);
-                        }}
-                        value={team.name}
-                      />
+                    <div className={s.group} key={`${type}${i}`}>
+                      <div className={s.group__main__content}>
+                        <InputFile
+                          type="image"
+                          onChange={(value) => {
+                            onTeamImageLoad(value, i, "foto", type);
+                          }}
+                          label="Фото"
+                        />
+                        <Input
+                          containerClass={s.field__container}
+                          isTextarea
+                          onChange={({ target: { value } }) => {
+                            onGroupInputChange(value, i, "value", key);
+                          }}
+                          label="Професія"
+                          value={team.value}
+                        />
+                        <Input
+                          label="Ім'я"
+                          onChange={({ target: { value } }) => {
+                            onGroupInputChange(value, i, "value", key);
+                          }}
+                          value={team.name}
+                        />
+                      </div>
+                      <div className={s.delete__icon__container}>
+                        <BiTrash
+                          className={s.delete__icon}
+                          onClick={() => deleteGroupItem(key, i)}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -374,34 +364,42 @@ const EditSiteSection = ({
                 <h4 className={s.section__subtitle}>Соціальні мережі</h4>
                 <div className={s.field}>
                   {values.social.map((socialObj, i) => (
-                    <div className={s.field__container} key={`${type}${i}`}>
-                      <InputFile
-                        //{...inputProps}
-                        containerClass={s.field__container}
-                        type="image"
-                        onChange={(value) => {
-                          onSocialImageLoad(value, i, "img", type);
-                        }}
-                        label="Фото"
-                      />
-                      <Input
-                        containerClass={s.field__container}
-                        {...inputProps}
-                        isTextarea
-                        onChange={({ target: { value } }) => {
-                          onGroupInputChange(value, i, "url", key);
-                        }}
-                        label="Посилання на соціальну мережу"
-                        value={socialObj.url}
-                      />
-                      <Input
-                        {...inputProps}
-                        label="Назва"
-                        onChange={({ target: { value } }) => {
-                          onGroupInputChange(value, i, "name", key);
-                        }}
-                        value={socialObj.name}
-                      />
+                    <div className={s.group} key={`${type}${i}`}>
+                      <div className={s.group__main__content}>
+                        <InputFile
+                          //{...inputProps}
+                          containerClass={s.field__container}
+                          type="image"
+                          onChange={(value) => {
+                            onSocialImageLoad(value, i, "img", type);
+                          }}
+                          label="Фото"
+                        />
+                        <Input
+                          containerClass={s.field__container}
+                          {...inputProps}
+                          isTextarea
+                          onChange={({ target: { value } }) => {
+                            onGroupInputChange(value, i, "url", key);
+                          }}
+                          label="Посилання на соціальну мережу"
+                          value={socialObj.url}
+                        />
+                        <Input
+                          {...inputProps}
+                          label="Назва"
+                          onChange={({ target: { value } }) => {
+                            onGroupInputChange(value, i, "name", key);
+                          }}
+                          value={socialObj.name}
+                        />
+                      </div>
+                      <div className={s.delete__icon__container}>
+                        <BiTrash
+                          className={s.delete__icon}
+                          onClick={() => deleteGroupItem(key, i)}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>

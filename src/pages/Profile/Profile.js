@@ -5,9 +5,16 @@ import { connect } from "react-redux";
 import Input from "../../misc/Input/Input";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { BiExit, BiPencil, FiLogOut } from "react-icons/all";
-import { editUserAction } from "../../store/actions/userActions";
+import {
+  editUserAction,
+  logoutUserAction,
+} from "../../store/actions/userActions";
 import { object, string } from "yup";
 import Button from "../../misc/Button/Button";
+import {
+  hideModalAction,
+  showModalAction,
+} from "../../store/actions/assetsActions";
 
 const Profile = ({
   user,
@@ -16,8 +23,20 @@ const Profile = ({
   errors,
   handleSubmit,
   handleChange,
+  showModal,
+  hideModal,
+  logout,
 }) => {
   const uploadInputRef = useRef();
+
+  const logoutHandler = () => {
+    showModal(
+      "Вийти з профілю?",
+      "Щоб увійти наступного разу вам потрібно ввести логін і пароль.",
+      logout
+    );
+  };
+
   useEffect(() => {
     setValues({
       fName: user.first_name,
@@ -32,7 +51,7 @@ const Profile = ({
     <FixedWrapper>
       <div className={s.container}>
         <div className={s.inner}>
-          <Button isRound className={s.logout__button}>
+          <Button isRound className={s.logout__button} onClick={logoutHandler}>
             <BiExit className={s.logout__button__icon} />
           </Button>
           <div className={s.avatar__container}>
@@ -109,6 +128,9 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   editUser: (user) => dispatch(editUserAction(user)),
+  showModal: (title, desc, onResolve, onReject) =>
+    dispatch(showModalAction(title, desc, onResolve, onReject)),
+  logout: () => dispatch(logoutUserAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(formikHOC);
