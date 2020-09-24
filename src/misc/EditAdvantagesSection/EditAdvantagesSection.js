@@ -12,6 +12,9 @@ import {
 } from "react-accessible-accordion";
 import Checkbox from "../Checkbox/Checkbox";
 import Input from "../Input/Input";
+import { Formik } from "formik";
+import Button from "../Button/Button";
+import { createAdvantageAction } from "../../store/actions/siteActions";
 
 const EditAdvantagesSection = ({
   section,
@@ -21,6 +24,7 @@ const EditAdvantagesSection = ({
   onEdit,
   values,
   sectionsVariations,
+  createAdvantage,
 }) => {
   const {
     benefitList: selectedAdvantages,
@@ -124,6 +128,31 @@ const EditAdvantagesSection = ({
                         </div>
                       </div>
                     ))}
+                    <Formik
+                      initialValues={{ name: "" }}
+                      onSubmit={async (values, { resetForm }) => {
+                        await createAdvantage({
+                          parent_id: id,
+                          value: values.name,
+                          lang: "ua",
+                        });
+                        resetForm({ name: "" });
+                      }}
+                    >
+                      {({ values, handleChange, handleSubmit }) => (
+                        <div>
+                          <Input
+                            label="Назва переваги"
+                            name="name"
+                            placeholder="Привітний персонал"
+                            onChange={handleChange}
+                            value={values.name}
+                            containerClass={s.field__container}
+                          />
+                          <Button title="Додати" onClick={handleSubmit} />
+                        </div>
+                      )}
+                    </Formik>
                   </AccordionItemPanel>
                 </AccordionItem>
               );
@@ -139,7 +168,9 @@ const EditAdvantagesSection = ({
 const mapStateToProps = (state) => ({
   sectionsVariations: state.site.sectionsVariations,
 });
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  createAdvantage: (advantage) => dispatch(createAdvantageAction(advantage)),
+});
 
 export default connect(
   mapStateToProps,

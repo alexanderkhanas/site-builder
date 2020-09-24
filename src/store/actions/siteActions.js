@@ -8,6 +8,9 @@ import {
   postSite,
   fetchEditingSite,
   deleteSite,
+  postService,
+  postAdvantage,
+  fetchDefaultImages,
 } from "../api/api";
 import { getToken } from "../../utils/utils";
 import {
@@ -17,7 +20,10 @@ import {
   SET_SECTIONS_VARIATIONS,
   SET_TEMPLATES,
   SET_EDITING_SITE,
+  ADD_SERVICE,
+  SET_DEFAULT_IMAGES,
 } from "./actionTypes";
+import rootReducer from "../reducers/rootReducer";
 
 export const getEditingSiteAction = (id) => {
   return (dispatch) => {
@@ -88,5 +94,58 @@ export const getSectionVariationsAction = (sectionId) => {
         sectionId,
       });
     }
+  };
+};
+
+export const createServiceAction = (service) => {
+  return (dispatch, getState) => {
+    postService(service)
+      .then((res) => {
+        const { sections } = getState().site;
+        const editedSections = sections.map((section) => {
+          const categoryParameters = section.categoryParameters.map((param) => {
+            return param.key === "servicesList"
+              ? { ...param, value: res.data.services }
+              : param;
+          });
+          return { ...section, categoryParameters };
+        });
+        dispatch({ type: SET_ELEMENTS, elements: editedSections });
+      })
+      .catch(console.error);
+  };
+};
+
+export const createAdvantageAction = (advantage) => {
+  return async (dispatch, getState) => {
+    postAdvantage(advantage)
+      .then((res) => {
+        const { sections } = getState().site;
+        const editedSections = sections.map((section) => {
+          const categoryParameters = section.categoryParameters.map((param) => {
+            return param.key === "benefitList"
+              ? { ...param, value: res.data.benefits }
+              : param;
+          });
+          return { ...section, categoryParameters };
+        });
+        dispatch({ type: SET_ELEMENTS, elements: editedSections });
+      })
+      .catch(console.error);
+  };
+};
+
+export const getDefaultImagesAction = (templateId, type) => {
+  return async (dispatch) => {
+    fetchDefaultImages(templateId, type).then((res) => {
+      const { imgUser, imgAdmin } = res.data;
+      dispatch({
+        type: SET_DEFAULT_IMAGES,
+        userImages: imgUser,
+        adminImages: imgAdmin,
+        templateId,
+        key: type,
+      });
+    });
   };
 };

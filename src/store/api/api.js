@@ -73,3 +73,19 @@ export const fetchSingleSite = (id) => {
 export const patchUser = (user) => {
   return _axios.post("/update-user", user);
 };
+
+export const logoutUserRequest = () => {
+  return _axios.post("/logout", {});
+};
+
+export const postService = (service) => {
+  return _axios.post("/add-services", service);
+};
+
+export const postAdvantage = (advantage) => {
+  return _axios.post("/add-benefit", advantage);
+};
+
+export const fetchDefaultImages = (templateId, type) => {
+  return _axios.get(`/get-img?templateId=${templateId}&type=${type}`);
+};

@@ -54,7 +54,7 @@ const Header = ({ user, history }) => {
             <Link className={s.header__item} to="/">
               ГОЛОВНА
             </Link>
-            <Link className={s.header__item} to="/about">
+            <Link className={s.header__item} to="/about-us">
               ПРО НАС
             </Link>
             <Link className={s.header__item} to="/tariffs">
@@ -138,7 +138,7 @@ const Header = ({ user, history }) => {
           />
         </Link>
         <Link to="/">ГОЛОВНА</Link>
-        <Link to="/about">ПРО НАС</Link>
+        <Link to="/about-us">ПРО НАС</Link>
         <Link to="/tariffs">ТАРИФИ</Link>
         <Link to="/advantages">ПЕРЕВАГИ</Link>
         <Link to="/reviews">ВІДГУКИ</Link>

@@ -1,0 +1,39 @@
+.title {
+    text-align: center;
+}
+
+.desc {
+    text-align: center;
+}
+
+.buttons__container {
+    display: flex;
+}
+
+.container {
+    position: fixed;
+    top: 0;
+    display: flex;
+    align-items: center;
+    z-index: 400;
+    height: 100%;
+    width: 100%;
+}
+
+.inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    background: #fff;
+    z-index: 401;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: #40404020;
+    z-index: 0;
+}

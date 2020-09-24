@@ -9,6 +9,8 @@ const SiteSection = ({
   removeSection,
   isActive,
   showEditingModal,
+  reference,
+  ...rest
 }) => {
   const { categoryID, element } = section || {};
 
@@ -33,7 +35,9 @@ const SiteSection = ({
 
   return (
     <div
+      ref={reference}
       className={classnames(s.container, { [s.container__active]: isActive })}
+      {...rest}
     >
       <div className={s.element}>
         <div className={s.element__main__container} onClick={switchCheckbox}>

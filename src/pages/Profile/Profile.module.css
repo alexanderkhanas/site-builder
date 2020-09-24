@@ -85,6 +85,23 @@
     /* transform: rotateZ(10deg); */
 }
 
+.logout__button {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    /*height: 40px;*/
+    /*width: 40px;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 9px;
+}
+
+.logout__button__icon {
+    font-size: 20px;
+    margin: 0 auto;
+}
+
 @keyframes move {
     0% {
         left: -2.5px;

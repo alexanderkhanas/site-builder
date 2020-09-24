@@ -5,11 +5,8 @@ import Header from "./misc/Header/Header";
 import { connect } from "react-redux";
 import { getUserAction } from "./store/actions/userActions";
 import { getHomeContentAction } from "./store/actions/contentActions";
-import Register from "./pages/Register/Register";
-import Sites from "./pages/Sites/Sites";
-import Demo from "./pages/Demo/Demo";
-import EditSite from "./pages/EditSite/EditSite";
-import SingleSite from "./pages/SingleSite/SingleSite";
+import PublicOffer from "./pages/PublicOffer/PublicOffer";
+import Modal from "./misc/Modal/Modal";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const CreateSite = lazy(() => import("./pages/CreateSite/CreateSite"));
@@ -17,6 +14,12 @@ const Profile = lazy(() => import("./pages/Profile/Profile"));
 const SelectTemplate = lazy(() =>
   import("./pages/SelectTemplate/SelectTemplate")
 );
+const Register = lazy(() => import("./pages/Register/Register"));
+const Sites = lazy(() => import("./pages/Sites/Sites"));
+const EditSite = lazy(() => import("./pages/EditSite/EditSite"));
+const Demo = lazy(() => import("./pages/Demo/Demo"));
+const SingleSite = lazy(() => import("./pages/SingleSite/SingleSite"));
+const About = lazy(() => import("./pages/About/About"));
 
 function App({ getUser, getContent }) {
   useEffect(() => {
@@ -28,6 +31,7 @@ function App({ getUser, getContent }) {
   return (
     <Router>
       <Header />
+      <Modal />
       <div className="container">
         <Suspense fallback={<div className="fallback" />}>
           <Switch>
@@ -41,6 +45,8 @@ function App({ getUser, getContent }) {
             <Route path="/site/demo/:id" component={Demo} />
             <Route path="/edit-site/:id" component={EditSite} />
             <Route path="/site/:id" component={SingleSite} />
+            <Route path="/about-us" component={About} />
+            <Route path="/public-offer" component={PublicOffer} />
           </Switch>
         </Suspense>
       </div>

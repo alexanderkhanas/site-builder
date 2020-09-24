@@ -10,6 +10,8 @@ import { AiOutlinePlus, FaTimes, FiRefreshCw } from "react-icons/all";
 import { fetchRefreshedText, postImage } from "../../store/api/api";
 import Button from "../Button/Button";
 import PhoneNumberInput from "../PhoneNumberinput/PhoneNumberInput";
+import { getDefaultImagesAction } from "../../store/actions/siteActions";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 const EditSiteSection = ({
   section,
@@ -19,19 +21,15 @@ const EditSiteSection = ({
   uploadImage,
   values = {},
   sectionsVariations,
+  getDefaultImages,
+  images,
 }) => {
   const { id } = useParams();
 
-  const addReviewItem = (key) => {
-    onEdit(section.categoryID, key, [
-      ...values.reviews,
-      { name: "", value: "" },
-    ]);
-  };
+  // key: boolean
+  const [imageModalState, setImageModalState] = useState({});
 
-  const addTeamItem = (key) => {
-    onEdit(section.categoryID, key, [...values.teams, { name: "", value: "" }]);
-  };
+  const templateImgs = images[id];
 
   const addGroupItem = (key, defaultValue) => {
     onEdit(section.categoryID, key, [...values[key], defaultValue]);
@@ -55,16 +53,9 @@ const EditSiteSection = ({
     onEdit(section.categoryID, "reviews", temp);
   };
 
-  const onTeamChange = (value, index, key) => {
-    const temp = [...values.teams];
-    temp[index][key] = value;
-    onEdit(section.categoryID, "teams", temp);
-  };
-
   const onTeamImageLoad = async (images, index, key, type) => {
     const temp = [...values.teams];
     const formData = new FormData();
-    console.log("type ===", type);
     images.forEach((image) => {
       formData.append("imageFile[]", image);
     });
@@ -80,7 +71,6 @@ const EditSiteSection = ({
   const onSocialImageLoad = async (images, index, key, type) => {
     const temp = [...values.social];
     const formData = new FormData();
-    console.log("type ===", type);
     images.forEach((image) => {
       formData.append("imageFile[]", image);
     });
@@ -121,14 +111,15 @@ const EditSiteSection = ({
 
   useEffect(() => {
     section.categoryParameters.forEach((parameter) => {
-      const { type, id, key } = parameter;
+      const { type, key } = parameter;
+      if (type === "img") {
+        getDefaultImages(id, key);
+      }
       if (type === "textareaArray" || type === "textArray") {
         onEdit(section.categoryID, key, [""]);
       }
     });
   }, [section]);
-
-  console.log("values ===", values);
 
   return (
     <>
@@ -152,7 +143,6 @@ const EditSiteSection = ({
 
         {section.categoryParameters.map((parameter, i) => {
           const { type, name, key, id } = parameter;
-          console.log("parameter ===", parameter);
           const inputProps = {
             containerClass: s.field__container,
             label: name,
@@ -196,7 +186,55 @@ const EditSiteSection = ({
             return <PhoneNumberInput {...inputProps} />;
           }
           if (type === "img" || type === "imgArray") {
-            return <InputFile {...imageInputProps} />;
+            return (
+              <div style={{ margin: "40px 0" }}>
+                <span className={s.label}>{name}</span>
+                <Tabs>
+                  <TabList className={s.tab__list}>
+                    <Tab className={s.tab} selectedClassName={s.tab__active}>
+                      Завантажені
+                    </Tab>
+                    <Tab className={s.tab} selectedClassName={s.tab__active}>
+                      Інші варіанти
+                    </Tab>
+                  </TabList>
+                  <TabPanel className={s.tab__panel}>
+                    {templateImgs &&
+                      templateImgs[key]?.user?.map((img) => {
+                        return (
+                          <img
+                            onClick={() => onEdit(section.categoryID, key, img)}
+                            key={img}
+                            alt="loading"
+                            src={`https://topfractal.com/${img}`}
+                            className={classnames(s.default__image, {
+                              [s.default__image__active]: img === values[key],
+                            })}
+                          />
+                        );
+                      })}
+                  </TabPanel>
+                  <TabPanel className={s.tab__panel}>
+                    {templateImgs &&
+                      templateImgs[key]?.admin?.map((img) => {
+                        return (
+                          <img
+                            onClick={() => onEdit(section.categoryID, key, img)}
+                            key={img}
+                            alt="loading"
+                            src={`https://topfractal.com/${img}`}
+                            className={classnames(s.default__image, {
+                              [s.default__image__active]: img === values[key],
+                            })}
+                          />
+                        );
+                      })}
+                  </TabPanel>
+                </Tabs>
+
+                <InputFile {...imageInputProps} label="" />
+              </div>
+            );
           }
           if (type === "textArray") {
             return (
@@ -389,10 +427,13 @@ const EditSiteSection = ({
 
 const mapStateToProps = (state) => ({
   sectionsVariations: state.site.sectionsVariations,
+  images: state.site.images,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   uploadImage: (imageFormData) => dispatch(uploadImageAction(imageFormData)),
+  getDefaultImages: (templateId, type) =>
+    dispatch(getDefaultImagesAction(templateId, type)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditSiteSection);

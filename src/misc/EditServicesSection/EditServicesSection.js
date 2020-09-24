@@ -12,6 +12,9 @@ import {
 } from "react-accessible-accordion";
 import Checkbox from "../Checkbox/Checkbox";
 import InputFile from "../InputFile/InputFile";
+import Button from "../Button/Button";
+import { Formik } from "formik";
+import { createServiceAction } from "../../store/actions/siteActions";
 
 const EditServicesSection = ({
   sectionsVariations,
@@ -19,6 +22,7 @@ const EditServicesSection = ({
   setSectionVariation,
   hide,
   onEdit,
+  createService,
 }) => {
   const { element } = section;
 
@@ -45,8 +49,9 @@ const EditServicesSection = ({
     return [tempParentsIds, tempChildrenIds];
   }, [selectedServices]);
 
+  console.log("selected service ===", selectedServices);
+
   const onParentSelected = (parent, isSelected) => {
-    console.log("parent selected");
     if (!isSelected) {
       const filtered = selectedServices.filter((service) => {
         return service.id !== parent.id;
@@ -208,6 +213,31 @@ const EditServicesSection = ({
                         />
                       </div>
                     ))}
+                    <Formik
+                      initialValues={{ name: "" }}
+                      onSubmit={async (values, { resetForm }) => {
+                        await createService({
+                          parent_id: parent.id,
+                          value: values.name,
+                          lang: "ua",
+                        });
+                        resetForm({ name: "" });
+                      }}
+                    >
+                      {({ values, handleChange, handleSubmit }) => (
+                        <div>
+                          <Input
+                            label="Назва послуги"
+                            name="name"
+                            placeholder="Послуга"
+                            onChange={handleChange}
+                            containerClass={s.field__container}
+                            value={values.name}
+                          />
+                          <Button title="Додати" onClick={handleSubmit} />
+                        </div>
+                      )}
+                    </Formik>
                   </AccordionItemPanel>
                 </AccordionItem>
               );
@@ -223,7 +253,9 @@ const EditServicesSection = ({
 const mapStateToProps = (state) => ({
   sectionsVariations: state.site.sectionsVariations,
 });
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  createService: (service) => dispatch(createServiceAction(service)),
+});
 
 export default connect(
   mapStateToProps,

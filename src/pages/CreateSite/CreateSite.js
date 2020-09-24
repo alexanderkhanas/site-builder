@@ -20,6 +20,7 @@ import { fetchRefreshedText } from "../../store/api/api";
 import PhoneNumberInput from "../../misc/PhoneNumberinput/PhoneNumberInput";
 import EditAdvantagesSection from "../../misc/EditAdvantagesSection/EditAdvantagesSection";
 import EditServicesSection from "../../misc/EditServicesSection/EditServicesSection";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const CreateSite = ({
   getSingleTemplate,
@@ -44,6 +45,16 @@ const CreateSite = ({
     adress: "",
     logo: "elements/images/header_logo/2/ppp.png",
   });
+
+  const onDragEnd = ({ source, destination }) => {
+    const tempArray = [...sectionsValues];
+    const foundValue = tempArray[source.index];
+    tempArray.splice(source.index, 1);
+    tempArray.splice(destination.index, 0, foundValue);
+    setSectionsValues(tempArray);
+    // console.log("e ===", e);
+    console.log("temp array ===", tempArray);
+  };
 
   const onBaseInputChange = ({ target: { name, value } }) => {
     setBaseData((prev) => ({ ...prev, [name]: value }));
@@ -174,6 +185,7 @@ const CreateSite = ({
       });
       return {
         ...section,
+        id: `${Math.random()} ${new Date().getTime()}`,
         element: { ...section.element, parameters },
       };
     });
@@ -190,6 +202,10 @@ const CreateSite = ({
   const isAdvantagesEditing =
     activeEditingValue?.element?.link === "#advantages";
   const isServicesEditing = activeEditingValue?.element?.link === "#services";
+
+  useEffect(() => {
+    console.log("section values ===", sectionsValues);
+  }, [sections]);
 
   return (
     <FixedWrapper>
@@ -277,30 +293,79 @@ const CreateSite = ({
           </div>
         </TabPanel>
         <TabPanel>
-          <div className={s.sections}>
-            {sectionsValues.map((section) => (
+          {!!sectionsValues?.length && (
+            <div className={s.sections}>
               <SiteSection
-                isActive={
-                  !!activeSections.filter(
-                    ({ categoryID }) => categoryID === section.categoryID
-                  )[0]
-                }
+                isActive
                 {...{ showEditingModal }}
                 {...{ addSection }}
                 {...{ removeSection }}
-                {...{ section }}
-                key={section.categoryID}
+                section={sectionsValues[0]}
               />
-            ))}
-          </div>
+
+              <DragDropContext {...{ onDragEnd }}>
+                <Droppable droppableId="droppable123">
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ marginBottom: "20px" }}
+                    >
+                      {sectionsValues
+                        .slice(1, sectionsValues.length - 2)
+                        .map((section, i) => (
+                          <Draggable
+                            key={section.id}
+                            draggableId={section.id}
+                            index={i + 1}
+                          >
+                            {(provided, snapshot) => (
+                              // <div
+                              //   ref={provided.innerRef}
+                              //   {...provided.draggableProps}
+                              //   {...provided.dragHandleProps}
+                              // >
+                              <SiteSection
+                                isActive={
+                                  !!activeSections.filter(
+                                    ({ categoryID }) =>
+                                      categoryID === section.categoryID
+                                  )[0]
+                                }
+                                {...{ showEditingModal }}
+                                {...{ addSection }}
+                                {...{ removeSection }}
+                                {...{ section }}
+                                reference={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              />
+                              // </div>
+                            )}
+                          </Draggable>
+                        ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+              <SiteSection
+                isActive
+                {...{ showEditingModal }}
+                {...{ addSection }}
+                {...{ removeSection }}
+                section={sectionsValues[sectionsValues.length - 1]}
+              />
+            </div>
+          )}
         </TabPanel>
+        <Button
+          size="lg"
+          title="Створити"
+          className={s.submit__button}
+          onClick={onSubmit}
+        />
       </Tabs>
-      <Button
-        size="lg"
-        title="Створити"
-        className={s.submit__button}
-        onClick={onSubmit}
-      />
     </FixedWrapper>
   );
 };

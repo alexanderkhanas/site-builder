@@ -1,4 +1,5 @@
 import {
+  SET_DEFAULT_IMAGES,
   SET_DIRECTIONS,
   SET_EDITING_SITE,
   SET_ELEMENTS,
@@ -14,6 +15,7 @@ const initialState = {
   sectionsVariations: {}, //[id]: variation[]
   headerImages: [],
   editingSite: {},
+  images: {}, // template id: {key: imgArray}
 };
 
 export default (state = initialState, action) => {
@@ -53,6 +55,20 @@ export default (state = initialState, action) => {
       return {
         ...state,
         editingSite: action.site,
+      };
+    case SET_DEFAULT_IMAGES:
+      return {
+        ...state,
+        images: {
+          ...state.images,
+          [action.templateId]: {
+            ...state.images[action.templateId],
+            [action.key]: {
+              user: action.userImages,
+              admin: action.adminImages,
+            },
+          },
+        },
       };
     default:
       return state;

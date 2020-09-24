@@ -1,6 +1,7 @@
 import {
   fetchUser,
   loginRequest,
+  logoutUserRequest,
   patchUser,
   postImage,
   registerRequest,
@@ -60,5 +61,13 @@ export const editUserAction = (user) => {
         console.log("user ===", response.data);
       })
       .catch((e) => false);
+  };
+};
+
+export const logoutUserAction = () => {
+  return async (dispatch) => {
+    logoutUserRequest().then(() => {
+      dispatch({ type: SET_USER, user: {} });
+    });
   };
 };

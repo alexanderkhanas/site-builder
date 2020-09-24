@@ -4,9 +4,10 @@ import { withFormik } from "formik";
 import { connect } from "react-redux";
 import Input from "../../misc/Input/Input";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import { BiPencil } from "react-icons/all";
+import { BiExit, BiPencil, FiLogOut } from "react-icons/all";
 import { editUserAction } from "../../store/actions/userActions";
 import { object, string } from "yup";
+import Button from "../../misc/Button/Button";
 
 const Profile = ({
   user,
@@ -31,6 +32,9 @@ const Profile = ({
     <FixedWrapper>
       <div className={s.container}>
         <div className={s.inner}>
+          <Button isRound className={s.logout__button}>
+            <BiExit className={s.logout__button__icon} />
+          </Button>
           <div className={s.avatar__container}>
             <img
               src={require("../../assets/avatar-placeholder.png")}

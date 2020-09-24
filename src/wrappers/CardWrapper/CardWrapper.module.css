@@ -1,7 +1,10 @@
 .container.wrapper{
-    flex-basis: 32%;
     transition: 0.2s;
     margin-bottom: 20px;
+}
+
+.container {
+    flex-basis: 32%;
 }
 
 .container.wrapper:hover {
