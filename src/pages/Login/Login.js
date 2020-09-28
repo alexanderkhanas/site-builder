@@ -75,6 +75,7 @@ const Login = ({
               clientId="827143410680-ad89eag6n70npuf5ge4oc9mgkums1me7.apps.googleusercontent.com"
               buttonText="Увійти за допомогою Google"
               onSuccess={onGoogleLoggedIn}
+              onFailure={onGoogleLoggedIn}
               className={s.google__login}
             />
             <FacebookLogin
