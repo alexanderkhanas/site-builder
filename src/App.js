@@ -56,7 +56,12 @@ function App({ getUser, getContent, user }) {
         <Suspense fallback={<div className="fallback" />}>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/login" component={Login} />
+            <PrivateRoute
+              condition={!id}
+              redirectTo="/profile"
+              path="/login"
+              component={Login}
+            />
             <Route path="/register" component={Register} />
             <PrivateRoute
               condition={!!id}

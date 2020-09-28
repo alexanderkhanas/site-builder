@@ -1,6 +1,7 @@
 import {
   fetchUser,
   fetchUserGallery,
+  loginFacebookRequest,
   loginRequest,
   logoutUserRequest,
   patchUser,
@@ -25,6 +26,16 @@ export const loginAction = (data, isRemember) => {
       dispatch({ type: SET_USER, user });
     }
     return response?.status === 200;
+  };
+};
+
+export const facebookLoginAction = (data) => {
+  return async (dispatch) => {
+    loginFacebookRequest(data).then((res) => {
+      const { user, token } = res.data;
+      localStorage.setItem("_token", token);
+      dispatch({ type: SET_USER, user });
+    });
   };
 };
 

@@ -8,6 +8,10 @@ export const registerRequest = (data) => {
   return _axios.post("/createUser", data);
 };
 
+export const loginFacebookRequest = (data) => {
+  return _axios.post("//facebook-login", data);
+};
+
 export const fetchUser = () => {
   return _axios.get("/getUserByToken");
 };

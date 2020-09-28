@@ -13,7 +13,10 @@ import {
 import Button from "../../misc/Button/Button";
 import Checkbox from "../../misc/Checkbox/Checkbox";
 import { Link } from "react-router-dom";
-import { loginAction } from "../../store/actions/userActions";
+import {
+  facebookLoginAction,
+  loginAction,
+} from "../../store/actions/userActions";
 import { withRouter } from "react-router";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
@@ -26,13 +29,36 @@ const Login = ({
   handleBlur,
   touched,
   handleSubmit,
+  facebookLogin,
 }) => {
   const toggleRemember = () => {
     setValues({ ...values, isRemember: !values.isRemember });
   };
 
   const onFacebookLoggedIn = (res) => {
-    console.log("facebook ===", res);
+    const {
+      id,
+      email,
+      name,
+      picture: {
+        data: { url },
+      },
+    } = res;
+    const [fName, lName] = name.split(" ");
+    console.log("facebook login ===", {
+      facebook_user_id: id,
+      email,
+      avatar: url,
+      first_name: fName,
+      last_name: lName,
+    });
+    facebookLogin({
+      facebook_user_id: id,
+      email,
+      avatar: url,
+      first_name: fName,
+      last_name: lName,
+    });
   };
 
   const onGoogleLoggedIn = (res) => {
@@ -183,6 +209,7 @@ const routerHOC = withRouter(formikHOC);
 const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) => ({
   login: (data, isRemember) => dispatch(loginAction(data, isRemember)),
+  facebookLogin: (data) => dispatch(facebookLoginAction(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(routerHOC);
