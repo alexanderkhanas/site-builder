@@ -150,7 +150,7 @@ const Header = ({ user, history }) => {
         <Link to="/advantages">ПЕРЕВАГИ</Link>
         <Link to="/reviews">ВІДГУКИ</Link>
         {!!user.id && <Link to="/sites">МОЇ САЙТИ</Link>}
-        <Link to="/gallery">ГАЛЕРЕЯ</Link>
+        {!!user.id && <Link to="/gallery">ГАЛЕРЕЯ</Link>}
         {user.id ? (
           <Link to="/profile">Профіль</Link>
         ) : (

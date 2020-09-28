@@ -15,6 +15,7 @@ import InputFile from "../../misc/InputFile/InputFile";
 
 const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [isLoading, setLoading] = useState(true);
 
   const onImageLoad = (type, images) => {
     console.log("type ===", type);
@@ -23,10 +24,10 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
   };
 
   useEffect(() => {
-    getUserGallery();
+    getUserGallery().then(() => setLoading(false));
   }, []);
 
-  return Object.keys(gallery).length ? (
+  return !isLoading ? (
     <FixedWrapper>
       <div className={s.container}>
         <CustomTabs
@@ -35,34 +36,39 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
           {...{ setSelectedTab }}
           tabs={["Логотипи", "Основні", "Про нас", "Команда", "Портфоліо"]}
         >
-          {Object.entries(gallery).map(([key, images]) => (
-            <div>
-              <InputFile
-                onChange={(images) => onImageLoad(key, images)}
-                type="image"
-                multiple
-                accept="image/*"
-                withPreview={false}
-                containerClass={s.upload__input}
-              />
-              <div className={s.items__container}>
-                {images.map((img) => (
-                  <div className={s.item}>
-                    <BiTrash
-                      className={s.delete__icon}
-                      onClick={() => deleteImage(key, img)}
-                    />
-                    <img
-                      key={`gallery${img}`}
-                      src={`https://topfractal.com/${img}`}
-                      className={s.item__image}
-                      alt="loading"
-                    />
-                  </div>
-                ))}
+          {[...Array(5)].map((_, i) => {
+            const [key, images] = Object.entries(gallery)[i] || [];
+            return images?.length ? (
+              <div>
+                <InputFile
+                  onChange={(images) => onImageLoad(key, images)}
+                  type="image"
+                  multiple
+                  accept="image/*"
+                  withPreview={false}
+                  containerClass={s.upload__input}
+                />
+                <div className={s.items__container}>
+                  {images.map((img) => (
+                    <div className={s.item}>
+                      <BiTrash
+                        className={s.delete__icon}
+                        onClick={() => deleteImage(key, img)}
+                      />
+                      <img
+                        key={`gallery${img}`}
+                        src={`https://topfractal.com/${img}`}
+                        className={s.item__image}
+                        alt="loading"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ) : (
+              <h3>Ви ще не завантажили фото цієї категорії</h3>
+            );
+          })}
         </CustomTabs>
       </div>
     </FixedWrapper>

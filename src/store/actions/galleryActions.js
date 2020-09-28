@@ -11,7 +11,7 @@ import {
 
 export const getUserGalleryAction = () => {
   return async (dispatch) => {
-    fetchUserGallery().then((res) => {
+    return fetchUserGallery().then((res) => {
       dispatch({ type: SET_USER_IMAGES, gallery: res.data.files });
     });
   };

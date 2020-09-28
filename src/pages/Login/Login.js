@@ -4,12 +4,13 @@ import { withFormik } from "formik";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import Input from "../../misc/Input/Input";
-import { FiKey, FiUser } from "react-icons/all";
+import { FiKey, FiUser, TiSocialFacebookCircular } from "react-icons/all";
 import Button from "../../misc/Button/Button";
 import Checkbox from "../../misc/Checkbox/Checkbox";
 import { Link } from "react-router-dom";
 import { loginAction } from "../../store/actions/userActions";
 import { withRouter } from "react-router";
+import FacebookLogin from "react-facebook-login";
 
 const Login = ({
   values,
@@ -22,6 +23,10 @@ const Login = ({
 }) => {
   const toggleRemember = () => {
     setValues({ ...values, isRemember: !values.isRemember });
+  };
+
+  const onFacebookLoggedIn = (res) => {
+    console.log("facebook ===", res);
   };
 
   return (
@@ -89,13 +94,14 @@ const Login = ({
                 className={s.social__icon}
               />
             </a>
-            <a href="https://topfractal.com/ua/redirect">
-              <img
-                src={require("../../assets/facebook.png")}
-                alt="loading"
-                className={s.social__icon}
-              />
-            </a>
+            <FacebookLogin
+              appId="255806118955205"
+              autoLoad
+              language="uk_UA"
+              fields="name,email,picture"
+              callback={onFacebookLoggedIn}
+              textButton="Увійти за допомогою Facebook"
+            />
           </div>
         </div>
       </div>
