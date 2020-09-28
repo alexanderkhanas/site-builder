@@ -23,7 +23,7 @@
 }
 
 .title {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .input__container {
@@ -55,8 +55,8 @@
 
 .actions__container {
     display: flex;
-    align-items: center;
-    margin-top: 40px;
+    margin: 20px 0;
+    flex-direction: column;
 }
 
 .action__title {
@@ -73,4 +73,21 @@
 
 .button {
     margin-top: 10px;
+}
+
+.google__login {
+    border-radius: 10px !important;
+    box-shadow: 1px 1px 5px #cccccc80 !important;
+}
+
+.facebook__login {
+    margin-top: 10px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    font-family: "Montserrat", sans-serif;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: #1F2C4F;
+    color: #fff;
 }

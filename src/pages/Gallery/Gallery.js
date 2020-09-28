@@ -66,7 +66,9 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
                 </div>
               </div>
             ) : (
-              <h3>Ви ще не завантажили фото цієї категорії</h3>
+              <h3 key={`empty${i}`}>
+                Ви ще не завантажили фото цієї категорії
+              </h3>
             );
           })}
         </CustomTabs>

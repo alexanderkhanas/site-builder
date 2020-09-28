@@ -9,6 +9,7 @@ import {
   registerRequest,
 } from "../api/api";
 import {
+  CLEAR_USER,
   SET_LOGGING,
   SET_USER,
   SET_USER_AVATAR,
@@ -88,7 +89,7 @@ export const editUserAction = (user) => {
 export const logoutUserAction = () => {
   return async (dispatch) => {
     logoutUserRequest().then(() => {
-      dispatch({ type: SET_USER, user: {} });
+      dispatch({ type: CLEAR_USER });
       localStorage.removeItem("_token");
     });
   };
