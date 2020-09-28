@@ -11,7 +11,7 @@
     max-width: 600px;
     padding: 20px 40px 100px 40px;
     background: #fff;
-    border-radius: 25px;
+    border-radius: 40px;
     overflow: hidden;
 }
 
@@ -29,6 +29,9 @@
     margin: 0 auto;
     width: 70px;
     height: 70px;
+    cursor: pointer;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .hidden {

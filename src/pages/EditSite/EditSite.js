@@ -23,6 +23,7 @@ import PhoneNumberInput from "../../misc/PhoneNumberinput/PhoneNumberInput";
 import EditAdvantagesSection from "../../misc/EditAdvantagesSection/EditAdvantagesSection";
 import EditServicesSection from "../../misc/EditServicesSection/EditServicesSection";
 import Login from "../Login/Login";
+import DraggableSections from "../../misc/DraggableSections/DraggableSections";
 
 const EditSite = ({
   getEditingSite,
@@ -41,11 +42,20 @@ const EditSite = ({
   });
   const [baseData, setBaseData] = useState({
     organizationName: "",
-    templateId: +id,
+    siteId: +id,
     phone: null,
     adress: "",
     logo: "elements/images/header_logo/2/ppp.png",
+    templateId: null,
   });
+
+  const onDragEnd = ({ source, destination }) => {
+    const tempArray = [...sectionsValues];
+    const foundValue = tempArray[source.index];
+    tempArray.splice(source.index, 1);
+    tempArray.splice(destination.index, 0, foundValue);
+    setSectionsValues(tempArray);
+  };
 
   const onBaseInputChange = ({ target: { name, value } }) => {
     setBaseData((prev) => ({ ...prev, [name]: value }));
@@ -141,7 +151,6 @@ const EditSite = ({
       })
       .map(({ element }, i) => {
         const { link, name } = element;
-        console.log("element ===", element);
         if (Object.keys(element.parameters).includes("menu")) {
           headerIndex = i;
         }
@@ -150,16 +159,18 @@ const EditSite = ({
         }
         return element;
       });
-    console.log("header index ===", headerIndex);
     elements[headerIndex].parameters.menu = menu;
     editSite({ ...baseData, elements, phone: +baseData.phone });
   };
 
   useEffect(() => {
-    const { elements, templateName } = site;
+    const { elements, templateName, templateId } = site;
     if (!site.elements) return;
-    setBaseData((prev) => ({ ...prev, organizationName: templateName }));
-    console.log("site ===", site);
+    setBaseData((prev) => ({
+      ...prev,
+      organizationName: templateName,
+      templateId,
+    }));
     const tempActiveSections = [];
     const temp = elements.map((section) => {
       const { element, categoryParameters } = section;
@@ -167,21 +178,18 @@ const EditSite = ({
       section.categoryParameters.forEach(({ key, value }) => {
         parameters[key] = value;
       });
-      if (element.type === "selected") {
+      if (element.type === "selected" || element.type === "required") {
         tempActiveSections.push(section);
       }
       return {
         ...section,
+        id: `${Math.random()} ${new Date().getTime()}`,
         element: { ...element, parameters },
       };
     });
     setActiveSections(tempActiveSections);
     setSectionsValues(temp);
   }, [site]);
-
-  useEffect(() => {
-    console.log("sectionsValues ===", sectionsValues);
-  }, [sectionsValues]);
 
   useEffect(() => {
     getEditingSite(id);
@@ -283,20 +291,29 @@ const EditSite = ({
         </TabPanel>
         <TabPanel>
           <div className={s.sections}>
-            {sectionsValues.map((section) => (
-              <SiteSection
-                isActive={
-                  !!activeSections.filter(
-                    ({ categoryID }) => categoryID === section.categoryID
-                  )[0]
-                }
-                {...{ showEditingModal }}
-                {...{ addSection }}
-                {...{ removeSection }}
-                {...{ section }}
-                key={section.categoryID}
-              />
-            ))}
+            <SiteSection
+              isActive
+              {...{ showEditingModal }}
+              {...{ addSection }}
+              {...{ removeSection }}
+              section={sectionsValues[0]}
+            />
+
+            <DraggableSections
+              sections={sectionsValues.slice(1, sectionsValues.length - 1)}
+              {...{ showEditingModal }}
+              {...{ addSection }}
+              {...{ removeSection }}
+              {...{ onDragEnd }}
+              {...{ activeSections }}
+            />
+            <SiteSection
+              isActive
+              {...{ showEditingModal }}
+              {...{ addSection }}
+              {...{ removeSection }}
+              section={sectionsValues[sectionsValues.length - 1]}
+            />
           </div>
         </TabPanel>
         <Button

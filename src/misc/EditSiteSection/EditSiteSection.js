@@ -332,7 +332,7 @@ const EditSiteSection = ({
                         <Input
                           label="Ім'я"
                           onChange={({ target: { value } }) => {
-                            onGroupInputChange(value, i, "value", key);
+                            onGroupInputChange(value, i, "name", key);
                           }}
                           value={team.name}
                         />

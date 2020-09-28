@@ -1,4 +1,5 @@
 export const SET_USER = "SET_USER";
+export const SET_USER_AVATAR = "SET_USER_AVATAR";
 export const SET_DIRECTIONS = "SET_DIRECTIONS";
 export const SET_TEMPLATES = "SET_TEMPLATES";
 export const SET_ELEMENTS = "SET_ELEMENTS";
@@ -15,3 +16,6 @@ export const ADD_SERVICE = "ADD_SERVICE";
 export const SET_DEFAULT_IMAGES = "SET_DEFAULT_IMAGES";
 export const SHOW_MODAL = "SHOW_MODAL";
 export const HIDE_MODAL = "HIDE_MODAL";
+export const SET_USER_IMAGES = "SET_USER_IMAGES";
+export const DELETE_USER_IMAGE = "DELETE_USER_IMAGE";
+export const ADD_USER_IMAGES = "ADD_USER_IMAGES";

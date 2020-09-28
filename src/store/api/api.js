@@ -12,6 +12,25 @@ export const fetchUser = () => {
   return _axios.get("/getUserByToken");
 };
 
+export const fetchUserGallery = () => {
+  return _axios.get("/get-user-img");
+};
+
+export const deleteUserImagesRequest = (images) => {
+  return _axios.post("/delete-user-img", { imageFile: images });
+};
+
+export const postUserImage = (type, images) => {
+  return _axios.post("/upload-user-img", {
+    type,
+    imageFile: images,
+  });
+};
+
+export const postUserAvatar = (image) => {
+  return _axios.post("/update-user-avatar", image);
+};
+
 export const fetchHeaderImages = (templateId) => {
   return _axios.get(`/get-img?templateId=${templateId}&type=imgList`);
 };
@@ -34,6 +53,10 @@ export const postSite = (site) => {
 
 export const patchSite = (site) => {
   return _axios.patch("/site-edit", site);
+};
+
+export const publishSiteRequest = (siteId) => {
+  return _axios.post(`/site/publish/${siteId}`, {});
 };
 
 export const postImage = (image) => {

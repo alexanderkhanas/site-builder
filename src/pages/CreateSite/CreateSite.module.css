@@ -25,23 +25,6 @@
     max-width: 750px;
 }
 
-.tab__list {
-    display: flex;
-    padding: 0;
-    flex-wrap: wrap;
-}
-
-.tab {
-    padding: 10px 19px;
-    list-style: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.tab__active {
-    background: #51608a;
-    color: #fff;
-}
 
 .refresh__icon {
     margin-right: 10px;

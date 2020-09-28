@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import EditSiteSection from "../../misc/EditSiteSection/EditSiteSection";
 import Button from "../../misc/Button/Button";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Input from "../../misc/Input/Input";
 import InputFile from "../../misc/InputFile/InputFile";
 import { uploadImageAction } from "../../store/actions/userActions";
@@ -20,9 +19,10 @@ import { fetchRefreshedText } from "../../store/api/api";
 import PhoneNumberInput from "../../misc/PhoneNumberinput/PhoneNumberInput";
 import EditAdvantagesSection from "../../misc/EditAdvantagesSection/EditAdvantagesSection";
 import EditServicesSection from "../../misc/EditServicesSection/EditServicesSection";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
+import DraggableSections from "../../misc/DraggableSections/DraggableSections";
+import CustomTabs from "../../misc/CustomTabs/CustomTabs";
 
 const CreateSite = ({
   getSingleTemplate,
@@ -55,8 +55,6 @@ const CreateSite = ({
     tempArray.splice(source.index, 1);
     tempArray.splice(destination.index, 0, foundValue);
     setSectionsValues(tempArray);
-    // console.log("e ===", e);
-    console.log("temp array ===", tempArray);
   };
 
   const onBaseInputChange = ({ target: { name, value } }) => {
@@ -108,7 +106,6 @@ const CreateSite = ({
     const editedSection = sectionsValues.filter(
       (section) => section.categoryID === categoryID
     )[0];
-    console.log("editedSection ===", editedSection);
     editedSection.element.parameters[key] = value;
     if (key === "reviews" || key === "reviewName") {
       const { reviews, reviewName } = editedSection.element.parameters;
@@ -154,7 +151,6 @@ const CreateSite = ({
       })
       .map(({ element }, i) => {
         const { link, name } = element;
-        console.log("element ===", element);
         if (Object.keys(element.parameters).includes("menu")) {
           headerIndex = i;
         }
@@ -169,7 +165,6 @@ const CreateSite = ({
       elements,
       phone: +baseData.phone,
     });
-    console.log("site id ===", siteId);
     if (siteId) {
       history.push(`/site/${siteId}`);
     }
@@ -184,7 +179,6 @@ const CreateSite = ({
     const temp = sections.map((section) => {
       const { type } = section.element;
       const parameters = {};
-      console.log("section ===", section);
       if (type === "selected" || type === "required") {
         tempActiveSections.push(section);
       }
@@ -201,7 +195,6 @@ const CreateSite = ({
         element: { ...section.element, parameters },
       };
     });
-    console.log("temp ===", temp);
     setActiveSections(tempActiveSections);
     setSectionsValues(temp);
   }, [sections]);
@@ -215,11 +208,6 @@ const CreateSite = ({
   const isAdvantagesEditing =
     activeEditingValue?.element?.link === "#advantages";
   const isServicesEditing = activeEditingValue?.element?.link === "#services";
-
-  // useEffect(() => {
-  console.log("section values ===", sectionsValues);
-  console.log("active sections ===", activeSections);
-  // }, [sections]);
 
   return (
     <FixedWrapper>
@@ -249,20 +237,8 @@ const CreateSite = ({
         />
       )}
       <h1 className={s.title}>Створення сайту</h1>
-      <Tabs
-        selectedIndex={selectedTab}
-        onSelect={setSelectedTab}
-        className={s.inner}
-      >
-        <TabList className={s.tab__list}>
-          <Tab className={s.tab} selectedClassName={s.tab__active}>
-            Базова інформація
-          </Tab>
-          <Tab className={s.tab} selectedClassName={s.tab__active}>
-            Структура сайту
-          </Tab>
-        </TabList>
-        <TabPanel>
+      <CustomTabs tabs={["Базова інформація", "Структура сайту"]}>
+        <div>
           <div className={s.form}>
             <Input
               label="Назва сайту"
@@ -305,8 +281,8 @@ const CreateSite = ({
               <FaCogs className={s.button__icon} />
             </Button>
           </div>
-        </TabPanel>
-        <TabPanel>
+        </div>
+        <div>
           {sectionsValues?.length ? (
             <div className={s.sections}>
               <SiteSection
@@ -317,46 +293,14 @@ const CreateSite = ({
                 section={sectionsValues[0]}
               />
 
-              <DragDropContext {...{ onDragEnd }}>
-                <Droppable droppableId="droppable123">
-                  {(provided, snapshot) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      style={{ marginBottom: "20px" }}
-                    >
-                      {sectionsValues
-                        .slice(1, sectionsValues.length - 1)
-                        .map((section, i) => (
-                          <Draggable
-                            key={section.id}
-                            draggableId={section.id}
-                            index={i + 1}
-                          >
-                            {(provided, snapshot) => (
-                              <SiteSection
-                                isActive={
-                                  !!activeSections.filter(
-                                    ({ categoryID }) =>
-                                      categoryID === section.categoryID
-                                  )[0]
-                                }
-                                {...{ showEditingModal }}
-                                {...{ addSection }}
-                                {...{ removeSection }}
-                                {...{ section }}
-                                reference={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                              />
-                            )}
-                          </Draggable>
-                        ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+              <DraggableSections
+                sections={sectionsValues.slice(1, sectionsValues.length - 1)}
+                {...{ showEditingModal }}
+                {...{ addSection }}
+                {...{ removeSection }}
+                {...{ onDragEnd }}
+                {...{ activeSections }}
+              />
               <SiteSection
                 isActive
                 {...{ showEditingModal }}
@@ -368,7 +312,7 @@ const CreateSite = ({
           ) : (
             <div className={s.loader__container}>
               <Loader
-                type="ThreeDots"
+                type="Oval"
                 color="#404040"
                 height={100}
                 width={100}
@@ -376,14 +320,15 @@ const CreateSite = ({
               />
             </div>
           )}
-        </TabPanel>
-        <Button
-          size="lg"
-          title="Створити"
-          className={s.submit__button}
-          onClick={onSubmit}
-        />
-      </Tabs>
+        </div>
+      </CustomTabs>
+
+      <Button
+        size="lg"
+        title="Створити"
+        className={s.submit__button}
+        onClick={onSubmit}
+      />
     </FixedWrapper>
   );
 };

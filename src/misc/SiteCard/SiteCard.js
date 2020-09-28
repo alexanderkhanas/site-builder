@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { deleteSiteAction } from "../../store/actions/userSitesActions";
 import { connect } from "react-redux";
 
-const SiteCard = ({ site, deleteSite }) => {
+const SiteCard = ({ site, deleteSite, className }) => {
   const history = useHistory();
   const { logo, site_name: name, id } = site;
 
@@ -19,7 +19,7 @@ const SiteCard = ({ site, deleteSite }) => {
   const onDeletePress = () => deleteSite(id);
 
   return (
-    <CardWrapper className={s.container}>
+    <CardWrapper className={`${s.container} ${className}`}>
       <img
         src={`https://topfractal.com/${logo}`}
         alt="loading"

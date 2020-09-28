@@ -49,3 +49,8 @@
 .submit__button {
     margin-top: 30px;
 }
+
+.button__icon {
+    font-size: 18px;
+    margin-right: 10px;
+}

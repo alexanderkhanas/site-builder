@@ -1,12 +1,14 @@
 import {
   fetchUser,
+  fetchUserGallery,
   loginRequest,
   logoutUserRequest,
   patchUser,
   postImage,
+  postUserAvatar,
   registerRequest,
 } from "../api/api";
-import { SET_USER } from "./actionTypes";
+import { SET_USER, SET_USER_AVATAR, SET_USER_IMAGES } from "./actionTypes";
 
 export const loginAction = (data, isRemember) => {
   return async (dispatch) => {
@@ -51,6 +53,17 @@ export const uploadImageAction = (imageFormData) => {
     if (response.status === 200) {
     }
     return response?.data;
+  };
+};
+
+export const uploadAvatarAction = (imageFormData) => {
+  return async (dispatch) => {
+    postUserAvatar(imageFormData).then((res) => {
+      dispatch({
+        type: SET_USER_AVATAR,
+        avatar: res.data.url,
+      });
+    });
   };
 };
 

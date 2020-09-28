@@ -8,6 +8,7 @@ import { BiExit, BiPencil, FiLogOut } from "react-icons/all";
 import {
   editUserAction,
   logoutUserAction,
+  uploadAvatarAction,
 } from "../../store/actions/userActions";
 import { object, string } from "yup";
 import Button from "../../misc/Button/Button";
@@ -26,8 +27,27 @@ const Profile = ({
   showModal,
   hideModal,
   logout,
+  uploadAvatar,
 }) => {
   const uploadInputRef = useRef();
+
+  const { avatar } = user;
+
+  const showPickImageModal = () => {
+    uploadInputRef.current.click();
+  };
+
+  const onImageUpload = ({ target: { files } }) => {
+    const [file] = files;
+    console.log("files ===", files);
+    const reader = new FileReader();
+    reader.onload = async ({ target: { result } }) => {
+      const formData = new FormData();
+      formData.append("imageFile", [result]);
+      uploadAvatar(formData);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const logoutHandler = () => {
     showModal(
@@ -56,11 +76,22 @@ const Profile = ({
           </Button>
           <div className={s.avatar__container}>
             <img
-              src={require("../../assets/avatar-placeholder.png")}
+              onClick={showPickImageModal}
+              src={
+                avatar
+                  ? `https://topfractal.com/${avatar}`
+                  : require("../../assets/avatar-placeholder.png")
+              }
               className={s.avatar}
               alt="loading"
             />
-            <input ref={uploadInputRef} className={s.hidden} />
+            <input
+              onChange={onImageUpload}
+              type="file"
+              accept="image/*"
+              ref={uploadInputRef}
+              className={s.hidden}
+            />
           </div>
           <Input
             containerClass={s.input__container}
@@ -131,6 +162,7 @@ const mapDispatchToProps = (dispatch) => ({
   showModal: (title, desc, onResolve, onReject) =>
     dispatch(showModalAction(title, desc, onResolve, onReject)),
   logout: () => dispatch(logoutUserAction()),
+  uploadAvatar: (imageFormData) => dispatch(uploadAvatarAction(imageFormData)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(formikHOC);

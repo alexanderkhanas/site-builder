@@ -7,6 +7,7 @@ const InputFile = ({
   multiple,
   buttonSize,
   label,
+  withPreview = true,
   containerClass,
   onChange = () => {},
   ...rest
@@ -59,11 +60,13 @@ const InputFile = ({
 
         <Button onClick={onButtonClick} title="Завантажити" size={buttonSize} />
       </div>
-      <div className={s.images__container}>
-        {imagesPreview.map((img) => (
-          <img alt="" src={img} className={s.img} />
-        ))}
-      </div>
+      {withPreview && (
+        <div className={s.images__container}>
+          {imagesPreview.map((img) => (
+            <img alt="" src={img} className={s.img} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

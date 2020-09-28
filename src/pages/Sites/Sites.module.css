@@ -1,11 +1,33 @@
 .cards__container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
     margin-top: 10px;
 }
 
-@media (max-width: 900px) {
+.cards__container .card {
+    margin-right: 3%;
+    min-width: 200px;
+}
+
+@media (max-width: 750px) {
+    .cards__container {
+        justify-content: space-between;
+    }
+    .cards__container .card {
+        margin-right: 0;
+    }
+}
+
+@media(min-width: 900px) {
+    .card:nth-child(3n) {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .card:nth-child(2n) {
+        margin-right: 0;
+    }
     .cards__container {
         margin-top: 60px;
     }

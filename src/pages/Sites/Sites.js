@@ -13,7 +13,13 @@ const Sites = ({ getSites, sites }) => {
     <FixedWrapper>
       <div className={s.cards__container}>
         {sites.map((site) => (
-          <SiteCard key={site.id} {...{ site }} />
+          <SiteCard className={s.card} key={site.id} {...{ site }} />
+        ))}
+        {sites.map((site) => (
+          <SiteCard className={s.card} key={site.id} {...{ site }} />
+        ))}
+        {sites.slice(1).map((site) => (
+          <SiteCard className={s.card} key={site.id} {...{ site }} />
         ))}
       </div>
     </FixedWrapper>

@@ -69,6 +69,9 @@ const Header = ({ user, history }) => {
             <Link to="/sites" className={s.header__item}>
               МОЇ САЙТИ
             </Link>
+            <Link to="/gallery" className={s.header__item}>
+              ГАЛЕРЕЯ
+            </Link>
             {/*<a className={s.header__item} href="http://panel.topfractal.com/">*/}
             {/*  ПАНЕЛЬ УПРАВЛІННЯ*/}
             {/*</a>*/}
@@ -142,7 +145,8 @@ const Header = ({ user, history }) => {
         <Link to="/tariffs">ТАРИФИ</Link>
         <Link to="/advantages">ПЕРЕВАГИ</Link>
         <Link to="/reviews">ВІДГУКИ</Link>
-        <Link to="/sites">МОЇ САЙТИ</Link>
+        {!!user.id && <Link to="/sites">МОЇ САЙТИ</Link>}
+        <Link to="/gallery">ГАЛЕРЕЯ</Link>
         {user.id ? (
           <Link to="/profile">Профіль</Link>
         ) : (
