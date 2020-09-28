@@ -1,4 +1,6 @@
 export const SET_USER = "SET_USER";
+export const CLEAR_USER = "CLEAR_USER";
+export const SET_LOGGING = "SET_LOGGING";
 export const SET_USER_AVATAR = "SET_USER_AVATAR";
 export const SET_DIRECTIONS = "SET_DIRECTIONS";
 export const SET_TEMPLATES = "SET_TEMPLATES";

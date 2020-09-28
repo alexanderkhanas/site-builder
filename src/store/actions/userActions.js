@@ -8,7 +8,12 @@ import {
   postUserAvatar,
   registerRequest,
 } from "../api/api";
-import { SET_USER, SET_USER_AVATAR, SET_USER_IMAGES } from "./actionTypes";
+import {
+  SET_LOGGING,
+  SET_USER,
+  SET_USER_AVATAR,
+  SET_USER_IMAGES,
+} from "./actionTypes";
 
 export const loginAction = (data, isRemember) => {
   return async (dispatch) => {
@@ -37,12 +42,15 @@ export const registerAction = (data) => {
 
 export const getUserAction = () => {
   return async (dispatch) => {
-    const response = await fetchUser();
-    if (response?.status === 200) {
-      const { user } = response.data;
-      dispatch({ type: SET_USER, user });
-    }
-    return response?.status === 200;
+    const isSuccess = await fetchUser()
+      .then((res) => {
+        const { user } = res.data;
+        dispatch({ type: SET_USER, user });
+      })
+      .catch(() => {
+        dispatch({ type: SET_LOGGING, isLogging: false });
+      });
+    return isSuccess;
   };
 };
 

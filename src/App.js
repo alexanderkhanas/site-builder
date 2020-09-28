@@ -94,7 +94,12 @@ function App({ getUser, getContent, user }) {
               path="/site/:id"
               component={SingleSite}
             />
-            <Route path="/profile" component={Profile} />
+            <PrivateRoute
+              condition={!!id}
+              redirectTo="/login"
+              path="/profile"
+              component={Profile}
+            />
             <Route path="/gallery" component={Gallery} />
             <Route path="/about-us" component={About} />
             <Route path="/public-offer" component={PublicOffer} />

@@ -66,12 +66,16 @@ const Header = ({ user, history }) => {
             <Link className={s.header__item} to="/reviews">
               ВІДГУКИ
             </Link>
-            <Link to="/sites" className={s.header__item}>
-              МОЇ САЙТИ
-            </Link>
-            <Link to="/gallery" className={s.header__item}>
-              ГАЛЕРЕЯ
-            </Link>
+            {!!user.id && (
+              <Link to="/sites" className={s.header__item}>
+                МОЇ САЙТИ
+              </Link>
+            )}
+            {!!user.id && (
+              <Link to="/gallery" className={s.header__item}>
+                ГАЛЕРЕЯ
+              </Link>
+            )}
             {/*<a className={s.header__item} href="http://panel.topfractal.com/">*/}
             {/*  ПАНЕЛЬ УПРАВЛІННЯ*/}
             {/*</a>*/}
