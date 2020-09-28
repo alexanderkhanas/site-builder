@@ -65,9 +65,9 @@
 }
 
 .social__icon {
-    width: 32px;
-    height: 32px;
-    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    margin-right: 20px;
     border-radius:6px;
 }
 
@@ -86,8 +86,9 @@
     width: 100%;
     align-items: center;
     font-family: "Montserrat", sans-serif;
-    padding: 5px 10px;
+    padding: 11px 10px;
     border-radius: 10px;
     background: #1F2C4F;
     color: #fff;
+    font-weight: 300;
 }

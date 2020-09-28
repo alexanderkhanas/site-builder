@@ -24,7 +24,10 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
   };
 
   useEffect(() => {
-    getUserGallery().then(() => setLoading(false));
+    (async () => {
+      await getUserGallery();
+      setLoading(false);
+    })();
   }, []);
 
   return !isLoading ? (
