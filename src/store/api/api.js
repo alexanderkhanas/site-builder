@@ -9,7 +9,7 @@ export const registerRequest = (data) => {
 };
 
 export const loginFacebookRequest = (data) => {
-  return _axios.post("//facebook-login", data);
+  return _axios.post("/facebook-login", data);
 };
 
 export const fetchUser = () => {
