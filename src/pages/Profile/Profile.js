@@ -77,11 +77,7 @@ const Profile = ({
           <div className={s.avatar__container}>
             <img
               onClick={showPickImageModal}
-              src={
-                avatar
-                  ? `https://topfractal.com/${avatar}`
-                  : require("../../assets/avatar-placeholder.png")
-              }
+              src={avatar || require("../../assets/avatar-placeholder.png")}
               className={s.avatar}
               alt="loading"
             />
