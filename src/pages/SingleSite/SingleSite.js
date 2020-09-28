@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import s from "./SingleSite.module.css";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
@@ -13,6 +13,7 @@ import FullPageLoader from "../../misc/FullPageLoader/FullPageLoader";
 import Select from "../../misc/Select/Select";
 import uuid from "react-uuid";
 import Checkbox from "../../misc/Checkbox/Checkbox";
+import { createOrderAction } from "../../store/actions/siteActions";
 
 const periodSelectOptions = [
   { label: "Місяць", value: "month" },
@@ -20,7 +21,7 @@ const periodSelectOptions = [
   { label: "Рік", value: "year" },
 ];
 
-const SingleSite = () => {
+const SingleSite = ({ createOrder }) => {
   const [data, setData] = useState({});
   const [orderId, setOrderId] = useState(uuid());
   const [isLoading, setLoading] = useState(true);
@@ -29,18 +30,48 @@ const SingleSite = () => {
     period: periodSelectOptions[0],
     isInCart: false,
   });
+  const [selectedServices, setSelectedServices] = useState([]);
+  const [fullPrice, setFullPrice] = useState(0);
   const { id } = useParams();
   const history = useHistory();
 
   const { site = {}, tariff, tariffCurrent, services } = data;
-  const { logo, site_name: name, created_at: date, remote_url: url } = site;
+  const { logo, site_name: siteName, created_at: date, remote_url: url } = site;
 
   const onTariffSelect = (index) => {
-    setSelectedTariff((prev) => ({ ...prev, index }));
+    setSelectedTariff((prev) => ({ ...prev, index, ...tariff[index] }));
   };
 
   const onPeriodSelect = (period) => {
     setSelectedTariff((prev) => ({ ...prev, period }));
+  };
+
+  const onTariffCheckboxChange = ({ target: { checked } }) => {
+    setSelectedTariff((prev) => ({
+      ...prev,
+      isInCart: checked,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    await createOrder(
+      orderId,
+      id,
+      selectedTariff.id ? selectedTariff.id : null,
+      selectedServices.map(({ id: serviceId }) => serviceId).join(","),
+      fullPrice
+    );
+    setOrderId(uuid());
+  };
+
+  const onServiceCheckboxChange = ({ target: { checked } }, service) => {
+    if (checked) {
+      setSelectedServices((prev) => [...prev, service]);
+    } else {
+      setSelectedServices((prev) =>
+        prev.filter((item) => item.id !== service.id)
+      );
+    }
   };
 
   const redirectToDemo = () => history.push(`/site/demo/${id}`);
@@ -56,6 +87,20 @@ const SingleSite = () => {
     });
   };
 
+  const { period: tariffPeriod } = selectedTariff;
+
+  useEffect(() => {
+    let temp = 0;
+    console.log("selected tariff", selectedTariff);
+    if (selectedTariff.isInCart) {
+      temp += +selectedTariff[tariffPeriod.value].price;
+    }
+    selectedServices.forEach(({ price }) => {
+      temp += +price;
+    });
+    setFullPrice(temp);
+  }, [selectedTariff, selectedServices]);
+
   useEffect(() => {
     setLoading(true);
     fetchSingleSite(id)
@@ -66,9 +111,18 @@ const SingleSite = () => {
       .catch(() => setLoading(false));
   }, []);
 
-  console.log("data ===", data);
+  useEffect(() => {
+    if (tariff) {
+      setSelectedTariff((prev) => ({
+        ...prev,
+        ...tariff[selectedTariff.index],
+      }));
+    }
+  }, [tariff]);
 
-  console.log("tariff ===", tariff && tariff[selectedTariff.index]);
+  console.log("full price ===", fullPrice);
+
+  // console.log("tariffObj ===", tariffObj);
 
   return !isLoading && site.id ? (
     <FixedWrapper className={s.container}>
@@ -81,7 +135,7 @@ const SingleSite = () => {
           />
           <div className={s.section__main}>
             <div>
-              <h3 className={s.section__name}>{name}</h3>
+              <h3 className={s.section__name}>{siteName}</h3>
               <p className={s.section__desc}>
                 {date && new Date(date).toISOString().split("T")[0]}
               </p>
@@ -138,18 +192,25 @@ const SingleSite = () => {
           </div>
         </div>
       </div>
-      {services?.map(({ name, desk, price, id }) => (
-        <div className={s.section}>
-          <div className={s.service} key={`service${id}`}>
-            <div className={s.service__info}>
+      {services?.map((service) => {
+        const { name, desk, price, id: serviceId } = service;
+        return (
+          <div className={s.section}>
+            <div className={s.service} key={`service${serviceId}`}>
               <h4 className={s.service__title}>{name}</h4>
               <p className={s.service__desc}>{desk}</p>
-              <p className={s.section__price}>{price}₴</p>
+              <div className={s.section__price__container}>
+                <p className={s.section__price}>{price}₴</p>
+                <Checkbox
+                  checked={selectedServices.includes(service)}
+                  onChange={(e) => onServiceCheckboxChange(e, service)}
+                  id={`service_checkbox${serviceId}`}
+                />
+              </div>
             </div>
-            <Checkbox />
           </div>
-        </div>
-      ))}
+        );
+      })}
       <div className={s.section}>
         <Tabs selectedIndex={selectedTariff.index} onSelect={onTariffSelect}>
           <TabList className={s.tabs__container}>
@@ -164,16 +225,16 @@ const SingleSite = () => {
             ))}
           </TabList>
           {tariff.map((tariffObj) => {
-            const { id, text } = tariffObj;
+            const { id: tariffId, text } = tariffObj;
             const { price } = tariffObj[selectedTariff.period.value];
             return (
-              <TabPanel key={id}>
+              <TabPanel key={`tariff${tariffId}`}>
                 <div className={s.tariff}>
                   <div className={s.tariff__main}>
                     <div className={s.tariff__desc}>
-                      {text.map(({ id, value }) => (
+                      {text.map(({ id: textId, value }) => (
                         <p
-                          key={`text__tariff${id}`}
+                          key={`text__tariff${textId}`}
                           className={s.tariff__desc__item}
                         >
                           {value}
@@ -191,33 +252,75 @@ const SingleSite = () => {
                   </div>
                 </div>
 
-                <div className={s.tariff__price__container}>
-                  <Checkbox containerClass={s.tariff__checkbox} />
+                <div className={s.section__price__container}>
                   <p className={s.section__price}>{price}₴</p>
+                  <Checkbox
+                    checked={selectedTariff.isInCart}
+                    onChange={onTariffCheckboxChange}
+                    containerClass={s.tariff__checkbox}
+                    id={`checkbox_tariff${id}`}
+                  />
                 </div>
               </TabPanel>
             );
           })}
         </Tabs>
       </div>
-      <LiqPayPay
-        publicKey={process.env.REACT_APP_LIQPAY_PUBLIC}
-        privateKey={process.env.REACT_APP_LIQPAY_PRIVATE}
-        description="Payment for services"
-        {...{ orderId }}
-        result_url="http://domain.com/user/account"
-        server_url="http://server.domain.com/liqpay"
-        product_description="Tariffs"
-        style={{ margin: "8px" }}
-        extra={[
-          <Button
-            className={s.submit__button}
-            title="Оплатити Liqpay"
-            size="lg"
-            key="1"
-          />,
-        ]}
-      />
+      <div className={s.cart}>
+        {selectedServices.map((service) => {
+          const { id: serviceId, name, desk, price } = service;
+          return (
+            <div className={s.cart__item} key={`cart__service${serviceId}`}>
+              <div>
+                <h4 className={s.cart__item__title}>{name}</h4>
+                <p className={s.cart__item__desc}>{desk}</p>
+              </div>
+              <p className={s.cart__item__price}>{price}₴</p>
+            </div>
+          );
+        })}
+        {selectedTariff.isInCart && (
+          <div className={s.cart__item} key={`cart__service${id}`}>
+            <div>
+              <h4 className={s.cart__item__title}>
+                {tariff[selectedTariff.index].name} тариф
+              </h4>
+              <p className={s.cart__item__desc}>{tariffPeriod.label}</p>
+            </div>
+            <p className={s.cart__item__price}>
+              {selectedTariff[tariffPeriod.value]?.price}₴
+            </p>
+          </div>
+        )}
+      </div>
+      {!!fullPrice && (
+        <LiqPayPay
+          publicKey={process.env.REACT_APP_LIQPAY_PUBLIC}
+          privateKey={process.env.REACT_APP_LIQPAY_PRIVATE}
+          description="Payment for services"
+          {...{ orderId }}
+          result_url={`https://panel.topfractal.com/siteAjaxUpdate/${orderId}`}
+          product_description="Tariffs"
+          amount={fullPrice}
+          style={{ margin: "8px" }}
+          extra={[
+            <Button
+              onClick={handleSubmit}
+              className={s.submit__button}
+              title={`Оплатити Liqpay ${fullPrice}₴`}
+              size="lg"
+              key="1"
+            />,
+          ]}
+        />
+        // <Button
+        //   onClick={handleSubmit}
+        //   className={s.submit__button}
+        //   title={`Оплатити Liqpay ${fullPrice}₴`}
+        //   size="lg"
+        //   key="1"
+        // />
+      )}
     </FixedWrapper>
   ) : (
     <FullPageLoader />
@@ -225,6 +328,9 @@ const SingleSite = () => {
 };
 
 const mapStateToProps = (state) => ({});
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  createOrder: (orderId, siteId, tariffId, serviceIds, amount) =>
+    dispatch(createOrderAction(orderId, siteId, tariffId, serviceIds, amount)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleSite);

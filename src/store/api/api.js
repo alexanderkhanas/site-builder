@@ -125,3 +125,7 @@ export const postAdvantage = (advantage) => {
 export const fetchDefaultImages = (templateId, type) => {
   return axios.get(`/get-img?templateId=${templateId}&type=${type}`);
 };
+
+export const postOrder = (data) => {
+  return axios.post("/create-order", data);
+};

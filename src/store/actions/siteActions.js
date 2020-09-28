@@ -13,6 +13,7 @@ import {
   fetchDefaultImages,
   patchUser,
   patchSite,
+  postOrder,
 } from "../api/api";
 import { getToken } from "../../utils/utils";
 import {
@@ -166,6 +167,26 @@ export const getDefaultImagesAction = (templateId, type) => {
         templateId,
         key: type,
       });
+    });
+  };
+};
+
+export const createOrderAction = (
+  orderId,
+  siteId,
+  tariffId,
+  serviceIds,
+  amount
+) => {
+  return async (dispatch) => {
+    postOrder({
+      orderId,
+      siteId,
+      tariffId,
+      serviceId: serviceIds,
+      totalAmount: amount,
+    }).then((res) => {
+      console.log("res data", res.data);
     });
   };
 };

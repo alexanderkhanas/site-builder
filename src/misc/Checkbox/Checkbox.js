@@ -14,7 +14,7 @@ const Checkbox = ({
   return (
     <div className={classnames(s.checkbox__container, containerClass)}>
       <input
-        onChange={onChange}
+        {...{ onChange }}
         {...{ checked }}
         type="checkbox"
         {...{ id }}

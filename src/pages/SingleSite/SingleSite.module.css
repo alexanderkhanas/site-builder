@@ -1,6 +1,6 @@
 .container {
     max-width: 700px;
-    margin: 60px auto 0;
+    margin: 60px auto 50px;
 }
 
 .section {
@@ -124,7 +124,7 @@
     background: #fff;
     overflow: hidden;
     padding: 0;
-    margin-bottom: 20px;
+    margin: 0 0 20px;
 }
 
 .tab {
@@ -143,11 +143,12 @@
     border-right: none;
 }
 
-.tariff__price__container {
+.section__price__container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-top: 20px;
-    flex-grow: 1;
+   width: 100%;
 }
 
 .section__price {
@@ -176,13 +177,11 @@
 }
 
 .submit__button {
-    margin-top: 20px;
+    margin: 20px 0;
 }
 
 .service {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-grow: 1;
 }
 
 .service__title {
@@ -194,6 +193,33 @@
     font-weight: 300;
     color: #40404095;
     margin-bottom: 20px;
+}
+
+.cart__item {
+    display: flex;
+    justify-content: space-between;
+    margin: 14px 0;
+}
+
+.cart__item:last-child {
+    margin-bottom: 0;
+}
+
+.cart__item__title {
+    font-weight: 400;
+    color: #404040;
+    margin-bottom: 7px;
+}
+
+.cart__item__desc {
+    font-weight: 300;
+    color: #40404090
+}
+
+.cart__item__price {
+    font-weight: 600;
+    font-size: 20px;
+    color: #1F2C4F;
 }
 
 @media (max-width: 500px) {
