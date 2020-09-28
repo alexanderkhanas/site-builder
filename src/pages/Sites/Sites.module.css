@@ -9,6 +9,27 @@
     min-width: 200px;
 }
 
+.link__container {
+    margin-top: 20px;
+}
+
+.link {
+    transition: 0.15s;
+}
+
+.link:hover {
+    border-bottom: 1px solid #000;
+}
+
+.empty__container {
+    height: 90vh;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 @media (max-width: 750px) {
     .cards__container {
         justify-content: space-between;

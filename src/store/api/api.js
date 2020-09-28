@@ -1,122 +1,127 @@
-import _axios from "./_axios";
+import axios from "axios";
+
+axios.defaults.baseURL = "https://topfractal.com/api/v1/";
+axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem(
+  "_token"
+)}`;
 
 export const loginRequest = (data) => {
-  return _axios.post("/getToken", data);
+  return axios.post("/getToken", data);
 };
 
 export const registerRequest = (data) => {
-  return _axios.post("/createUser", data);
+  return axios.post("/createUser", data);
 };
 
 export const loginFacebookRequest = (data) => {
-  return _axios.post("/facebook-login", data);
+  return axios.post("/facebook-login", data);
 };
 
 export const fetchUser = () => {
-  return _axios.get("/getUserByToken");
+  return axios.get("/getUserByToken");
 };
 
 export const fetchUserGallery = () => {
-  return _axios.get("/get-user-img");
+  return axios.get("/get-user-img");
 };
 
 export const deleteUserImagesRequest = (images) => {
-  return _axios.post("/delete-user-img", { imageFile: images });
+  return axios.post("/delete-user-img", { imageFile: images });
 };
 
 export const postUserImage = (type, images) => {
-  return _axios.post("/upload-user-img", {
+  return axios.post("/upload-user-img", {
     type,
     imageFile: images,
   });
 };
 
 export const postUserAvatar = (image) => {
-  return _axios.post("/update-user-avatar", image);
+  return axios.post("/update-user-avatar", image);
 };
 
 export const fetchHeaderImages = (templateId) => {
-  return _axios.get(`/get-img?templateId=${templateId}&type=imgList`);
+  return axios.get(`/get-img?templateId=${templateId}&type=imgList`);
 };
 
 export const fetchDirections = (token) => {
-  return _axios.get("/directions");
+  return axios.get("/directions");
 };
 
 export const fetchTemplates = (id, token) => {
-  return _axios.get(`/direction/${id}`);
+  return axios.get(`/direction/${id}`);
 };
 
 export const fetchSingleTemplate = (id) => {
-  return _axios.get(`/template/${id}`);
+  return axios.get(`/template/${id}`);
 };
 
 export const postSite = (site) => {
-  return _axios.post("/site-create", site);
+  return axios.post("/site-create", site);
 };
 
 export const patchSite = (site) => {
-  return _axios.patch("/site-edit", site);
+  return axios.patch("/site-edit", site);
 };
 
 export const publishSiteRequest = (siteId) => {
-  return _axios.post(`/site/publish/${siteId}`, {});
+  return axios.post(`/site/publish/${siteId}`, {});
 };
 
 export const postImage = (image) => {
-  return _axios.post("/upload-img", image);
+  return axios.post("/upload-img", image);
 };
 
 export const fetchRefreshedText = (templateId, lang, type) => {
-  return _axios.get(
+  return axios.get(
     `/refresh-text?lang=${lang}&templateId=${templateId}&type=${type}`
   );
 };
 
 export const fetchSectionVariations = (sectionId) => {
-  return _axios.get(`/category/${sectionId}`);
+  return axios.get(`/category/${sectionId}`);
 };
 
 export const fetchHomeContent = (lang) => {
-  return _axios.get(`/home-page`);
+  return axios.get(`/home-page`);
 };
 
 export const fetchUserSites = () => {
-  return _axios.get("/sites");
+  return axios.get("/sites");
 };
 
 export const fetchSiteDemo = (id) => {
-  return _axios.get(`/site/preview/${id}`);
+  return axios.get(`/site/preview/${id}`);
 };
 
 export const fetchEditingSite = (id) => {
-  return _axios.get(`/site-data/${id}`);
+  return axios.get(`/site-data/${id}`);
 };
 
 export const deleteSite = (id) => {
-  return _axios.post(`/site-delete/${id}`, {});
+  return axios.post(`/site-delete/${id}`, {});
 };
 
 export const fetchSingleSite = (id) => {
-  return _axios.get(`/site/${id}`);
+  return axios.get(`/site/${id}`);
 };
 
 export const patchUser = (user) => {
-  return _axios.post("/update-user", user);
+  return axios.post("/update-user", user);
 };
 
 export const logoutUserRequest = () => {
-  return _axios.post("/logout", {});
+  return axios.post("/logout", {});
 };
 
 export const postService = (service) => {
-  return _axios.post("/add-services", service);
+  return axios.post("/add-services", service);
 };
 
 export const postAdvantage = (advantage) => {
-  return _axios.post("/add-benefit", advantage);
+  return axios.post("/add-benefit", advantage);
 };
 
 export const fetchDefaultImages = (templateId, type) => {
-  return _axios.get(`/get-img?templateId=${templateId}&type=${type}`);
+  return axios.get(`/get-img?templateId=${templateId}&type=${type}`);
 };

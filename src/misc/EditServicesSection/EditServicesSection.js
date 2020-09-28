@@ -188,7 +188,7 @@ const EditServicesSection = ({
                     onChange={({ target: { checked } }) => {
                       onParentSelected(parent, checked);
                     }}
-                    containerStyle={s.parent__checkbox}
+                    containerClass={s.parent__checkbox}
                     id={`${id}-parent-checkbox`}
                   />
                   <AccordionItemPanel>

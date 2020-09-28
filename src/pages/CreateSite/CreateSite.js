@@ -93,8 +93,10 @@ const CreateSite = ({
         ? {
             ...sectionValue,
             element: {
-              ...element,
-              parameters: sectionValue.element.parameters,
+              ...sectionValue.element,
+              id: element.id,
+              thumbnail: element.thumbnail,
+              url: element.url,
             },
           }
         : sectionValue;
@@ -159,7 +161,9 @@ const CreateSite = ({
         }
         return element;
       });
+    console.log("menu ===", menu);
     elements[headerIndex].parameters.menu = menu;
+    console.log();
     const siteId = await createSite({
       ...baseData,
       elements,
@@ -173,6 +177,8 @@ const CreateSite = ({
   useEffect(() => {
     getSingleTemplate(id);
   }, []);
+
+  console.log("section values ===", sectionsValues);
 
   useEffect(() => {
     const tempActiveSections = [];

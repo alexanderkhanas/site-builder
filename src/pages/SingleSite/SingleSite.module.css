@@ -1,18 +1,22 @@
 .container {
-    margin-top: 60px;
+    max-width: 700px;
+    margin: 60px auto 0;
 }
-
-
 
 .section {
     padding: 20px 30px;
     background: #fff;
-    max-width: 700px;
     border-radius: 10px;
     margin: 20px auto 0 auto;
     align-self: center;
     position: relative;
 }
+
+.tariff__section {
+    display: flex;
+    align-items: center;
+}
+
 
 .section__inner {
     display: flex;
@@ -120,7 +124,6 @@
     background: #fff;
     overflow: hidden;
     padding: 0;
-    margin: 0;
     margin-bottom: 20px;
 }
 
@@ -140,9 +143,57 @@
     border-right: none;
 }
 
+.tariff__price__container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    flex-grow: 1;
+}
+
+.section__price {
+    font-weight: bold;
+    font-size: 26px;
+}
+
+
+.tariff__checkbox {
+    margin-right: 10px;
+}
+
+.tariff__desc__item {
+    padding: 8px 0;
+    color: #40404095;
+    font-weight: 300;
+}
+
 .tab__active {
     background: #1F2C4F;
     color: #fff;
+}
+
+.select__period {
+    width: 150px;
+}
+
+.submit__button {
+    margin-top: 20px;
+}
+
+.service {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.service__title {
+    margin-bottom: 7px;
+    font-weight: 400;
+}
+
+.service__desc {
+    font-weight: 300;
+    color: #40404095;
+    margin-bottom: 20px;
 }
 
 @media (max-width: 500px) {

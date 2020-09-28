@@ -85,10 +85,17 @@
     display: flex;
     width: 100%;
     align-items: center;
-    font-family: "Montserrat", sans-serif;
+    font-family: Roboto, sans-serif;
     padding: 11px 10px;
     border-radius: 10px;
     background: #1F2C4F;
     color: #fff;
     font-weight: 300;
+    cursor: pointer;
 }
+
+.link {
+    cursor: pointer;
+}
+
+

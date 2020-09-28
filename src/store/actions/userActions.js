@@ -16,6 +16,8 @@ import {
   SET_USER_AVATAR,
   SET_USER_IMAGES,
 } from "./actionTypes";
+import _axios from "../api/_axios";
+import axios from "axios";
 
 export const loginAction = (data, isRemember) => {
   return async (dispatch) => {
@@ -23,6 +25,7 @@ export const loginAction = (data, isRemember) => {
     if (response?.status === 200) {
       const { user, token } = response.data;
       localStorage.setItem("_token", token);
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       dispatch({ type: SET_USER, user });
     }
     return response?.status === 200;
@@ -34,6 +37,7 @@ export const facebookLoginAction = (data) => {
     loginFacebookRequest(data).then((res) => {
       const { user, token } = res.data;
       localStorage.setItem("_token", token);
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       dispatch({ type: SET_USER, user });
     });
   };
@@ -46,6 +50,7 @@ export const registerAction = (data) => {
     if (response?.data) {
       const { user, token } = response.data;
       localStorage.setItem("_token", token);
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       dispatch({ type: SET_USER, user });
     }
     return response?.status === 200;

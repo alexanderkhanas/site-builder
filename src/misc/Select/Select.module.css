@@ -51,8 +51,7 @@
     box-sizing: border-box;
     font-size: 15px;
     color: #404040;
-
-    font-family: Nunito;
+    font-family: Roboto, sans-serif;
     border: none;
 }
 
@@ -63,7 +62,7 @@
 .value__text {
     color: #404040;
     font-size: 15px;
-    font-family: Nunito;
+    font-family: Roboto, sans-serif;
 }
 
 .label {

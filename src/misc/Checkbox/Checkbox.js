@@ -7,12 +7,12 @@ const Checkbox = ({
   checked,
   onTitleClick,
   title,
-  containerStyle,
+  containerClass,
   id,
   ...rest
 }) => {
   return (
-    <div className={classnames(s.checkbox__container, containerStyle)}>
+    <div className={classnames(s.checkbox__container, containerClass)}>
       <input
         onChange={onChange}
         {...{ checked }}

@@ -41,7 +41,7 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
         >
           {[...Array(5)].map((_, i) => {
             const [key, images] = Object.entries(gallery)[i] || [];
-            return images?.length ? (
+            return (
               <div>
                 <InputFile
                   onChange={(images) => onImageLoad(key, images)}
@@ -52,26 +52,26 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
                   containerClass={s.upload__input}
                 />
                 <div className={s.items__container}>
-                  {images.map((img) => (
-                    <div className={s.item}>
-                      <BiTrash
-                        className={s.delete__icon}
-                        onClick={() => deleteImage(key, img)}
-                      />
-                      <img
-                        key={`gallery${img}`}
-                        src={`https://topfractal.com/${img}`}
-                        className={s.item__image}
-                        alt="loading"
-                      />
-                    </div>
-                  ))}
+                  {images?.length ? (
+                    images.map((img) => (
+                      <div className={s.item}>
+                        <BiTrash
+                          className={s.delete__icon}
+                          onClick={() => deleteImage(key, img)}
+                        />
+                        <img
+                          key={`gallery${img}`}
+                          src={`https://topfractal.com/${img}`}
+                          className={s.item__image}
+                          alt="loading"
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <h3>Ви ще не завантажили фото для цієї категорії</h3>
+                  )}
                 </div>
               </div>
-            ) : (
-              <h3 key={`empty${i}`}>
-                Ви ще не завантажили фото цієї категорії
-              </h3>
             );
           })}
         </CustomTabs>
