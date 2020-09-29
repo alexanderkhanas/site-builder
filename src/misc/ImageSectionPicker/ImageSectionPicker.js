@@ -7,7 +7,7 @@ const ImageSectionPicker = ({
   userImages,
   adminImages,
   onSelect,
-  activeImage,
+  activeImages = [],
 }) => {
   return (
     (!!userImages.length || !!adminImages.length) && (
@@ -24,12 +24,12 @@ const ImageSectionPicker = ({
           {userImages.map((img) => {
             return (
               <img
-                onClick={() => onSelect(img)}
+                onClick={() => onSelect(img, activeImages.includes(img))}
                 key={img}
                 alt="loading"
                 src={`https://topfractal.com/${img}`}
                 className={classnames(s.image, {
-                  [s.image__active]: img === activeImage,
+                  [s.image__active]: activeImages.includes(img),
                 })}
               />
             );
@@ -42,12 +42,12 @@ const ImageSectionPicker = ({
           {adminImages.map((img) => {
             return (
               <img
-                onClick={() => onSelect(img)}
+                onClick={() => onSelect(img, activeImages.includes(img))}
                 key={img}
                 alt="loading"
                 src={`https://topfractal.com/${img}`}
                 className={classnames(s.image, {
-                  [s.image__active]: img === activeImage,
+                  [s.image__active]: activeImages.includes(img),
                 })}
               />
             );

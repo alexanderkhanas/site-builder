@@ -58,6 +58,23 @@ const EditSiteSection = ({
     onEdit(section.categoryID, "reviews", temp);
   };
 
+  const onSingleImageSelect = (img, key) => {
+    onEdit(section.categoryID, key, img);
+  };
+
+  const onMultipleImagesSelect = (img, key, selectedImages, isSelected) => {
+    console.log("is selected ===", isSelected);
+    if (isSelected) {
+      onEdit(
+        section.categoryID,
+        key,
+        selectedImages.filter((selectedImage) => selectedImage !== img)
+      );
+    } else {
+      onEdit(section.categoryID, key, [...selectedImages, img]);
+    }
+  };
+
   const onTeamImageLoad = async (images, index, key, type) => {
     const temp = [...values.teams];
     const formData = new FormData();
@@ -192,14 +209,27 @@ const EditSiteSection = ({
             return <PhoneNumberInput {...inputProps} />;
           }
           if (type === "img" || type === "imgArray") {
-            // console.log("template imgs ===", tem);
+            console.log("template imgs ===", templateImgs);
             return (
               <div style={{ margin: "40px 0" }}>
                 <span className={s.label}>{name}</span>
                 {!!templateImgs && (
                   <ImageSectionPicker
-                    onSelect={(img) => onEdit(section.categoryID, key, img)}
-                    activeImage={values[key]}
+                    onSelect={(img, isSelected) => {
+                      if (type === "imgArray") {
+                        onMultipleImagesSelect(
+                          img,
+                          key,
+                          values[key] || [],
+                          isSelected
+                        );
+                        return;
+                      }
+                      onSingleImageSelect(img, key);
+                    }}
+                    activeImages={
+                      type === "imgArray" ? values[key] || [] : [values[key]]
+                    }
                     userImages={templateImgs[key]?.user}
                     adminImages={templateImgs[key]?.admin}
                   />

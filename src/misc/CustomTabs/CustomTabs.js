@@ -15,12 +15,12 @@ const CustomTabs = ({
       console.error("You need to pass children (1 child - 1 tab panel)");
     }
   }, [children]);
-  console.log("children ===", children);
   return (
-    <Tabs {...{ selectedTab }} onSelect={setSelectedTab}>
+    <Tabs selectedIndex={selectedTab} onSelect={setSelectedTab}>
       <TabList className={`${s.tab__list} ${tabListClass}`}>
         {tabs.map((tab) => (
           <Tab
+            key={`custom_tab${tab}`}
             className={`${s.tab} ${tabClass}`}
             selectedClassName={s.tab__active}
           >
@@ -28,9 +28,13 @@ const CustomTabs = ({
           </Tab>
         ))}
       </TabList>
-      {Array.isArray(children)
-        ? children.map((child) => <TabPanel>{child}</TabPanel>)
-        : [children].map((child) => <TabPanel>{child}</TabPanel>)}
+      {Array.isArray(children) ? (
+        children.map((child, i) => (
+          <TabPanel key={`tabpanel${i}`}>{child}</TabPanel>
+        ))
+      ) : (
+        <TabPanel>{children}</TabPanel>
+      )}
     </Tabs>
   );
 };

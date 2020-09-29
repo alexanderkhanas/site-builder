@@ -14,6 +14,7 @@ import Select from "../../misc/Select/Select";
 import uuid from "react-uuid";
 import Checkbox from "../../misc/Checkbox/Checkbox";
 import { createOrderAction } from "../../store/actions/siteActions";
+import CustomTabs from "../../misc/CustomTabs/CustomTabs";
 
 const periodSelectOptions = [
   { label: "Місяць", value: "month" },
@@ -212,24 +213,17 @@ const SingleSite = ({ createOrder }) => {
         );
       })}
       <div className={s.section}>
-        <Tabs selectedIndex={selectedTariff.index} onSelect={onTariffSelect}>
-          <TabList className={s.tabs__container}>
-            {tariff.map(({ name }) => (
-              <Tab
-                key={`tab${name}`}
-                selectedClassName={s.tab__active}
-                className={s.tab}
-              >
-                {name}
-              </Tab>
-            ))}
-          </TabList>
+        <CustomTabs
+          tabListClass={s.tab__list}
+          tabClass={s.tab}
+          tabs={tariff.map(({ name }) => name)}
+        >
           {tariff.map((tariffObj) => {
             const { id: tariffId, text } = tariffObj;
             const { price } = tariffObj[selectedTariff.period.value];
             return (
-              <TabPanel key={`tariff${tariffId}`}>
-                <div className={s.tariff}>
+              <div>
+                <div className={s.tariff} key={`tariff${tariffId}`}>
                   <div className={s.tariff__main}>
                     <div className={s.tariff__desc}>
                       {text.map(({ id: textId, value }) => (
@@ -242,14 +236,12 @@ const SingleSite = ({ createOrder }) => {
                       ))}
                     </div>
                   </div>
-                  <div className={s.select__period__container}>
-                    <Select
-                      containerClass={s.select__period}
-                      onSelect={onPeriodSelect}
-                      value={selectedTariff.period.label}
-                      options={periodSelectOptions}
-                    />
-                  </div>
+                  <Select
+                    containerClass={s.select__period}
+                    onSelect={onPeriodSelect}
+                    value={selectedTariff.period.label}
+                    options={periodSelectOptions}
+                  />
                 </div>
 
                 <div className={s.section__price__container}>
@@ -261,10 +253,23 @@ const SingleSite = ({ createOrder }) => {
                     id={`checkbox_tariff${id}`}
                   />
                 </div>
-              </TabPanel>
+              </div>
             );
           })}
-        </Tabs>
+        </CustomTabs>
+        {/*<Tabs selectedIndex={selectedTariff.index} onSelect={onTariffSelect}>*/}
+        {/*  <TabList className={s.tabs__container}>*/}
+        {/*    {tariff.map(({ name }) => (*/}
+        {/*      <Tab*/}
+        {/*        key={`tab${name}`}*/}
+        {/*        selectedClassName={s.tab__active}*/}
+        {/*        className={s.tab}*/}
+        {/*      >*/}
+        {/*        {name}*/}
+        {/*      </Tab>*/}
+        {/*    ))}*/}
+        {/*  </TabList>*/}
+        {/*</Tabs>*/}
       </div>
       <div className={s.cart}>
         {selectedServices.map((service) => {

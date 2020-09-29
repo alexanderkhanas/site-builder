@@ -243,7 +243,11 @@ const CreateSite = ({
         />
       )}
       <h1 className={s.title}>Створення сайту</h1>
-      <CustomTabs tabs={["Базова інформація", "Структура сайту"]}>
+      <CustomTabs
+        {...{ selectedTab }}
+        {...{ setSelectedTab }}
+        tabs={["Базова інформація", "Структура сайту"]}
+      >
         <div>
           <div className={s.form}>
             <Input

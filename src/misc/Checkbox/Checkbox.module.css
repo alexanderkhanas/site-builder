@@ -29,7 +29,6 @@
     position: relative;
     vertical-align: middle;
     cursor: pointer;
-    margin-right: 5px;
 }
 
 .checkbox__container input:checked + label:after {
