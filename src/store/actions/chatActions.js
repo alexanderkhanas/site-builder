@@ -4,6 +4,7 @@ import { ADD_MESSAGE } from "./actionTypes";
 export const subcribeToMessagesAction = () => {
   return async (dispatch) => {
     const onMessageReceive = (message) => {
+      console.log("message ===", message);
       dispatch({ type: ADD_MESSAGE, message });
     };
     subcribeMessagesSocket(onMessageReceive);
