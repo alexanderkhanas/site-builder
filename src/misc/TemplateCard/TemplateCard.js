@@ -2,9 +2,12 @@ import React from "react";
 import s from "./TemplateCard.module.css";
 import Button from "../Button/Button";
 import CardWrapper from "../../wrappers/CardWrapper/CardWrapper";
+import { useHistory } from "react-router";
 
 const TemplateCard = ({ onSubmit, template, demoText, selectText }) => {
-  const { name, img, demo, desc } = template;
+  const history = useHistory();
+  const { name, img, demo, desc, id } = template;
+  const redirectToSingle = () => history.push(`/template/${id}`);
   return (
     <CardWrapper>
       <div className={s.container}>

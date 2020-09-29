@@ -10,6 +10,7 @@
     "axios": "^0.20.0",
     "classnames": "^2.2.6",
     "formik": "^2.1.5",
+    "laravel-echo": "^1.8.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-accessible-accordion": "^3.3.3",
@@ -35,6 +36,7 @@
     "recompose": "^0.30.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.3.0",
     "yup": "^0.29.3"
   },
   "scripts": {

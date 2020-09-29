@@ -21,3 +21,4 @@ export const HIDE_MODAL = "HIDE_MODAL";
 export const SET_USER_IMAGES = "SET_USER_IMAGES";
 export const DELETE_USER_IMAGE = "DELETE_USER_IMAGE";
 export const ADD_USER_IMAGES = "ADD_USER_IMAGES";
+export const ADD_MESSAGE = "ADD_MESSAGE";

@@ -25,10 +25,11 @@ const EditSiteSection = ({
   sectionsVariations,
   getDefaultImages,
   images,
+  templateId,
 }) => {
-  const { id } = useParams();
+  // const { id } = useParams();
 
-  const templateImgs = images[id];
+  const templateImgs = images[templateId];
 
   const addGroupItem = (key, defaultValue) => {
     onEdit(section.categoryID, key, [...values[key], defaultValue]);
@@ -124,7 +125,7 @@ const EditSiteSection = ({
   };
 
   const onRefreshClick = async (type) => {
-    const response = await fetchRefreshedText(id, "ua", type);
+    const response = await fetchRefreshedText(templateId, "ua", type);
     if (response?.status === 200) {
       const { desc } = response.data.text;
       onEdit(section.categoryID, type, desc);
@@ -135,7 +136,7 @@ const EditSiteSection = ({
     section.categoryParameters.forEach((parameter) => {
       const { type, key } = parameter;
       if (type === "img" || type === "imgArray") {
-        getDefaultImages(id, key);
+        getDefaultImages(templateId, key);
         return;
       }
       if (type === "textareaArray" || type === "textArray") {
@@ -166,6 +167,9 @@ const EditSiteSection = ({
 
         {section.categoryParameters.map((parameter, i) => {
           const { type, name, key, id } = parameter;
+          if (key === "organizationName") {
+            return;
+          }
           const inputProps = {
             containerClass: s.field__container,
             label: name,

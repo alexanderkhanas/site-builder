@@ -120,4 +120,7 @@
         width: 100%;
         height: 150px;
     }
+    .element {
+        padding: 20px;
+    }
 }

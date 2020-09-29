@@ -19,8 +19,8 @@ const TariffCard = ({ isPrimary, tariff, selectText, priceText }) => {
           </h3>
         </div>
         <div className={s.main__content}>
-          {tariffTexts.slice(0, 6).map((text) => (
-            <div className={s.desc}>
+          {tariffTexts.slice(0, 6).map((text, i) => (
+            <div className={s.desc} key={`tariff_text${i}`}>
               <p>{text.value}</p>
             </div>
           ))}

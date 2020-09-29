@@ -24,6 +24,7 @@ import EditAdvantagesSection from "../../misc/EditAdvantagesSection/EditAdvantag
 import EditServicesSection from "../../misc/EditServicesSection/EditServicesSection";
 import Login from "../Login/Login";
 import DraggableSections from "../../misc/DraggableSections/DraggableSections";
+import CustomTabs from "../../misc/CustomTabs/CustomTabs";
 
 const EditSite = ({
   getEditingSite,
@@ -175,9 +176,35 @@ const EditSite = ({
     const temp = elements.map((section) => {
       const { element, categoryParameters } = section;
       const parameters = {};
-      section.categoryParameters.forEach(({ key, value }) => {
+      categoryParameters.forEach(({ key, value }) => {
+        if (key === "servicesList") {
+          const defaultSelectedServices = [];
+          value.forEach((parent) => {
+            if (parent.selected) {
+              defaultSelectedServices.push({
+                ...parent,
+                children: parent.children.filter((child) => child.selected),
+              });
+            }
+          });
+          parameters[key] = defaultSelectedServices;
+          return;
+        }
+        if (key === "benefitList") {
+          const defaultSelectedAdvantages = [];
+          value.forEach(({ children }) => {
+            children.forEach((child) => {
+              if (child.selected) {
+                defaultSelectedAdvantages.push(child);
+              }
+            });
+          });
+          parameters[key] = defaultSelectedAdvantages;
+          return;
+        }
         parameters[key] = value;
       });
+
       if (element.type === "selected" || element.type === "required") {
         tempActiveSections.push(section);
       }
@@ -206,46 +233,41 @@ const EditSite = ({
 
   return (
     <FixedWrapper>
-      {editingState.isEditing && !isAdvantagesEditing && !isServicesEditing && (
-        <EditSiteSection
-          values={activeEditingValue.element.parameters}
-          hide={hideEditingModal}
-          section={activeEditingValue}
-          {...{ onEdit }}
-          {...{ setSectionVariation }}
-        />
-      )}
-      {editingState.isEditing && isAdvantagesEditing && (
-        <EditAdvantagesSection
-          hide={hideEditingModal}
-          section={activeEditingValue}
-          {...{ onEdit }}
-          {...{ setSectionVariation }}
-        />
-      )}
-      {editingState.isEditing && isServicesEditing && (
-        <EditServicesSection
-          hide={hideEditingModal}
-          section={activeEditingValue}
-          {...{ onEdit }}
-          {...{ setSectionVariation }}
-        />
-      )}
-      <h1 className={s.title}>Редагування сайту</h1>
-      <Tabs
-        selectedIndex={selectedTab}
-        onSelect={setSelectedTab}
-        className={s.inner}
-      >
-        <TabList className={s.tab__list}>
-          <Tab className={s.tab} selectedClassName={s.tab__active}>
-            Базова інформація
-          </Tab>
-          <Tab className={s.tab} selectedClassName={s.tab__active}>
-            Структура сайту
-          </Tab>
-        </TabList>
-        <TabPanel>
+      <div className={s.inner}>
+        {editingState.isEditing &&
+          !isAdvantagesEditing &&
+          !isServicesEditing && (
+            <EditSiteSection
+              values={activeEditingValue.element.parameters}
+              hide={hideEditingModal}
+              templateId={baseData.templateId}
+              section={activeEditingValue}
+              {...{ onEdit }}
+              {...{ setSectionVariation }}
+            />
+          )}
+        {editingState.isEditing && isAdvantagesEditing && (
+          <EditAdvantagesSection
+            hide={hideEditingModal}
+            section={activeEditingValue}
+            {...{ onEdit }}
+            {...{ setSectionVariation }}
+          />
+        )}
+        {editingState.isEditing && isServicesEditing && (
+          <EditServicesSection
+            hide={hideEditingModal}
+            section={activeEditingValue}
+            {...{ onEdit }}
+            {...{ setSectionVariation }}
+          />
+        )}
+        <h1 className={s.title}>Редагування сайту</h1>
+        <CustomTabs
+          {...{ selectedTab }}
+          {...{ setSelectedTab }}
+          tabs={["Базова інформація", "Структура сайту"]}
+        >
           <div className={s.form}>
             <Input
               label="Назва сайту"
@@ -260,36 +282,16 @@ const EditSite = ({
                 className={s.refresh__icon}
               />
             </Input>
-            <PhoneNumberInput
-              label="Номер телефону"
-              value={baseData.phone}
-              name="phone"
-              onChange={onBaseInputChange}
-              containerClass={s.input__container}
-            />
-            <Input
-              label="Адреса"
-              value={baseData.adress}
-              name="adress"
-              placeholder="New York"
-              onChange={onBaseInputChange}
-              containerClass={s.input__container}
-            />
             <InputFile
               label="Логотип"
               containerClass={s.input__container}
               onChange={onLogoLoad}
               type="image"
             />
-            <Button
-              onClick={() => setSelectedTab(1)}
-              title="Розширені налаштування"
-            >
+            <Button onClick={() => setSelectedTab(1)} title="Налаштування">
               <FaCogs className={s.button__icon} />
             </Button>
           </div>
-        </TabPanel>
-        <TabPanel>
           <div className={s.sections}>
             <SiteSection
               isActive
@@ -315,14 +317,14 @@ const EditSite = ({
               section={sectionsValues[sectionsValues.length - 1]}
             />
           </div>
-        </TabPanel>
+        </CustomTabs>
         <Button
           size="lg"
           title="Змінити"
           className={s.submit__button}
           onClick={onSubmit}
         />
-      </Tabs>
+      </div>
     </FixedWrapper>
   );
 };

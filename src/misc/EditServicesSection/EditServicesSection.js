@@ -15,6 +15,7 @@ import InputFile from "../InputFile/InputFile";
 import Button from "../Button/Button";
 import { Formik } from "formik";
 import { createServiceAction } from "../../store/actions/siteActions";
+import { FaTimes } from "react-icons/all";
 
 const EditServicesSection = ({
   sectionsVariations,
@@ -132,6 +133,7 @@ const EditServicesSection = ({
   return (
     <>
       <div className={s.container}>
+        <FaTimes onClick={hide} className={s.close__button} />
         <h2 className={s.title}>Обрати вигляд</h2>
         <div className={s.variations__container}>
           {sectionsVariations[section.categoryID]?.map((variation) => (

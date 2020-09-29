@@ -9,6 +9,9 @@ import PublicOffer from "./pages/PublicOffer/PublicOffer";
 import Modal from "./misc/Modal/Modal";
 import FullPageLoader from "./misc/FullPageLoader/FullPageLoader";
 import { Redirect } from "react-router";
+import Chat from "./misc/Chat/Chat";
+import Echo from "laravel-echo";
+import socketio from "socket.io-client";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const CreateSite = lazy(() => import("./pages/CreateSite/CreateSite"));
@@ -39,6 +42,8 @@ const PrivateRoute = ({
     )}
   </Route>
 );
+
+// echo.listen("NewMessage", (ev) => console.log(ev));
 
 function App({ getUser, getContent, user }) {
   const { isLogging, id } = user;
@@ -111,6 +116,7 @@ function App({ getUser, getContent, user }) {
           </Switch>
         </Suspense>
       </div>
+      <Chat />
     </Router>
   ) : (
     <FullPageLoader />

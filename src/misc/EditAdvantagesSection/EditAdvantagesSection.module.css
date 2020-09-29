@@ -46,6 +46,7 @@
     height: 70px;
     margin-right: 14px;
     object-fit: cover;
+    margin-bottom: 8px;
     cursor: pointer;
 }
 
@@ -123,4 +124,10 @@
 
 .benefit__input {
     margin-top: 10px;
+}
+
+@media(max-width: 500px) {
+    .container {
+        padding: 40px 20px 100px 20px;
+    }
 }
