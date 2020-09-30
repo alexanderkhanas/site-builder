@@ -1,4 +1,5 @@
 .iframe {
-    width: 100vw;
-    height :91vh;
+    width: 100%;
+    height:88vh;
+    box-sizing: border-box;
 }

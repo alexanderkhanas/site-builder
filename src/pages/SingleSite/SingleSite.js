@@ -202,11 +202,14 @@ const SingleSite = ({ createOrder }) => {
               <p className={s.service__desc}>{desk}</p>
               <div className={s.section__price__container}>
                 <p className={s.section__price}>{price}₴</p>
-                <Checkbox
-                  checked={selectedServices.includes(service)}
-                  onChange={(e) => onServiceCheckboxChange(e, service)}
-                  id={`service_checkbox${serviceId}`}
-                />
+                {/*<Checkbox*/}
+                {/*  checked={selectedServices.includes(service)}*/}
+                {/*  onChange={(e) => onServiceCheckboxChange(e, service)}*/}
+                {/*  id={`service_checkbox${serviceId}`}*/}
+                {/*/>*/}
+                <div>
+                  <Button title="Детальніше" />
+                </div>
               </div>
             </div>
           </div>
@@ -300,8 +303,8 @@ const SingleSite = ({ createOrder }) => {
       </div>
       {!!fullPrice && (
         <LiqPayPay
-          publicKey={process.env.REACT_APP_LIQPAY_PUBLIC}
-          privateKey={process.env.REACT_APP_LIQPAY_PRIVATE}
+          publicKey="i4340652402"
+          privateKey="YH5tb7kqdw0nPSYlYDKfFlFzSGDfI5tGJADdGFK8"
           description="Payment for services"
           {...{ orderId }}
           result_url={`https://panel.topfractal.com/siteAjaxUpdate/${orderId}`}
