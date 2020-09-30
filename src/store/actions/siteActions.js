@@ -85,7 +85,6 @@ export const createSiteAction = (siteData) => {
     return postSite(siteData)
       .then((res) => {
         const { site } = res.data;
-        console.log("response ===", res.data);
         dispatch({ type: ADD_USER_SITE, site });
         return site.id;
       })
@@ -97,7 +96,9 @@ export const editSiteAction = (siteData) => {
   return async (dispatch) => {
     return patchSite(siteData)
       .then((res) => {
-        dispatch({ type: REPLACE_USER_SITE, site: res.data.site });
+        const { site } = res.data;
+        dispatch({ type: REPLACE_USER_SITE, site });
+        return site.id;
       })
       .catch(() => false);
   };

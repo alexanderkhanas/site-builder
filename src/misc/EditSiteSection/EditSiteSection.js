@@ -216,7 +216,25 @@ const EditSiteSection = ({
             console.log("template imgs ===", templateImgs);
             return (
               <div style={{ margin: "40px 0" }}>
-                <span className={s.label}>{name}</span>
+                <p className={s.label}>{name}</p>
+                {type === "img" ? (
+                  <img
+                    src={`https://topfractal.com/${values[key]}`}
+                    className={`${s.image} ${s.image__active}`}
+                    alt="loading"
+                  />
+                ) : (
+                  values[key].map((img, imgIndex) => {
+                    return (
+                      <img
+                        src={`https://topfractal.com/${img}`}
+                        key={`image_array${img}${imgIndex}`}
+                        className={`${s.image} ${s.image__active}`}
+                        alt="loading"
+                      />
+                    );
+                  })
+                )}
                 {!!templateImgs && (
                   <ImageSectionPicker
                     onSelect={(img, isSelected) => {
@@ -238,6 +256,7 @@ const EditSiteSection = ({
                     adminImages={templateImgs[key]?.admin}
                   />
                 )}
+
                 <InputFile {...imageInputProps} label="" />
               </div>
             );
@@ -344,41 +363,52 @@ const EditSiteSection = ({
             return (
               <div className={s.field__container}>
                 <div className={s.field}>
-                  {values.teams.map((team, i) => (
-                    <div className={s.group} key={`${type}${i}`}>
-                      <div className={s.group__main__content}>
-                        <InputFile
-                          type="image"
-                          onChange={(value) => {
-                            onTeamImageLoad(value, i, "foto", type);
-                          }}
-                          label="Фото"
-                        />
-                        <Input
-                          containerClass={s.field__container}
-                          isTextarea
-                          onChange={({ target: { value } }) => {
-                            onGroupInputChange(value, i, "value", key);
-                          }}
-                          label="Професія"
-                          value={team.value}
-                        />
-                        <Input
-                          label="Ім'я"
-                          onChange={({ target: { value } }) => {
-                            onGroupInputChange(value, i, "name", key);
-                          }}
-                          value={team.name}
-                        />
+                  {values.teams.map((team, i) => {
+                    console.log("team ===", team);
+                    return (
+                      <div className={s.group} key={`${type}${i}`}>
+                        <div className={s.group__main__content}>
+                          {!!team.foto && (
+                            <img
+                              src={`https://topfractal.com/${team.foto}`}
+                              alt="loading"
+                              className={`${s.image} ${s.image__active}`}
+                            />
+                          )}
+                          <InputFile
+                            type="image"
+                            withPreview={false}
+                            onChange={(value) => {
+                              onTeamImageLoad(value, i, "foto", type);
+                            }}
+                            label="Фото"
+                          />
+                          <Input
+                            containerClass={s.field__container}
+                            isTextarea
+                            onChange={({ target: { value } }) => {
+                              onGroupInputChange(value, i, "value", key);
+                            }}
+                            label="Професія"
+                            value={team.value}
+                          />
+                          <Input
+                            label="Ім'я"
+                            onChange={({ target: { value } }) => {
+                              onGroupInputChange(value, i, "name", key);
+                            }}
+                            value={team.name}
+                          />
+                        </div>
+                        <div className={s.delete__icon__container}>
+                          <BiTrash
+                            className={s.delete__icon}
+                            onClick={() => deleteGroupItem(key, i)}
+                          />
+                        </div>
                       </div>
-                      <div className={s.delete__icon__container}>
-                        <BiTrash
-                          className={s.delete__icon}
-                          onClick={() => deleteGroupItem(key, i)}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
                 <Button
                   className={s.add__button}

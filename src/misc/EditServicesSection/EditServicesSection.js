@@ -31,7 +31,10 @@ const EditServicesSection = ({
     return section.categoryParameters.find(({ key }) => key === "servicesList");
   }, [section]);
 
-  const { servicesList: selectedServices } = section.element.parameters;
+  const {
+    servicesList: selectedServices,
+    section_name: sectionName,
+  } = section.element.parameters;
 
   console.log("selected services ===", selectedServices);
 
@@ -155,7 +158,7 @@ const EditServicesSection = ({
             label: name,
             placeholder: name,
             onChange: ({ target: { value } }) => {
-              onEdit(section.categoryID, "section_name", value);
+              onEdit(section.categoryID, key, value);
             },
             key: id,
           };
@@ -164,13 +167,13 @@ const EditServicesSection = ({
               <InputFile
                 {...inputProps}
                 onChange={(value) => {
-                  onEdit(section.categoryID, "section_name", value);
+                  onEdit(section.categoryID, key, value);
                 }}
               />
             );
           }
           if (type === "text") {
-            return <Input {...inputProps} value={value} />;
+            return <Input {...inputProps} value={element.parameters[key]} />;
           }
           return <div />;
         })}
@@ -209,6 +212,7 @@ const EditServicesSection = ({
                         <Input
                           placeholder="Ціна послуги (не обов'язково)"
                           containerClass={s.service__input}
+                          value={child.price}
                           onChange={({ target: { value } }) => {
                             onChildPriceChange(child, id, value);
                           }}

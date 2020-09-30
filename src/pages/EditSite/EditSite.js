@@ -10,7 +10,7 @@ import {
   getEditingSiteAction,
 } from "../../store/actions/siteActions";
 import { connect } from "react-redux";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import EditSiteSection from "../../misc/EditSiteSection/EditSiteSection";
 import Button from "../../misc/Button/Button";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -35,6 +35,7 @@ const EditSite = ({
   editSite,
 }) => {
   const { id } = useParams();
+  const history = useHistory();
   const [selectedTab, setSelectedTab] = useState(0);
   const [sectionsValues, setSectionsValues] = useState([]);
   const [activeSections, setActiveSections] = useState([]);
@@ -146,7 +147,7 @@ const EditSite = ({
     }
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     let headerIndex = null;
     const menu = [];
     const elements = sectionsValues
@@ -166,7 +167,14 @@ const EditSite = ({
         return element;
       });
     elements[headerIndex].parameters.menu = menu;
-    editSite({ ...baseData, elements, phone: +baseData.phone });
+    const siteId = await editSite({
+      ...baseData,
+      elements,
+      phone: +baseData.phone,
+    });
+    if (siteId) {
+      history.push(`/site/${siteId}`);
+    }
   };
 
   useEffect(() => {

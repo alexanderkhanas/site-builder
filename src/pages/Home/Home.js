@@ -46,14 +46,10 @@ const Home = ({ getContent, content }) => {
       <div className={s.section}>
         <h2 className={s.section__title}>{pageContent.templates}</h2>
         <FixedWrapper className={s.cards__container}>
-          {[...Array(3)].map((_, i) => (
+          {content?.template?.map((template, i) => (
             <TemplateCard
-              template={{
-                name: pageContent[`templates${i + 1}`],
-                img: "",
-                desc: pageContent[`text_templates${i + 1}`],
-                demo: "https://topfractal.com",
-              }}
+              // template={pageContent[`templates${i + 1}`]}
+              {...{ template }}
               key={i}
               demoText={pageContent.demo}
               selectText={pageContent.select}

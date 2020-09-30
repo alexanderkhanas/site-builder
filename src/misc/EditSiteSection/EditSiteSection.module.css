@@ -38,6 +38,20 @@
     position: relative;
 }
 
+.image {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    object-fit: cover;
+}
+
+.image__active {
+    border: 1px solid #51608a;
+}
+
 .refresh__icon {
     margin-right: 10px;
     cursor: pointer;
