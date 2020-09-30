@@ -1,6 +1,7 @@
 import {
+  changePasswordRequest,
   fetchUser,
-  fetchUserGallery,
+  loginGoogleRequest,
   loginFacebookRequest,
   loginRequest,
   logoutUserRequest,
@@ -35,6 +36,17 @@ export const loginAction = (data, isRemember) => {
 export const facebookLoginAction = (data) => {
   return async (dispatch) => {
     loginFacebookRequest(data).then((res) => {
+      const { user, token } = res.data;
+      localStorage.setItem("_token", token);
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      dispatch({ type: SET_USER, user });
+    });
+  };
+};
+
+export const googleLoginAction = (data) => {
+  return async (dispatch) => {
+    loginGoogleRequest(data).then((res) => {
       const { user, token } = res.data;
       localStorage.setItem("_token", token);
       axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -107,6 +119,15 @@ export const logoutUserAction = () => {
     logoutUserRequest().then(() => {
       dispatch({ type: CLEAR_USER });
       localStorage.removeItem("_token");
+    });
+  };
+};
+
+export const changePasswordAction = (password, code) => {
+  return async (dispatch) => {
+    return changePasswordRequest({ password, code }).then((res) => {
+      dispatch({ type: SET_USER, user: res.data.user });
+      return true;
     });
   };
 };

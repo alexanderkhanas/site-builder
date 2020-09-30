@@ -5,13 +5,10 @@ import Header from "./misc/Header/Header";
 import { connect } from "react-redux";
 import { getUserAction } from "./store/actions/userActions";
 import { getHomeContentAction } from "./store/actions/contentActions";
-import PublicOffer from "./pages/PublicOffer/PublicOffer";
 import Modal from "./misc/Modal/Modal";
 import FullPageLoader from "./misc/FullPageLoader/FullPageLoader";
 import { Redirect } from "react-router";
 import Chat from "./misc/Chat/Chat";
-import Echo from "laravel-echo";
-import socketio from "socket.io-client";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const CreateSite = lazy(() => import("./pages/CreateSite/CreateSite"));
@@ -26,6 +23,11 @@ const Demo = lazy(() => import("./pages/Demo/Demo"));
 const SingleSite = lazy(() => import("./pages/SingleSite/SingleSite"));
 const About = lazy(() => import("./pages/About/About"));
 const Gallery = lazy(() => import("./pages/Gallery/Gallery"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword/ResetPassword"));
+const ChangePassword = lazy(() =>
+  import("./pages/ChangePassword/ChangePassword")
+);
+const PublicOffer = lazy(() => import("./pages/PublicOffer/PublicOffer"));
 
 const PrivateRoute = ({
   redirectTo,
@@ -49,8 +51,6 @@ function App({ getUser, getContent, user }) {
   const { isLogging, id } = user;
   useEffect(() => {
     getUser();
-  }, []);
-  useEffect(() => {
     getContent();
   }, []);
   return !isLogging ? (
@@ -113,6 +113,8 @@ function App({ getUser, getContent, user }) {
             <Route path="/gallery" component={Gallery} />
             <Route path="/about-us" component={About} />
             <Route path="/public-offer" component={PublicOffer} />
+            <Route path="/reset-password" component={ResetPassword} />
+            <Route path="/change-password/:code" component={ChangePassword} />
           </Switch>
         </Suspense>
       </div>

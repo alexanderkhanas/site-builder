@@ -1,34 +1,29 @@
-import Echo from "laravel-echo";
-import socketio from "socket.io-client";
-import Pusher from "pusher-js";
+import * as firebase from "firebase";
+import uuid from "react-uuid";
 
-const options = {
-  broadcaster: "pusher",
-  key: "73e386dafe027e023ebe",
-  cluster: "eu",
-  forceTLS: true,
-  encrypted: false,
-  //authEndpoint is your apiUrl + /broadcasting/auth
-  authEndpoint: "https://topfractal.com/api/v1/broadcasting/auth",
-  // As I'm using JWT tokens, I need to manually set up the headers.
+const firebaseConfig = {
+  apiKey: "AIzaSyBeuryFzK_JxBJa-BvzAAW0trP54pvPwS0",
+  authDomain: "site-builder-46cfb.firebaseapp.com",
+  databaseURL: "https://site-builder-46cfb.firebaseio.com",
+  projectId: "site-builder-46cfb",
+  storageBucket: "site-builder-46cfb.appspot.com",
+  messagingSenderId: "33348700909",
+  appId: "1:33348700909:web:694992a74ba24fa3995ae4",
 };
 
-const echo = new Echo(options);
-console.log("echo ===", echo);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-export const subcribeMessagesSocket = (callback) => {
-  console.log("echo here ===", echo);
-  // echo.join("chat");
-
-  const result = echo.private("messages.12412412").listen(".chat", callback);
-  console.log("result ===", result);
-  echo.private("private-messages.12412412").listen(".chat", (data) => {
-    console.log("rumman");
-    console.log(data);
+export const subcribeMessagesSocket = (chatId, callback) => {
+  db.ref(`/chats/${chatId}`).on("value", (snapshot) => {
+    const value = snapshot.val();
+    const valueArray = value ? Object.values(value) : [];
+    callback(valueArray);
   });
-  // echo.channel("chat").listen("NewMessage", callback);
 };
 
-export const emitMessage = (message) => {
-  echo.private("message").whisper("sendMessage", message);
+// export const postEmptyHistory
+
+export const emitMessage = (chatId, message) => {
+  db.ref(`/chats/${chatId}`).push(message);
 };

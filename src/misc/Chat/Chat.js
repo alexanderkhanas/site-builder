@@ -4,37 +4,29 @@ import uuid from "react-uuid";
 import classnames from "classnames";
 import Input from "../Input/Input";
 import { AiFillMail, BiMailSend, BiSend } from "react-icons/all";
-import {
-  sendMessageAction,
-  subcribeToMessagesAction,
-} from "../../store/actions/chatActions";
+import { subcribeToMessagesAction } from "../../store/actions/chatActions";
 import { connect } from "react-redux";
+import { emitMessage } from "../../store/api/chatSocket";
 
-const messages = [
-  {
-    author: "Vasyl kit",
-    title: "Domain",
-    message: "blya, dai domen nature",
-    status: "read",
-    sendBy: "user",
-    id: uuid(),
-  },
-  {
-    author: "Admin",
-    title: "Domain",
-    message: "Ne dam idy nahuy",
-    status: "new",
-    sendBy: "admin",
-    id: uuid(),
-  },
-];
-
-const Chat = ({ listenToMessages, sendMessage }) => {
+const Chat = ({ subcribeToMessages, messages }) => {
   const [isExpanded, setExpanded] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [chatId] = useState(uuid());
   const toggleExpanded = () => setExpanded((prev) => !prev);
+
+  const sendMessage = () => {
+    if (!inputValue) return;
+    emitMessage(chatId, {
+      author: "Vasyl kit",
+      id: uuid(),
+      message: inputValue,
+      sendBy: "user",
+      status: "read",
+    });
+  };
+
   useEffect(() => {
-    listenToMessages();
-    sendMessage({ title: "asdasfas" });
+    subcribeToMessages(chatId);
   }, []);
   return isExpanded ? (
     <div className={s.container}>
@@ -58,8 +50,13 @@ const Chat = ({ listenToMessages, sendMessage }) => {
             );
           })}
         </div>
-        <Input placeholder="Введіть повідомлення" inputClass={s.input}>
-          <BiSend className={s.input__icon} />
+        <Input
+          onChange={({ target }) => setInputValue(target.value)}
+          value={inputValue}
+          placeholder="Введіть повідомлення"
+          inputClass={s.input}
+        >
+          <BiSend className={s.input__icon} onClick={sendMessage} />
         </Input>
       </div>
     </div>
@@ -74,9 +71,12 @@ const Chat = ({ listenToMessages, sendMessage }) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  listenToMessages: () => dispatch(subcribeToMessagesAction()),
-  sendMessage: (msg) => dispatch(sendMessageAction(msg)),
+const mapStateToProps = (state) => ({
+  messages: state.chat.messages,
 });
 
-export default connect(null, mapDispatchToProps)(Chat);
+const mapDispatchToProps = (dispatch) => ({
+  subcribeToMessages: (chatId) => dispatch(subcribeToMessagesAction(chatId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

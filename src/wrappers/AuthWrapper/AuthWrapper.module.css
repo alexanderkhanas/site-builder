@@ -7,14 +7,15 @@
 }
 
 .inner {
-    padding: 50px 60px;
+    padding: 40px 50px;
     background: #fff;
     display: flex;
     align-items: center;
     width:100%;
     flex-wrap: wrap;
     justify-content: space-between;
-    max-width: 600px;
+    max-width: 630px;
+    box-sizing: border-box;
     border-radius: 15px;
 }
 
@@ -26,18 +27,6 @@
     margin-bottom: 10px;
 }
 
-.inputs__container {
-    margin: 20px 0;
-}
-
-.input__container {
-    margin-bottom: 20px;
-}
-
-.input__container:last-child{
-    margin-bottom: 0;
-}
-
 .icon {
     margin-right: 8px;
 }
@@ -47,23 +36,14 @@
     height: 120px;
 }
 
-.submit__container {
-    display: flex;
-    align-items: center;
-    margin-top: 15px;
-}
-
-.submit__button {
-    margin-right: 30px;
-}
-
-.register__link {
-    font-size: 14px;
-    letter-spacing: normal;
-}
-
 .actions__container {
     display: flex;
+    margin: 20px 0;
+    flex-direction: column;
+}
+
+.mobile__actions__container {
+    display: none;
     margin: 20px 0;
     flex-direction: column;
 }
@@ -78,10 +58,6 @@
     height: 20px;
     margin-right: 20px;
     border-radius:6px;
-}
-
-.button {
-    margin-top: 10px;
 }
 
 .google__login {
@@ -107,4 +83,38 @@
     cursor: pointer;
 }
 
+@media (min-width: 350px) and (max-width: 600px) {
+    .inner {
+        padding: 50px 30px;
+        flex-direction: column;
+        align-items: initial;
+    }
+    .actions__container {
+        width: 270px
+    }
 
+}
+
+@media (max-width: 350px) {
+    .logo {
+        display: none;
+    }
+    .inner {
+        padding: 30px 20px;
+        flex-direction: column;
+        align-items: initial;
+        box-sizing: initial;
+    }
+    .mobile__actions__container {
+        /*width: 250px*/
+    }
+    .title {
+        font-size: 20px;
+    }
+    .actions__container {
+        display: none;
+    }
+    .mobile__actions__container {
+        display: flex;
+    }
+}

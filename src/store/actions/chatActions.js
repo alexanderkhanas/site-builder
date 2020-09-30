@@ -1,20 +1,13 @@
 import { emitMessage, subcribeMessagesSocket } from "../api/chatSocket";
-import { ADD_MESSAGE } from "./actionTypes";
+import { ADD_MESSAGE, SET_MESSAGES } from "./actionTypes";
+import uuid from "react-uuid";
 
-export const subcribeToMessagesAction = () => {
+export const subcribeToMessagesAction = (chatId) => {
   return async (dispatch) => {
-    const onMessageReceive = (message) => {
-      console.log("message ===", message);
-      dispatch({ type: ADD_MESSAGE, message });
+    const onMessageUpdated = (messages = []) => {
+      console.log("messages ====", messages);
+      dispatch({ type: SET_MESSAGES, messages: messages || [] });
     };
-    subcribeMessagesSocket(onMessageReceive);
-  };
-};
-
-export const sendMessageAction = (message) => {
-  emitMessage(message);
-  return {
-    type: ADD_MESSAGE,
-    message,
+    subcribeMessagesSocket(chatId, onMessageUpdated);
   };
 };

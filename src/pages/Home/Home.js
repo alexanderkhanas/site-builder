@@ -83,7 +83,7 @@ const Home = ({ getContent, content }) => {
                 <TariffCard
                   isPrimary={i === 1}
                   tariff={tariffs[i + 1] || {}}
-                  key={`tariff__card${tariffs[i + 1]?.id}`}
+                  key={`tariff__card${i}`}
                   priceText={pageContent.priceValue}
                   selectText={pageContent.select}
                 />

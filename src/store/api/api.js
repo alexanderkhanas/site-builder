@@ -129,3 +129,15 @@ export const fetchDefaultImages = (templateId, type) => {
 export const postOrder = (data) => {
   return axios.post("/create-order", data);
 };
+
+export const sendResetCode = (email) => {
+  return axios.post("/get-reset-password", { email });
+};
+
+export const changePasswordRequest = (data) => {
+  return axios.post("/reset-password", data);
+};
+
+export const loginGoogleRequest = (data) => {
+  return axios.post("/google-login", data);
+};

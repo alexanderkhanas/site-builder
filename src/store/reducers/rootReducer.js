@@ -5,6 +5,7 @@ import contentReducer from "./contentReducer";
 import userSitesReducer from "./userSitesReducer";
 import assetsReducer from "./assetsReducer";
 import galleryReducer from "./galleryReducer";
+import chatReducer from "./chatReducer";
 
 export default combineReducers({
   user: userReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   sites: userSitesReducer,
   assets: assetsReducer,
   gallery: galleryReducer,
+  chat: chatReducer,
 });
