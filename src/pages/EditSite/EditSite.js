@@ -69,9 +69,13 @@ const EditSite = ({
 
   const showEditingModal = (section) => {
     const { categoryID } = section;
+    const { templateId } = baseData;
     setEditingState({ section, isEditing: true });
-    if (!sectionsVariations[categoryID]) {
-      getSectionVariations(categoryID, baseData.templateId);
+    if (
+      !sectionsVariations[categoryID] ||
+      sectionsVariations.templateId !== templateId
+    ) {
+      getSectionVariations(categoryID, templateId);
     }
   };
 

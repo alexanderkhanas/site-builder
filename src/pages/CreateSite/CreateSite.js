@@ -68,7 +68,10 @@ const CreateSite = ({
   const showEditingModal = (section) => {
     const { categoryID } = section;
     setEditingState({ section, isEditing: true });
-    if (!sectionsVariations[categoryID]) {
+    if (
+      !sectionsVariations[categoryID] ||
+      sectionsVariations.templateId !== id
+    ) {
       getSectionVariations(categoryID, id);
     }
   };
@@ -163,7 +166,6 @@ const CreateSite = ({
       });
     console.log("menu ===", menu);
     elements[headerIndex].parameters.menu = menu;
-    console.log();
     const siteId = await createSite({
       ...baseData,
       elements,

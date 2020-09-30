@@ -44,6 +44,7 @@ export default (state = initialState, action) => {
         sectionsVariations: {
           ...state.sectionsVariations,
           [action.sectionId]: action.variations,
+          templateId: action.templateId,
         },
       };
     case SET_HEADER_IMAGES:

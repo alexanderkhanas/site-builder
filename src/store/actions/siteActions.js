@@ -113,6 +113,7 @@ export const getSectionVariationsAction = (sectionId, templateId) => {
         type: SET_SECTIONS_VARIATIONS,
         variations: elements,
         sectionId,
+        templateId,
       });
     }
   };
