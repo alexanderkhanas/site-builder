@@ -22,9 +22,13 @@ const Modal = ({ title, desc, onResolve, onReject, hide, isVisible }) => {
           <h2 className={s.title}>{title}</h2>
           {!!desc && <p className={s.desc}>{desc}</p>}
           <div className={s.buttons__container}>
-            <Button title="Так" onClick={resolveHandler} className={s.button} />
             <Button
-              title="Ні"
+              title="Підвердити"
+              onClick={resolveHandler}
+              className={s.button}
+            />
+            <Button
+              title="Скасувати"
               onClick={rejectHandler}
               isSecondary
               className={s.button}

@@ -69,7 +69,7 @@ const CreateSite = ({
     const { categoryID } = section;
     setEditingState({ section, isEditing: true });
     if (!sectionsVariations[categoryID]) {
-      getSectionVariations(categoryID);
+      getSectionVariations(categoryID, id);
     }
   };
 
@@ -207,10 +207,10 @@ const CreateSite = ({
         }
         if (key === "benefitList") {
           const defaultSelectedAdvantages = [];
-          value.forEach(({ children }) => {
+          value.forEach(({ children, img }) => {
             children.forEach((child) => {
               if (child.selected) {
-                defaultSelectedAdvantages.push(child);
+                defaultSelectedAdvantages.push({ ...child, img });
               }
             });
           });
@@ -273,77 +273,72 @@ const CreateSite = ({
           />
         )}
         <h1 className={s.title}>Створення сайту</h1>
-        <CustomTabs
-          {...{ selectedTab }}
-          {...{ setSelectedTab }}
-          tabs={["Базова інформація", "Структура сайту"]}
-        >
-          <div>
-            <div className={s.form}>
-              <Input
-                label="Назва сайту"
-                value={baseData.organizationName}
-                name="organizationName"
-                placeholder="Dent"
-                onChange={onBaseInputChange}
-                containerClass={s.input__container}
-              >
-                <FiRefreshCw
-                  onClick={() => onRefreshBaseData("organizationName")}
-                  className={s.refresh__icon}
-                />
-              </Input>
-              <InputFile
-                containerClass={s.input__container}
-                label="Логотип"
-                onChange={onLogoLoad}
-                type="image"
+        {/*<CustomTabs*/}
+        {/*  {...{ selectedTab }}*/}
+        {/*  {...{ setSelectedTab }}*/}
+        {/*  tabs={["Базова інформація", "Структура сайту"]}*/}
+        {/*>*/}
+        {/*<div>*/}
+        <div className={s.form}>
+          <Input
+            label="Назва сайту"
+            value={baseData.organizationName}
+            name="organizationName"
+            placeholder="Dent"
+            onChange={onBaseInputChange}
+            // containerClass={s.input__container}
+          >
+            <FiRefreshCw
+              onClick={() => onRefreshBaseData("organizationName")}
+              className={s.refresh__icon}
+            />
+          </Input>
+          {/*<Button onClick={() => setSelectedTab(1)} title="Налаштування">*/}
+          {/*  <FaCogs className={s.button__icon} />*/}
+          {/*</Button>*/}
+        </div>
+        {/*</div>*/}
+        <div>
+          <h2 className={s.subtitle}>Розширені налаштування</h2>
+          {sectionsValues?.length ? (
+            <div className={s.sections}>
+              <SiteSection
+                isActive
+                {...{ showEditingModal }}
+                {...{ addSection }}
+                {...{ removeSection }}
+                section={sectionsValues[0]}
               />
-              <Button onClick={() => setSelectedTab(1)} title="Налаштування">
-                <FaCogs className={s.button__icon} />
-              </Button>
-            </div>
-          </div>
-          <div>
-            {sectionsValues?.length ? (
-              <div className={s.sections}>
-                <SiteSection
-                  isActive
-                  {...{ showEditingModal }}
-                  {...{ addSection }}
-                  {...{ removeSection }}
-                  section={sectionsValues[0]}
-                />
 
-                <DraggableSections
-                  sections={sectionsValues.slice(1, sectionsValues.length - 1)}
-                  {...{ showEditingModal }}
-                  {...{ addSection }}
-                  {...{ removeSection }}
-                  {...{ onDragEnd }}
-                  {...{ activeSections }}
-                />
-                <SiteSection
-                  isActive
-                  {...{ showEditingModal }}
-                  {...{ addSection }}
-                  {...{ removeSection }}
-                  section={sectionsValues[sectionsValues.length - 1]}
-                />
-              </div>
-            ) : (
-              <div className={s.loader__container}>
-                <Loader
-                  type="Oval"
-                  color="#404040"
-                  height={100}
-                  width={100}
-                  timeout={3000}
-                />
-              </div>
-            )}
-          </div>
-        </CustomTabs>
+              <DraggableSections
+                sections={sectionsValues.slice(1, sectionsValues.length - 1)}
+                {...{ showEditingModal }}
+                {...{ addSection }}
+                {...{ removeSection }}
+                {...{ onDragEnd }}
+                {...{ activeSections }}
+              />
+              <SiteSection
+                isActive
+                {...{ showEditingModal }}
+                {...{ addSection }}
+                {...{ removeSection }}
+                section={sectionsValues[sectionsValues.length - 1]}
+              />
+            </div>
+          ) : (
+            <div className={s.loader__container}>
+              <Loader
+                type="Oval"
+                color="#404040"
+                height={100}
+                width={100}
+                timeout={3000}
+              />
+            </div>
+          )}
+        </div>
+        {/*</CustomTabs>*/}
 
         <Button
           size="lg"
@@ -365,8 +360,8 @@ const mapDispatchToProps = (dispatch) => ({
   getSingleTemplate: (id) => dispatch(getSingleTemplateAction(id)),
   createSite: (siteData) => dispatch(createSiteAction(siteData)),
   uploadImage: (imageFormData) => dispatch(uploadImageAction(imageFormData)),
-  getSectionVariations: (sectionId) =>
-    dispatch(getSectionVariationsAction(sectionId)),
+  getSectionVariations: (sectionId, templateId) =>
+    dispatch(getSectionVariationsAction(sectionId, templateId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateSite);

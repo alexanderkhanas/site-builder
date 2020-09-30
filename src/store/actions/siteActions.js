@@ -103,9 +103,9 @@ export const editSiteAction = (siteData) => {
   };
 };
 
-export const getSectionVariationsAction = (sectionId) => {
+export const getSectionVariationsAction = (sectionId, templateId) => {
   return async (dispatch) => {
-    const response = await fetchSectionVariations(sectionId);
+    const response = await fetchSectionVariations(sectionId, templateId);
     console.log("response data ===", response?.data);
     if (response.status === 200) {
       const { elements } = response.data;

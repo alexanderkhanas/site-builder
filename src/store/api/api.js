@@ -78,8 +78,8 @@ export const fetchRefreshedText = (templateId, lang, type) => {
   );
 };
 
-export const fetchSectionVariations = (sectionId) => {
-  return axios.get(`/category/${sectionId}`);
+export const fetchSectionVariations = (sectionId, templateId) => {
+  return axios.get(`/category/${sectionId}/${templateId}`);
 };
 
 export const fetchHomeContent = (lang) => {

@@ -22,14 +22,15 @@ import axios from "axios";
 
 export const loginAction = (data, isRemember) => {
   return async (dispatch) => {
-    const response = await loginRequest(data);
-    if (response?.status === 200) {
-      const { user, token } = response.data;
-      localStorage.setItem("_token", token);
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-      dispatch({ type: SET_USER, user });
-    }
-    return response?.status === 200;
+    return loginRequest(data)
+      .then((response) => {
+        const { user, token } = response.data;
+        localStorage.setItem("_token", token);
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+        dispatch({ type: SET_USER, user });
+        return true;
+      })
+      .catch(() => false);
   };
 };
 

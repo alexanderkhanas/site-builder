@@ -13,6 +13,7 @@ import {
 } from "../../store/actions/userActions";
 import { withRouter } from "react-router";
 import AuthWrapper from "../../wrappers/AuthWrapper/AuthWrapper";
+import { showModalAction } from "../../store/actions/assetsActions";
 
 const Login = ({
   values,
@@ -45,10 +46,6 @@ const Login = ({
     touched.email &&
     touched.password;
   const isValidRegister = !isLogin && !errors.email && touched.email;
-
-  console.log("disabled ===", !isValidLogin && !isValidRegister);
-
-  console.log("errors ===", errors);
 
   return (
     <AuthWrapper title="Увійти">
@@ -118,11 +115,9 @@ const formikHOC = withFormik({
   },
   handleSubmit: async (
     { email, password, isLogin },
-    { props: { login, history, register } }
+    { props: { login, history, register, showModal } }
   ) => {
-    console.log("is login ===", isLogin);
     let isSuccess = false;
-    console.log("is success ===", isSuccess);
     if (isLogin) {
       isSuccess = await login({
         email,
@@ -134,6 +129,11 @@ const formikHOC = withFormik({
     console.log("is success ===", isSuccess);
     if (isSuccess) {
       history.push("/profile");
+    } else {
+      showModal(
+        "Помилка авторизації",
+        "При спробі входу сталась помилка, перевірте правильність введених даних"
+      );
     }
   },
 })(Login);
@@ -145,6 +145,7 @@ const mapDispatchToProps = (dispatch) => ({
   login: (data, isRemember) => dispatch(loginAction(data, isRemember)),
   register: (data) => dispatch(registerAction(data)),
   facebookLogin: (data) => dispatch(facebookLoginAction(data)),
+  showModal: (title, desc) => dispatch(showModalAction(title, desc)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(routerHOC);
