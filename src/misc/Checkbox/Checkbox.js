@@ -20,6 +20,7 @@ const Checkbox = ({
         {...{ id }}
         {...rest}
       />
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label htmlFor={id} style={{ width: "10px", height: "10px" }} />
     </div>
   );

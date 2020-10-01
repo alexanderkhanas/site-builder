@@ -3,7 +3,9 @@ import s from "./Login.module.css";
 import { withFormik } from "formik";
 import { connect } from "react-redux";
 import Input from "../../misc/Input/Input";
-import { FiKey, FiUser } from "react-icons/all";
+// import { FiKey, FiUser } from "react-icons/all";
+import { ReactComponent as FiUser } from "../../assets/user.svg";
+import { ReactComponent as FiKey } from "../../assets/key.svg";
 import Button from "../../misc/Button/Button";
 import { Link } from "react-router-dom";
 import {
@@ -104,7 +106,7 @@ const formikHOC = withFormik({
   }),
   validate: ({ email, password, isLogin }) => {
     const errors = {};
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!emailRegex.test(email)) {
       errors.email = "invalid";
     }

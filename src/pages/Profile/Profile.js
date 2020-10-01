@@ -4,7 +4,8 @@ import { withFormik } from "formik";
 import { connect } from "react-redux";
 import Input from "../../misc/Input/Input";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import { BiExit, BiPencil, FiLogOut } from "react-icons/all";
+import { ReactComponent as BiExit } from "../../assets/exit.svg";
+import { ReactComponent as BiPencil } from "../../assets/pencil.svg";
 import {
   editUserAction,
   logoutUserAction,

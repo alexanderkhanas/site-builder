@@ -8,6 +8,13 @@
     z-index: 10;
 }
 
+.close__button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 20px;
+}
+
 
 .container {
     width: 100%;

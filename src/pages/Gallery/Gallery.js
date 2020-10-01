@@ -9,8 +9,7 @@ import {
 } from "../../store/actions/galleryActions";
 import CustomTabs from "../../misc/CustomTabs/CustomTabs";
 import FullPageLoader from "../../misc/FullPageLoader/FullPageLoader";
-import { BiTrash } from "react-icons/all";
-import Button from "../../misc/Button/Button";
+import { ReactComponent as BiTrash } from "../../assets/trash.svg";
 import InputFile from "../../misc/InputFile/InputFile";
 
 const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {

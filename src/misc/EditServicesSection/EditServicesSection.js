@@ -15,7 +15,7 @@ import InputFile from "../InputFile/InputFile";
 import Button from "../Button/Button";
 import { Formik } from "formik";
 import { createServiceAction } from "../../store/actions/siteActions";
-import { FaTimes } from "react-icons/all";
+import { ReactComponent as FaTimes } from "../../assets/times.svg";
 
 const EditServicesSection = ({
   sectionsVariations,

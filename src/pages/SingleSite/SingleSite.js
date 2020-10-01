@@ -5,7 +5,8 @@ import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { fetchSingleSite, publishSiteRequest } from "../../store/api/api";
 import { useHistory, useParams } from "react-router";
 import Button from "../../misc/Button/Button";
-import { BiPencil, BiTrash } from "react-icons/all";
+import { ReactComponent as BiTrash } from "../../assets/trash.svg";
+import { ReactComponent as BiPencil } from "../../assets/pencil.svg";
 import { Link } from "react-router-dom";
 import { LiqPayPay } from "react-liqpay";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -144,7 +145,7 @@ const SingleSite = ({ createOrder }) => {
                 <a
                   href={`http://${url}`}
                   className={s.section__url}
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   target="_blank"
                 >
                   {url}

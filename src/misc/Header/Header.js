@@ -4,7 +4,9 @@ import Button from "../Button/Button";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { CSSTransition } from "react-transition-group";
-import { FaBars, FaTimes } from "react-icons/all";
+import { ReactComponent as FaTimes } from "../../assets/times.svg";
+import { ReactComponent as FaBars } from "../../assets/bars.svg";
+
 import { stack as Menu } from "react-burger-menu";
 import { withRouter } from "react-router";
 

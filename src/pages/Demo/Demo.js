@@ -30,7 +30,11 @@ const Demo = () => {
 
   console.log("demo element ===", demoElements);
 
-  return <div>{!!url && <iframe className={s.iframe} src={url} />}</div>;
+  return (
+    <div>
+      {!!url && <iframe title="demo id" className={s.iframe} src={url} />}
+    </div>
+  );
 };
 
 export default Demo;

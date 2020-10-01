@@ -3,7 +3,7 @@ import s from "./AuthWrapper.module.css";
 import FixedWrapper from "../FixedWrapper/FixedWrapper";
 import GoogleLogin from "react-google-login";
 import FacebookLogin from "react-facebook-login";
-import { AiFillFacebook } from "react-icons/all";
+import { ReactComponent as AiFillFacebook } from "../../assets/facebook.svg";
 import {
   facebookLoginAction,
   googleLoginAction,
@@ -11,6 +11,7 @@ import {
   registerAction,
 } from "../../store/actions/userActions";
 import { connect } from "react-redux";
+import { ReactComponent as FacebookIcon } from "../../assets/facebook.svg";
 
 const AuthWrapper = ({
   children,
@@ -78,7 +79,7 @@ const AuthWrapper = ({
                   fields="name,email,picture"
                   callback={onFacebookLoggedIn}
                   textButton="Увійти за допомогою Facebook"
-                  icon={<AiFillFacebook className={s.social__icon} />}
+                  icon={<FacebookIcon className={s.social__icon} />}
                 />
               </div>
               <div className={s.mobile__actions__container}>
