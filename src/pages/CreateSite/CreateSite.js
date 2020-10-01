@@ -12,17 +12,14 @@ import { useHistory, useParams } from "react-router";
 import EditSiteSection from "../../misc/EditSiteSection/EditSiteSection";
 import Button from "../../misc/Button/Button";
 import Input from "../../misc/Input/Input";
-import InputFile from "../../misc/InputFile/InputFile";
 import { uploadImageAction } from "../../store/actions/userActions";
-import { FaCogs, FiRefreshCw } from "react-icons/all";
+import { ReactComponent as FiRefreshCw } from "../../assets/refresh-icon.svg";
 import { fetchRefreshedText } from "../../store/api/api";
-import PhoneNumberInput from "../../misc/PhoneNumberinput/PhoneNumberInput";
 import EditAdvantagesSection from "../../misc/EditAdvantagesSection/EditAdvantagesSection";
 import EditServicesSection from "../../misc/EditServicesSection/EditServicesSection";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import DraggableSections from "../../misc/DraggableSections/DraggableSections";
-import CustomTabs from "../../misc/CustomTabs/CustomTabs";
 
 const CreateSite = ({
   getSingleTemplate,
@@ -164,7 +161,6 @@ const CreateSite = ({
         }
         return element;
       });
-    console.log("menu ===", menu);
     elements[headerIndex].parameters.menu = menu;
     const siteId = await createSite({
       ...baseData,
@@ -182,7 +178,6 @@ const CreateSite = ({
 
   useEffect(() => {
     const tempActiveSections = [];
-    console.log("sections ===", sections);
     const temp = sections.map((section) => {
       const { type } = section.element;
       const parameters = {};
@@ -236,8 +231,6 @@ const CreateSite = ({
       return section.categoryID === editingState.section.categoryID;
     });
   }, [sectionsValues, editingState]);
-
-  console.log("section values ===", sectionsValues);
 
   const isAdvantagesEditing =
     activeEditingValue?.element?.link === "#advantages";

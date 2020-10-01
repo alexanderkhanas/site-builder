@@ -11,8 +11,12 @@ import TariffCard from "../../misc/TariffCard/TariffCard";
 import ServiceCard from "../../misc/ServiceCard/ServiceCard";
 import ReviewCard from "../../misc/ReviewCard/ReviewCard";
 
-const Home = ({ getContent, content }) => {
-  const { page_content: pageContent, tariffs, services } = content;
+const Home = ({ getContent, content, lang }) => {
+  const {
+    page_content: { home: homeContent },
+  } = content;
+
+  const { tariffs = [], template = [], services = [] } = homeContent;
 
   return (
     <div className={s.container}>
@@ -34,44 +38,43 @@ const Home = ({ getContent, content }) => {
             />
             <div className={s.carousel__content}>
               <h3 className={s.carousel__title}>
-                {pageContent[`header_${i + 1}`]}
+                {homeContent[`header_${i + 1}`]}
               </h3>
               <p className={s.carousel__text}>
-                {pageContent[`header_text_${i + 1}`]}
+                {homeContent[`header_text_${i + 1}`]}
               </p>
             </div>
           </div>
         ))}
       </Carousel>
       <div className={s.section}>
-        <h2 className={s.section__title}>{pageContent.templates}</h2>
+        <h2 className={s.section__title}>{homeContent.templates}</h2>
         <FixedWrapper className={s.cards__container}>
-          {content?.template?.map((template, i) => (
+          {template.map((template, i) => (
             <TemplateCard
-              // template={pageContent[`templates${i + 1}`]}
               {...{ template }}
               key={i}
-              demoText={pageContent.demo}
-              selectText={pageContent.select}
+              demoText={homeContent.demo}
+              selectText={homeContent.select}
             />
           ))}
         </FixedWrapper>
       </div>
       <div className={s.section}>
-        <h2 className={s.section__title}>{pageContent.benefits}</h2>
+        <h2 className={s.section__title}>{homeContent.benefits}</h2>
         <FixedWrapper className={s.cards__container}>
           {/*//BenefitsName1 BenefitsText1*/}
           {[...Array(4)].map((_, i) => (
             <AdvantagesCard
-              title={pageContent[`BenefitsName${i + 1}`]}
-              desc={pageContent[`BenefitsText${i + 1}`]}
+              title={homeContent[`BenefitsName${i + 1}`]}
+              desc={homeContent[`BenefitsText${i + 1}`]}
               img={`https://topfractal.com/images/ben${i + 1}.png`}
             />
           ))}
         </FixedWrapper>
       </div>
       <div className={s.section}>
-        <h2 className={s.section__title}>{pageContent.tariffs}</h2>
+        <h2 className={s.section__title}>{homeContent.tariffs_title}</h2>
         <FixedWrapper className={s.cards__container}>
           {[...Array(3)].map(
             (_, i) =>
@@ -80,15 +83,15 @@ const Home = ({ getContent, content }) => {
                   isPrimary={i === 1}
                   tariff={tariffs[i + 1] || {}}
                   key={`tariff__card${i}`}
-                  priceText={pageContent.priceValue}
-                  selectText={pageContent.select}
+                  priceText={homeContent.priceValue}
+                  selectText={homeContent.select}
                 />
               )
           )}
         </FixedWrapper>
       </div>
       <div className={s.section}>
-        <h2 className={s.section__title}>{pageContent.services}</h2>
+        <h2 className={s.section__title}>{homeContent.services_title}</h2>
         <FixedWrapper className={s.services__container}>
           {[...Array(3)].map(
             (_, i) =>
@@ -96,19 +99,19 @@ const Home = ({ getContent, content }) => {
                 <ServiceCard
                   service={services[i]}
                   key={services[i]?.id}
-                  selectText={pageContent.select}
+                  selectText={homeContent.select}
                 />
               )
           )}
         </FixedWrapper>
       </div>
       <div className={s.section}>
-        <h2 className={s.section__title}>{pageContent.reviews}</h2>
+        <h2 className={s.section__title}>{homeContent.reviews}</h2>
         <FixedWrapper className={s.cards__container}>
           {[...Array(3)].map((_, i) => {
             const review = {
-              name: pageContent[`reviews_name_${i + 1}`],
-              desc: pageContent[`reviews${i + 1}`],
+              name: homeContent[`reviews_name_${i + 1}`],
+              desc: homeContent[`reviews${i + 1}`],
             };
             return <ReviewCard {...{ review }} key={review.desc} />;
           })}
@@ -119,7 +122,7 @@ const Home = ({ getContent, content }) => {
 };
 
 const mapStateToProps = (state) => ({
-  content: state.content.home,
+  content: state.content,
 });
 
 const mapDispatchToProps = (dispatch) => ({});

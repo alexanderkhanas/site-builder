@@ -31,8 +31,9 @@ import {
 import rootReducer from "../reducers/rootReducer";
 
 export const getEditingSiteAction = (id) => {
-  return (dispatch) => {
-    fetchEditingSite(id).then((res) => {
+  return (dispatch, getState) => {
+    const { lang } = getState().content;
+    fetchEditingSite(id, lang).then((res) => {
       dispatch({ type: SET_EDITING_SITE, site: res.data });
     });
   };
@@ -41,7 +42,6 @@ export const getEditingSiteAction = (id) => {
 export const getDirectionsAction = () => {
   return async (dispatch) => {
     const response = await fetchDirections(getToken());
-    console.log("directions response ===", response?.data);
     if (response?.status === 200) {
       const { directions } = response.data;
       dispatch({ type: SET_DIRECTIONS, directions });
@@ -62,8 +62,9 @@ export const getTemplatesAction = (directionId) => {
 };
 
 export const getSingleTemplateAction = (templateId) => {
-  return async (dispatch) => {
-    const response = await fetchSingleTemplate(templateId);
+  return async (dispatch, getState) => {
+    const { lang } = getState().content;
+    const response = await fetchSingleTemplate(templateId, lang);
     const imagesResponse = await fetchHeaderImages(templateId);
     if (response?.status === 200) {
       const { elements } = response.data;
@@ -107,7 +108,6 @@ export const editSiteAction = (siteData) => {
 export const getSectionVariationsAction = (sectionId, templateId) => {
   return async (dispatch) => {
     const response = await fetchSectionVariations(sectionId, templateId);
-    console.log("response data ===", response?.data);
     if (response.status === 200) {
       const { elements } = response.data;
       dispatch({
@@ -187,8 +187,6 @@ export const createOrderAction = (
       tariffId,
       serviceId: serviceIds,
       totalAmount: amount,
-    }).then((res) => {
-      console.log("res data", res.data);
-    });
+    }).then((res) => {});
   };
 };

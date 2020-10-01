@@ -15,7 +15,7 @@ import InputFile from "../InputFile/InputFile";
 import Button from "../Button/Button";
 import { Formik } from "formik";
 import { createServiceAction } from "../../store/actions/siteActions";
-import { FaTimes } from "react-icons/all";
+import { ReactComponent as FaTimes } from "../../assets/times.svg";
 
 const EditServicesSection = ({
   sectionsVariations,
@@ -36,8 +36,6 @@ const EditServicesSection = ({
     section_name: sectionName,
   } = section.element.parameters;
 
-  console.log("selected services ===", selectedServices);
-
   const [selectedParentsIds, selectedChildrenIds] = useMemo(() => {
     const tempParentsIds = [];
     const tempChildrenIds = [];
@@ -52,8 +50,6 @@ const EditServicesSection = ({
 
     return [tempParentsIds, tempChildrenIds];
   }, [selectedServices]);
-
-  console.log("selected service ===", selectedServices);
 
   const onParentSelected = (parent, isSelected) => {
     if (!isSelected) {
@@ -81,8 +77,6 @@ const EditServicesSection = ({
         return service.id === parent.id ? parentCopy : service;
       });
     }
-
-    console.log("changedServices ===", changedServices);
 
     onEdit(section.categoryID, "servicesList", changedServices);
   };

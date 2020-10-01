@@ -5,14 +5,14 @@ import InputFile from "../InputFile/InputFile";
 import classnames from "classnames";
 import { uploadImageAction } from "../../store/actions/userActions";
 import { connect } from "react-redux";
-import { useParams } from "react-router";
-import { AiOutlinePlus, BiTrash, FaTimes, FiRefreshCw } from "react-icons/all";
+import { ReactComponent as FiRefreshCw } from "../../assets/refresh-icon.svg";
+import { ReactComponent as AiOutlinePlus } from "../../assets/plus.svg";
+import { ReactComponent as FaTimes } from "../../assets/times.svg";
+import { ReactComponent as BiTrash } from "../../assets/trash.svg";
 import { fetchRefreshedText, postImage } from "../../store/api/api";
 import Button from "../Button/Button";
 import PhoneNumberInput from "../PhoneNumberinput/PhoneNumberInput";
 import { getDefaultImagesAction } from "../../store/actions/siteActions";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import ImageZoom from "react-img-zoom";
 import ImageSectionPicker from "../ImageSectionPicker/ImageSectionPicker";
 
 const EditSiteSection = ({
@@ -64,7 +64,6 @@ const EditSiteSection = ({
   };
 
   const onMultipleImagesSelect = (img, key, selectedImages, isSelected) => {
-    console.log("is selected ===", isSelected);
     if (isSelected) {
       onEdit(
         section.categoryID,
@@ -213,7 +212,6 @@ const EditSiteSection = ({
             return <PhoneNumberInput {...inputProps} />;
           }
           if (type === "img" || type === "imgArray") {
-            console.log("template imgs ===", templateImgs);
             return (
               <div style={{ margin: "40px 0" }}>
                 <p className={s.label}>{name}</p>
@@ -364,7 +362,6 @@ const EditSiteSection = ({
               <div className={s.field__container}>
                 <div className={s.field}>
                   {values.teams.map((team, i) => {
-                    console.log("team ===", team);
                     return (
                       <div className={s.group} key={`${type}${i}`}>
                         <div className={s.group__main__content}>

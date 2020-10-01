@@ -7,7 +7,7 @@ import SiteCard from "../../misc/SiteCard/SiteCard";
 import { Link } from "react-router-dom";
 import FullPageLoader from "../../misc/FullPageLoader/FullPageLoader";
 
-const Sites = ({ getSites, sites }) => {
+const Sites = ({ getSites, sites, content }) => {
   const [isLoading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
@@ -24,10 +24,10 @@ const Sites = ({ getSites, sites }) => {
           ))
         ) : (
           <div className={s.empty__container}>
-            <h1>Ви ще не створили жодного сайту</h1>
+            <h1>{content.no_sites}</h1>
             <div className={s.link__container}>
               <Link to="/select-template" className={s.link}>
-                Перейти до створення
+                {content.create_button}
               </Link>
             </div>
           </div>
@@ -41,6 +41,7 @@ const Sites = ({ getSites, sites }) => {
 
 const mapStateToProps = (state) => ({
   sites: state.sites.all,
+  content: state.content.page_content.sites,
 });
 const mapDispatchToProps = (dispatch) => ({
   getSites: () => dispatch(getUserSitesAction()),

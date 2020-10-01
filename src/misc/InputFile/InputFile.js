@@ -24,9 +24,7 @@ const InputFile = ({
     const temp = [];
 
     Array.from(files).forEach((file, i) => {
-      console.log("file ===", file);
       const reader = new FileReader();
-
       reader.onload = async ({ target: { result } }) => {
         temp.push(result);
         if (type === "image") {
@@ -35,7 +33,6 @@ const InputFile = ({
       };
       reader.onloadend = () => {
         if (i === Array.from(files).length - 1) {
-          console.log("temp ===", temp);
           onChange(temp);
         }
       };

@@ -5,7 +5,8 @@ import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
 import { fetchSingleSite, publishSiteRequest } from "../../store/api/api";
 import { useHistory, useParams } from "react-router";
 import Button from "../../misc/Button/Button";
-import { BiPencil, BiTrash } from "react-icons/all";
+import { ReactComponent as BiTrash } from "../../assets/trash.svg";
+import { ReactComponent as BiPencil } from "../../assets/pencil.svg";
 import { Link } from "react-router-dom";
 import { LiqPayPay } from "react-liqpay";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -22,7 +23,7 @@ const periodSelectOptions = [
   { label: "Рік", value: "year" },
 ];
 
-const SingleSite = ({ createOrder }) => {
+const SingleSite = ({ createOrder, lang }) => {
   const [data, setData] = useState({});
   const [orderId, setOrderId] = useState(uuid());
   const [isLoading, setLoading] = useState(true);
@@ -65,21 +66,21 @@ const SingleSite = ({ createOrder }) => {
     setOrderId(uuid());
   };
 
-  const onServiceCheckboxChange = ({ target: { checked } }, service) => {
-    if (checked) {
-      setSelectedServices((prev) => [...prev, service]);
-    } else {
-      setSelectedServices((prev) =>
-        prev.filter((item) => item.id !== service.id)
-      );
-    }
-  };
+  // const onServiceCheckboxChange = ({ target: { checked } }, service) => {
+  //   if (checked) {
+  //     setSelectedServices((prev) => [...prev, service]);
+  //   } else {
+  //     setSelectedServices((prev) =>
+  //       prev.filter((item) => item.id !== service.id)
+  //     );
+  //   }
+  // };
 
   const redirectToDemo = () => history.push(`/site/demo/${id}`);
 
   const publishSite = async () => {
     publishSiteRequest(id).catch(() => {
-      fetchSingleSite(id)
+      fetchSingleSite(id, lang)
         .then((res) => {
           setData(res.data);
           setLoading(false);
@@ -92,7 +93,6 @@ const SingleSite = ({ createOrder }) => {
 
   useEffect(() => {
     let temp = 0;
-    console.log("selected tariff", selectedTariff);
     if (selectedTariff.isInCart) {
       temp += +selectedTariff[tariffPeriod.value].price;
     }
@@ -104,13 +104,13 @@ const SingleSite = ({ createOrder }) => {
 
   useEffect(() => {
     setLoading(true);
-    fetchSingleSite(id)
+    fetchSingleSite(id, lang)
       .then((res) => {
         setData(res.data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [lang]);
 
   useEffect(() => {
     if (tariff) {
@@ -120,8 +120,6 @@ const SingleSite = ({ createOrder }) => {
       }));
     }
   }, [tariff]);
-
-  console.log("full price ===", fullPrice);
 
   // console.log("tariffObj ===", tariffObj);
 
@@ -144,7 +142,7 @@ const SingleSite = ({ createOrder }) => {
                 <a
                   href={`http://${url}`}
                   className={s.section__url}
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   target="_blank"
                 >
                   {url}
@@ -335,7 +333,9 @@ const SingleSite = ({ createOrder }) => {
   );
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  lang: state.content.lang,
+});
 const mapDispatchToProps = (dispatch) => ({
   createOrder: (orderId, siteId, tariffId, serviceIds, amount) =>
     dispatch(createOrderAction(orderId, siteId, tariffId, serviceIds, amount)),

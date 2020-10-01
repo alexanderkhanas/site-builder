@@ -59,7 +59,6 @@ export const googleLoginAction = (data) => {
 export const registerAction = (data) => {
   return async (dispatch) => {
     const response = await registerRequest(data);
-    console.log("response ===", response);
     if (response?.data) {
       const { user, token } = response.data;
       localStorage.setItem("_token", token);
@@ -87,7 +86,6 @@ export const getUserAction = () => {
 export const uploadImageAction = (imageFormData) => {
   return async (dispatch) => {
     const response = await postImage(imageFormData);
-    console.log("image response ===", response?.data);
     if (response.status === 200) {
     }
     return response?.data;
@@ -108,9 +106,7 @@ export const uploadAvatarAction = (imageFormData) => {
 export const editUserAction = (user) => {
   return async (dispatch) => {
     return patchUser(user)
-      .then((response) => {
-        console.log("user ===", response.data);
-      })
+      .then((response) => {})
       .catch(() => false);
   };
 };

@@ -1,10 +1,9 @@
 import React from "react";
 import s from "./ReviewCard.module.css";
 import CardWrapper from "../../wrappers/CardWrapper/CardWrapper";
-import { AiFillLike, AiOutlineLike } from "react-icons/all";
+import { ReactComponent as AiOutlineLike } from "../../assets/like.svg";
 
 const ReviewCard = ({ review }) => {
-  console.log("review ===", review);
   const { desc, name } = review;
   return (
     <CardWrapper className={s.container}>

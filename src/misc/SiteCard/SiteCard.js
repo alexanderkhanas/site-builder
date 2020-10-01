@@ -2,18 +2,18 @@ import React from "react";
 import s from "./SiteCard.module.css";
 import Button from "../Button/Button";
 import CardWrapper from "../../wrappers/CardWrapper/CardWrapper";
-import { BiPencil, BiTrash } from "react-icons/all";
+import { ReactComponent as BiTrash } from "../../assets/trash.svg";
+import { ReactComponent as BiPencil } from "../../assets/pencil.svg";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { deleteSiteAction } from "../../store/actions/userSitesActions";
 import { connect } from "react-redux";
 
-const SiteCard = ({ site, deleteSite, className }) => {
+const SiteCard = ({ site, deleteSite, className, content }) => {
   const history = useHistory();
   const { logo, site_name: name, id } = site;
 
   const redirectToDemo = () => history.push(`/site/demo/${id}`);
-  const redirectToEdit = () => history.push(`/edit-site/${id}`);
   const redirectToSingle = () => history.push(`/site/${id}`);
 
   const onDeletePress = () => deleteSite(id);
@@ -30,10 +30,14 @@ const SiteCard = ({ site, deleteSite, className }) => {
         <span className={s.title}>{name}</span>
         <div className={s.buttons}>
           <div>
-            <Button title="Публікувати" className={s.button} size="sm" />
+            <Button
+              title={content.public_button}
+              className={s.button}
+              size="sm"
+            />
           </div>
           <Button
-            title="Демо"
+            title={content.demo_button}
             isSecondary
             onClick={redirectToDemo}
             className={s.button}
@@ -51,8 +55,12 @@ const SiteCard = ({ site, deleteSite, className }) => {
   );
 };
 
+const mapStateToProps = (state) => ({
+  content: state.content.page_content.sites,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   deleteSite: (id) => dispatch(deleteSiteAction(id)),
 });
 
-export default connect(null, mapDispatchToProps)(SiteCard);
+export default connect(mapStateToProps, mapDispatchToProps)(SiteCard);

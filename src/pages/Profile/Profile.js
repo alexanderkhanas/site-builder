@@ -4,7 +4,8 @@ import { withFormik } from "formik";
 import { connect } from "react-redux";
 import Input from "../../misc/Input/Input";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
-import { BiExit, BiPencil, FiLogOut } from "react-icons/all";
+import { ReactComponent as BiExit } from "../../assets/exit.svg";
+import { ReactComponent as BiPencil } from "../../assets/pencil.svg";
 import {
   editUserAction,
   logoutUserAction,
@@ -39,7 +40,6 @@ const Profile = ({
 
   const onImageUpload = ({ target: { files } }) => {
     const [file] = files;
-    console.log("files ===", files);
     const reader = new FileReader();
     reader.onload = async ({ target: { result } }) => {
       const formData = new FormData();
@@ -64,8 +64,6 @@ const Profile = ({
       email: user.email,
     });
   }, [user]);
-
-  console.log("errors ===", errors);
 
   return (
     <FixedWrapper>
@@ -146,7 +144,6 @@ const formikHOC = withFormik({
       last_name: values.lName,
       email: values.email,
     });
-    console.log("is success ===", isSuccess);
   },
 })(Profile);
 

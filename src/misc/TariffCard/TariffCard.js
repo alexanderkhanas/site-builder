@@ -6,7 +6,6 @@ import CardWrapper from "../../wrappers/CardWrapper/CardWrapper";
 
 const TariffCard = ({ isPrimary, tariff, selectText, priceText }) => {
   const { tariff_price: tariffPrices, tariff_text: tariffTexts } = tariff;
-  console.log("tariff ===", tariff);
   return (
     <CardWrapper className={s.container}>
       <div>

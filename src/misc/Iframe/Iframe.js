@@ -5,7 +5,6 @@ import { createPortal } from "react-dom";
 const Iframe = ({ children, title, ...props }) => {
   const contentRef = useRef(null);
   const mountNode = contentRef?.contentWindow?.document?.body;
-  console.log("children ===", children);
   return (
     <iframe title={title} {...props} ref={contentRef}>
       {mountNode && createPortal(children, mountNode)}

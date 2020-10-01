@@ -7,9 +7,6 @@
     min-width: 300px;
 }
 
-.container:hover {
-    transform: translateY(-5px);
-}
 
 .img {
     width: 100%;

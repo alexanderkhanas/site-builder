@@ -1,11 +1,19 @@
-import { SET_HOME_CONTENT } from "../actions/actionTypes";
+import {
+  SET_ALL_LANGUAGES,
+  SET_HOME_CONTENT,
+  SET_LANGUAGE,
+} from "../actions/actionTypes";
 
 const initialState = {
-  home: {
-    page_content: {},
-    services: [],
-    tariffs: {},
+  page_content: {
+    home: {},
+    about: {},
+    login: {},
   },
+  tariffs: [],
+  services: [],
+  lang: "ua",
+  allLanguages: [],
 };
 
 export default (state = initialState, action) => {
@@ -13,7 +21,17 @@ export default (state = initialState, action) => {
     case SET_HOME_CONTENT:
       return {
         ...state,
-        home: action.content,
+        ...action.content,
+      };
+    case SET_LANGUAGE:
+      return {
+        ...state,
+        lang: action.lang,
+      };
+    case SET_ALL_LANGUAGES:
+      return {
+        ...state,
+        allLanguages: action.langs,
       };
     default:
       return state;

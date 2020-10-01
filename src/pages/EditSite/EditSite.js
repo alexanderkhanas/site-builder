@@ -13,18 +13,13 @@ import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import EditSiteSection from "../../misc/EditSiteSection/EditSiteSection";
 import Button from "../../misc/Button/Button";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Input from "../../misc/Input/Input";
-import InputFile from "../../misc/InputFile/InputFile";
 import { uploadImageAction } from "../../store/actions/userActions";
-import { FaCogs, FiRefreshCw } from "react-icons/all";
+import { ReactComponent as FiRefreshCw } from "../../assets/refresh-icon.svg";
 import { fetchRefreshedText } from "../../store/api/api";
-import PhoneNumberInput from "../../misc/PhoneNumberinput/PhoneNumberInput";
 import EditAdvantagesSection from "../../misc/EditAdvantagesSection/EditAdvantagesSection";
 import EditServicesSection from "../../misc/EditServicesSection/EditServicesSection";
-import Login from "../Login/Login";
 import DraggableSections from "../../misc/DraggableSections/DraggableSections";
-import CustomTabs from "../../misc/CustomTabs/CustomTabs";
 import Loader from "react-loader-spinner";
 
 const EditSite = ({

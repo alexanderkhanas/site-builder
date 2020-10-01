@@ -52,8 +52,8 @@ export const fetchTemplates = (id, token) => {
   return axios.get(`/direction/${id}`);
 };
 
-export const fetchSingleTemplate = (id) => {
-  return axios.get(`/template/${id}`);
+export const fetchSingleTemplate = (id, lang) => {
+  return axios.get(`/template/${id}/${lang}`);
 };
 
 export const postSite = (site) => {
@@ -83,7 +83,11 @@ export const fetchSectionVariations = (sectionId, templateId) => {
 };
 
 export const fetchHomeContent = (lang) => {
-  return axios.get(`/home-page`);
+  return axios.get(`/home-page/${lang}`);
+};
+
+export const fetchLanguages = () => {
+  return axios.get(`/get-lang`);
 };
 
 export const fetchUserSites = () => {
@@ -94,16 +98,16 @@ export const fetchSiteDemo = (id) => {
   return axios.get(`/site/preview/${id}`);
 };
 
-export const fetchEditingSite = (id) => {
-  return axios.get(`/site-data/${id}`);
+export const fetchEditingSite = (id, lang) => {
+  return axios.get(`/site-data/${id}/${lang}`);
 };
 
 export const deleteSite = (id) => {
   return axios.post(`/site-delete/${id}`, {});
 };
 
-export const fetchSingleSite = (id) => {
-  return axios.get(`/site/${id}`);
+export const fetchSingleSite = (id, lang) => {
+  return axios.get(`/site/${id}/${lang}`);
 };
 
 export const patchUser = (user) => {

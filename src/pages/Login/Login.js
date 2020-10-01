@@ -3,7 +3,8 @@ import s from "./Login.module.css";
 import { withFormik } from "formik";
 import { connect } from "react-redux";
 import Input from "../../misc/Input/Input";
-import { FiKey, FiUser } from "react-icons/all";
+import { ReactComponent as FiUser } from "../../assets/user.svg";
+import { ReactComponent as FiKey } from "../../assets/key.svg";
 import Button from "../../misc/Button/Button";
 import { Link } from "react-router-dom";
 import {
@@ -24,7 +25,7 @@ const Login = ({
   handleBlur,
   touched,
   handleSubmit,
-  facebookLogin,
+  content,
 }) => {
   const { isLogin } = values;
   const toggleLogin = () => {
@@ -48,7 +49,7 @@ const Login = ({
   const isValidRegister = !isLogin && !errors.email && touched.email;
 
   return (
-    <AuthWrapper title="Увійти">
+    <AuthWrapper title={isLogin ? content.title : content.register_button}>
       <div className={s.inputs__container}>
         <Input
           containerClass={s.input__container}
@@ -67,7 +68,7 @@ const Login = ({
             placeholder="********"
             type="password"
             name="password"
-            label="Пароль"
+            label={content.password}
             Icon={FiKey}
             iconClass={s.icon}
             isError={errors.password && touched.password}
@@ -78,18 +79,18 @@ const Login = ({
         )}
       </div>
 
-      <Link to="/reset-password">Забули пароль?</Link>
+      <Link to="/reset-password">{content.forgot}</Link>
       <div className={s.submit__container}>
         <Button
           type="submit"
           onClick={handleSubmit}
           // onClick={() => console.log("here")}
           isDisabled={!isValidLogin && !isValidRegister}
-          title={!isLogin ? "Зареєструватись" : "Увійти"}
+          title={!isLogin ? content.register_button : content.login_button}
           className={s.submit__button}
         />
         <span onClick={toggleLogin} className={s.link}>
-          {isLogin ? "Зареєструватись" : "Увійти"}
+          {isLogin ? content.register_button : content.login_button}
         </span>
       </div>
     </AuthWrapper>
@@ -104,7 +105,7 @@ const formikHOC = withFormik({
   }),
   validate: ({ email, password, isLogin }) => {
     const errors = {};
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!emailRegex.test(email)) {
       errors.email = "invalid";
     }
@@ -126,7 +127,6 @@ const formikHOC = withFormik({
     } else {
       isSuccess = await register({ email });
     }
-    console.log("is success ===", isSuccess);
     if (isSuccess) {
       history.push("/profile");
     } else {
@@ -140,7 +140,9 @@ const formikHOC = withFormik({
 
 const routerHOC = withRouter(formikHOC);
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  content: state.content.page_content.login,
+});
 const mapDispatchToProps = (dispatch) => ({
   login: (data, isRemember) => dispatch(loginAction(data, isRemember)),
   register: (data) => dispatch(registerAction(data)),

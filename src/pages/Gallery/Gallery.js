@@ -9,8 +9,7 @@ import {
 } from "../../store/actions/galleryActions";
 import CustomTabs from "../../misc/CustomTabs/CustomTabs";
 import FullPageLoader from "../../misc/FullPageLoader/FullPageLoader";
-import { BiTrash } from "react-icons/all";
-import Button from "../../misc/Button/Button";
+import { ReactComponent as BiTrash } from "../../assets/trash.svg";
 import InputFile from "../../misc/InputFile/InputFile";
 
 const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
@@ -18,10 +17,17 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
   const [isLoading, setLoading] = useState(true);
 
   const onImageLoad = (type, images) => {
-    console.log("type ===", type);
-    console.log("img ===", images);
     uploadImage(type, images);
   };
+
+  // title(pin):"ГАЛЕРЕЯ"
+  // upload_button(pin):"Завантажити"
+  // no_images(pin):"Ви ще не завантажили фото для цієї категорії"
+  // logo(pin):"Логотипи"
+  // main(pin):"Основні"
+  // about(pin):"Про нас"
+  // team(pin):"Команда"
+  // img(pin):"Портфоліо"
 
   useEffect(() => {
     (async () => {

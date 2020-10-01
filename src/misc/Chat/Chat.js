@@ -3,7 +3,7 @@ import s from "./Chat.module.css";
 import uuid from "react-uuid";
 import classnames from "classnames";
 import Input from "../Input/Input";
-import { AiFillMail, BiMailSend, BiSend } from "react-icons/all";
+import { ReactComponent as BiSend } from "../../assets/bi-send.svg";
 import { subcribeToMessagesAction } from "../../store/actions/chatActions";
 import { connect } from "react-redux";
 import { emitMessage } from "../../store/api/chatSocket";
