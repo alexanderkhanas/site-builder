@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import s from "./SiteSection.module.css";
 import Button from "../Button/Button";
 import classnames from "classnames";
+import { connect } from "react-redux";
 
 const SiteSection = ({
   section,
@@ -10,9 +11,12 @@ const SiteSection = ({
   isActive,
   showEditingModal,
   reference,
+  content,
   ...rest
 }) => {
   const { categoryID, element } = section || {};
+
+  const { demo: demoText } = content.home.page_content;
 
   const onCheckboxChange = () => {
     if (isActive) {
@@ -57,7 +61,7 @@ const SiteSection = ({
                 className={s.element__button}
               />
               <Button
-                title="Демо"
+                title={demoText}
                 isSecondary
                 isLink
                 target="_blank"
@@ -86,4 +90,8 @@ const SiteSection = ({
   );
 };
 
-export default SiteSection;
+const mapStateToProps = (state) => ({
+  content: state.content,
+});
+
+export default connect(mapStateToProps, null)(SiteSection);

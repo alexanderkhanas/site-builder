@@ -1620,6 +1620,11 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
+"@prototyp/react-language-switcher@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@prototyp/react-language-switcher/-/react-language-switcher-0.3.0.tgz#2c9eca4324ff39881238ab4e641e392ff5fb1098"
+  integrity sha512-lzlovis4u1aCaxkOucThBd/dI7bVkT77+uswqZOk8vLrQD1nmoYQOKYIz8zMS70DIeLMwaxhQZCcqINe/1Wzuw==
+
 "@sheerun/mutationobserver-shim@^0.3.2":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@sheerun/mutationobserver-shim/-/mutationobserver-shim-0.3.3.tgz#5405ee8e444ed212db44e79351f0c70a582aae25"

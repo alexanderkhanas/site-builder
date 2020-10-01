@@ -120,6 +120,28 @@
     display: none;
 }
 
+.action__container {
+    display: flex;
+    align-items: center;
+}
+
+.container .language__select {
+    width: 50px;
+    box-sizing: border-box;
+    padding: 0;
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container .language__value__container {
+    justify-content: center;
+}
+
+.language__select__menu {
+    box-sizing: border-box;
+}
 
 
 @media (max-width: 1050px) {

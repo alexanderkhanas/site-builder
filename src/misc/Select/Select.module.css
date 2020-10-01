@@ -1,5 +1,9 @@
+.wrapper {
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
 .container {
-    /* width: 300px; */
     height: 40px;
     flex-grow: 1;
     border-radius: 10px;
@@ -12,7 +16,6 @@
     display: flex;
     align-items: center;
     height: 100%;
-    padding: 0 20px;
     cursor: pointer;
 }
 

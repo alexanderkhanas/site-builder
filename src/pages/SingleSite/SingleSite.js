@@ -23,7 +23,7 @@ const periodSelectOptions = [
   { label: "Рік", value: "year" },
 ];
 
-const SingleSite = ({ createOrder }) => {
+const SingleSite = ({ createOrder, lang }) => {
   const [data, setData] = useState({});
   const [orderId, setOrderId] = useState(uuid());
   const [isLoading, setLoading] = useState(true);
@@ -66,21 +66,21 @@ const SingleSite = ({ createOrder }) => {
     setOrderId(uuid());
   };
 
-  const onServiceCheckboxChange = ({ target: { checked } }, service) => {
-    if (checked) {
-      setSelectedServices((prev) => [...prev, service]);
-    } else {
-      setSelectedServices((prev) =>
-        prev.filter((item) => item.id !== service.id)
-      );
-    }
-  };
+  // const onServiceCheckboxChange = ({ target: { checked } }, service) => {
+  //   if (checked) {
+  //     setSelectedServices((prev) => [...prev, service]);
+  //   } else {
+  //     setSelectedServices((prev) =>
+  //       prev.filter((item) => item.id !== service.id)
+  //     );
+  //   }
+  // };
 
   const redirectToDemo = () => history.push(`/site/demo/${id}`);
 
   const publishSite = async () => {
     publishSiteRequest(id).catch(() => {
-      fetchSingleSite(id)
+      fetchSingleSite(id, lang)
         .then((res) => {
           setData(res.data);
           setLoading(false);
@@ -105,13 +105,13 @@ const SingleSite = ({ createOrder }) => {
 
   useEffect(() => {
     setLoading(true);
-    fetchSingleSite(id)
+    fetchSingleSite(id, lang)
       .then((res) => {
         setData(res.data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [lang]);
 
   useEffect(() => {
     if (tariff) {
@@ -336,7 +336,9 @@ const SingleSite = ({ createOrder }) => {
   );
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  lang: state.content.lang,
+});
 const mapDispatchToProps = (dispatch) => ({
   createOrder: (orderId, siteId, tariffId, serviceIds, amount) =>
     dispatch(createOrderAction(orderId, siteId, tariffId, serviceIds, amount)),

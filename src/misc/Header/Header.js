@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import s from "./Header.module.css";
 import Button from "../Button/Button";
 import { Link } from "react-router-dom";
@@ -6,19 +6,30 @@ import { connect } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 import { ReactComponent as FaTimes } from "../../assets/times.svg";
 import { ReactComponent as FaBars } from "../../assets/bars.svg";
-
 import { stack as Menu } from "react-burger-menu";
 import { withRouter } from "react-router";
+import Select from "../Select/Select";
+import { changeLanguageAction } from "../../store/actions/contentActions";
 
-const Header = ({ user, history }) => {
+const Header = ({ user, history, content, changeLanguage }) => {
   const [isBarOpen, setBarOpen] = useState(null);
   const [isAnimation, setAnimation] = useState(false);
   const [sidebarIcon, setSidebarIcon] = useState(false);
   const [isFirstLoad, setFirstLoad] = useState(false);
 
+  const { lang, allLanguages } = content;
+
+  const languageOptions = useMemo(() => {
+    return allLanguages.map((lang) => ({ label: lang, value: lang }));
+  }, [allLanguages]);
+
   const openSidebar = () => setBarOpen(true);
   const closeSidebar = () => setBarOpen(false);
   const onStateMenuChange = (state) => setBarOpen(state.isOpen);
+
+  const onLanguageSelect = ({ value }) => {
+    changeLanguage(value);
+  };
 
   const { pathname } = history.location;
 
@@ -85,6 +96,15 @@ const Header = ({ user, history }) => {
           </div>
         </div>
         <div className={s.action__container}>
+          <Select
+            options={languageOptions}
+            containerClass={s.language__select}
+            value={lang}
+            onSelect={onLanguageSelect}
+            noDefaultValue
+            valueContainerClass={s.language__value__container}
+            menuClass={s.language__select__menu}
+          />
           {user.id ? (
             <Link to="/profile" className={s.header__item}>
               Профіль
@@ -166,6 +186,11 @@ const Header = ({ user, history }) => {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  content: state.content,
 });
 
-export default withRouter(connect(mapStateToProps, null)(Header));
+const mapDispatchToProps = (dispatch) => ({
+  changeLanguage: (lang) => dispatch(changeLanguageAction(lang)),
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

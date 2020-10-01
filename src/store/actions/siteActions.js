@@ -31,8 +31,9 @@ import {
 import rootReducer from "../reducers/rootReducer";
 
 export const getEditingSiteAction = (id) => {
-  return (dispatch) => {
-    fetchEditingSite(id).then((res) => {
+  return (dispatch, getState) => {
+    const { lang } = getState().content;
+    fetchEditingSite(id, lang).then((res) => {
       dispatch({ type: SET_EDITING_SITE, site: res.data });
     });
   };
@@ -62,8 +63,9 @@ export const getTemplatesAction = (directionId) => {
 };
 
 export const getSingleTemplateAction = (templateId) => {
-  return async (dispatch) => {
-    const response = await fetchSingleTemplate(templateId);
+  return async (dispatch, getState) => {
+    const { lang } = getState().content;
+    const response = await fetchSingleTemplate(templateId, lang);
     const imagesResponse = await fetchHeaderImages(templateId);
     if (response?.status === 200) {
       const { elements } = response.data;

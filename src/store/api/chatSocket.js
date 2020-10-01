@@ -1,5 +1,5 @@
-import * as firebase from "firebase";
-import uuid from "react-uuid";
+import firebase from "firebase/app";
+import "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBeuryFzK_JxBJa-BvzAAW0trP54pvPwS0",

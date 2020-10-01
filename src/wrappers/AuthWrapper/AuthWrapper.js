@@ -3,12 +3,9 @@ import s from "./AuthWrapper.module.css";
 import FixedWrapper from "../FixedWrapper/FixedWrapper";
 import GoogleLogin from "react-google-login";
 import FacebookLogin from "react-facebook-login";
-import { ReactComponent as AiFillFacebook } from "../../assets/facebook.svg";
 import {
   facebookLoginAction,
   googleLoginAction,
-  loginAction,
-  registerAction,
 } from "../../store/actions/userActions";
 import { connect } from "react-redux";
 import { ReactComponent as FacebookIcon } from "../../assets/facebook.svg";
@@ -19,6 +16,7 @@ const AuthWrapper = ({
   withSocialMedia = true,
   facebookLogin,
   googleLogin,
+  content,
 }) => {
   const onFacebookLoggedIn = (res) => {
     const {
@@ -66,7 +64,7 @@ const AuthWrapper = ({
               <div className={s.actions__container}>
                 <GoogleLogin
                   clientId="827143410680-ad89eag6n70npuf5ge4oc9mgkums1me7.apps.googleusercontent.com"
-                  buttonText="Увійти за допомогою Google"
+                  buttonText={content.google}
                   onSuccess={onGoogleLoggedIn}
                   onFailure={onGoogleLoggedIn}
                   className={s.google__login}
@@ -78,7 +76,7 @@ const AuthWrapper = ({
                   cssClass={s.facebook__login}
                   fields="name,email,picture"
                   callback={onFacebookLoggedIn}
-                  textButton="Увійти за допомогою Facebook"
+                  textButton={content.facebook}
                   icon={<FacebookIcon className={s.social__icon} />}
                 />
               </div>
@@ -98,7 +96,7 @@ const AuthWrapper = ({
                   fields="name,email,picture"
                   callback={onFacebookLoggedIn}
                   textButton="Facebook"
-                  icon={<AiFillFacebook className={s.social__icon} />}
+                  icon={<FacebookIcon className={s.social__icon} />}
                 />
               </div>
             </>
@@ -110,7 +108,9 @@ const AuthWrapper = ({
   );
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  content: state.content.page_content.login,
+});
 const mapDispatchToProps = (dispatch) => ({
   facebookLogin: (data) => dispatch(facebookLoginAction(data)),
   googleLogin: (data) => dispatch(googleLoginAction(data)),

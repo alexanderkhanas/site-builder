@@ -1,10 +1,13 @@
-import React, { lazy, Suspense, useEffect } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./misc/Header/Header";
 import { connect } from "react-redux";
 import { getUserAction } from "./store/actions/userActions";
-import { getHomeContentAction } from "./store/actions/contentActions";
+import {
+  getHomeContentAction,
+  getLanguagesAction,
+} from "./store/actions/contentActions";
 import Modal from "./misc/Modal/Modal";
 import FullPageLoader from "./misc/FullPageLoader/FullPageLoader";
 import { Redirect } from "react-router";
@@ -28,12 +31,14 @@ const ChangePassword = lazy(() =>
   import("./pages/ChangePassword/ChangePassword")
 );
 const PublicOffer = lazy(() => import("./pages/PublicOffer/PublicOffer"));
+const Terms = lazy(() => import("./pages/Terms/Terms"));
 
 const PrivateRoute = ({
   redirectTo,
   component: Component,
   condition,
   state = {},
+  lang,
   ...rest
 }) => (
   <Route {...rest}>
@@ -45,14 +50,20 @@ const PrivateRoute = ({
   </Route>
 );
 
-// echo.listen("NewMessage", (ev) => console.log(ev));
-
-function App({ getUser, getContent, user }) {
+function App({ getUser, getContent, getLanguages, user, lang }) {
   const { isLogging, id } = user;
   useEffect(() => {
-    getUser();
-    getContent();
+    (async () => {
+      await getLanguages();
+      await getUser();
+    })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      await getContent();
+    })();
+  }, [lang]);
   return !isLogging ? (
     <Router>
       <Header />
@@ -115,6 +126,7 @@ function App({ getUser, getContent, user }) {
             <Route path="/public-offer" component={PublicOffer} />
             <Route path="/reset-password" component={ResetPassword} />
             <Route path="/change-password/:code" component={ChangePassword} />
+            <Route path="/terms" component={Terms} />
           </Switch>
         </Suspense>
       </div>
@@ -127,11 +139,13 @@ function App({ getUser, getContent, user }) {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  lang: state.content.lang,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getUser: () => dispatch(getUserAction()),
   getContent: () => dispatch(getHomeContentAction()),
+  getLanguages: () => dispatch(getLanguagesAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
