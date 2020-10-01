@@ -6,7 +6,6 @@ const Select = ({
   options,
   withSearch,
   label,
-  valueContainerClass,
   clearInputOnSelect,
   noDefaultValue = false,
   containerClass = "",
@@ -57,14 +56,11 @@ const Select = ({
     setSearchValue(defaultValue);
   }, [defaultSearchValue]);
   return (
-    <div className={`${s.wrapper} ${containerClass}`}>
+    <div className={containerClass}>
       {!!label && <p className={s.label}>{label}</p>}
       {!withSearch ? (
         <div className={s.container} onBlur={switchMenuOpened}>
-          <div
-            className={`${s.value__container} ${valueContainerClass}`}
-            onClick={switchMenuOpened}
-          >
+          <div className={s.value__container} onClick={switchMenuOpened}>
             <span className={s.value__text}>{value}</span>
           </div>
           {isMenuOpened && (
