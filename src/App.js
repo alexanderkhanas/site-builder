@@ -130,7 +130,7 @@ function App({ getUser, getContent, getLanguages, user, lang }) {
           </Switch>
         </Suspense>
       </div>
-      <Chat />
+      {/*<Chat />*/}
     </Router>
   ) : (
     <FullPageLoader />

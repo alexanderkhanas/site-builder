@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import s from "./SingleSite.module.css";
 import { connect } from "react-redux";
 import FixedWrapper from "../../wrappers/FixedWrapper/FixedWrapper";
@@ -9,7 +9,6 @@ import { ReactComponent as BiTrash } from "../../assets/trash.svg";
 import { ReactComponent as BiPencil } from "../../assets/pencil.svg";
 import { Link } from "react-router-dom";
 import { LiqPayPay } from "react-liqpay";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import FullPageLoader from "../../misc/FullPageLoader/FullPageLoader";
 import Select from "../../misc/Select/Select";
 import uuid from "react-uuid";
@@ -25,6 +24,7 @@ const periodSelectOptions = [
 
 const SingleSite = ({ createOrder, lang }) => {
   const [data, setData] = useState({});
+  const [isPublishing, setPublishing] = useState(false);
   const [orderId, setOrderId] = useState(uuid());
   const [isLoading, setLoading] = useState(true);
   const [selectedTariff, setSelectedTariff] = useState({
@@ -66,26 +66,17 @@ const SingleSite = ({ createOrder, lang }) => {
     setOrderId(uuid());
   };
 
-  // const onServiceCheckboxChange = ({ target: { checked } }, service) => {
-  //   if (checked) {
-  //     setSelectedServices((prev) => [...prev, service]);
-  //   } else {
-  //     setSelectedServices((prev) =>
-  //       prev.filter((item) => item.id !== service.id)
-  //     );
-  //   }
-  // };
-
   const redirectToDemo = () => history.push(`/site/demo/${id}`);
 
   const publishSite = async () => {
+    setPublishing(true);
     publishSiteRequest(id).catch(() => {
       fetchSingleSite(id, lang)
         .then((res) => {
           setData(res.data);
-          setLoading(false);
+          setPublishing(false);
         })
-        .catch(() => setLoading(false));
+        .catch(() => setPublishing(false));
     });
   };
 
@@ -93,6 +84,8 @@ const SingleSite = ({ createOrder, lang }) => {
 
   useEffect(() => {
     let temp = 0;
+    console.log("tariff ===", selectedTariff);
+    console.log("tariff period ===", tariffPeriod);
     if (selectedTariff.isInCart) {
       temp += +selectedTariff[tariffPeriod.value].price;
     }
@@ -151,11 +144,14 @@ const SingleSite = ({ createOrder, lang }) => {
             </div>
             <div className={s.section__buttons}>
               <Button
-                title="Опублікувати"
+                isLoading={isPublishing}
+                isDisabled={isPublishing}
+                title={url ? "Зберегти зміни" : "Опублікувати"}
                 size="md"
                 onClick={publishSite}
                 className={s.section__button}
               />
+
               <Button
                 title="Демо"
                 size="md"
@@ -217,6 +213,7 @@ const SingleSite = ({ createOrder, lang }) => {
         <CustomTabs
           tabListClass={s.tab__list}
           tabClass={s.tab}
+          setSelectedTab={onTariffSelect}
           tabs={tariff.map(({ name }) => name)}
         >
           {tariff.map((tariffObj) => {

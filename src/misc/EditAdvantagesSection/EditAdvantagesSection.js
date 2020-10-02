@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import s from "./EditAdvantagesSection.module.css";
 import { connect } from "react-redux";
 import classnames from "classnames";
@@ -19,17 +19,27 @@ import { createAdvantageAction } from "../../store/actions/siteActions";
 const EditAdvantagesSection = ({
   section,
   setSectionVariation,
-  onAdvantageSelected,
   hide,
-  onEdit,
-  values,
+  onEdit: saveState,
   sectionsVariations,
   createAdvantage,
 }) => {
+  const [changingState, setChangingState] = useState({});
+
+  const onEdit = (key, value) => {
+    setChangingState((prev) => ({...prev, [key]: value}))
+  }
+
+  const onSaveButtonClick = () => {
+    Object.entries(changingState).forEach(([key, value]) => {
+      saveState(section.categoryID, key, value)
+    });
+    hide();
+  }
+
   const {
     benefitList: selectedAdvantages,
-    section_name: sectionName,
-  } = section.element.parameters;
+  } = changingState;
 
   const benefitList = useMemo(() => {
     return section.categoryParameters.find(
@@ -37,13 +47,20 @@ const EditAdvantagesSection = ({
     );
   }, [section]);
 
-  const selectedAdvantagesIds = useMemo(() => {
-    return selectedAdvantages.map((advantage) => advantage.id);
+  const [selectedParentsIds, selectedAdvantagesIds ] = useMemo(() => {
+    const tempParentsIds = [];
+    const tempChildrenIds = [];
+    console.log("selected advantages ===", selectedAdvantages)
+    if (selectedAdvantages?.length) {
+      selectedAdvantages.forEach(({ id, children, parent_id: parentId }) => {
+        tempParentsIds.push(parentId);
+        tempChildrenIds.push(id);
+      });
+    }
+
+    return [tempParentsIds, tempChildrenIds];
   }, [selectedAdvantages]);
 
-  const selectedParentsIds = useMemo(() => {
-    return selectedAdvantages.map((advantage) => advantage.parent_id);
-  }, [selectedAdvantages]);
 
   const onAdvantageCheckboxChange = (child, img, value) => {
     const { parent_id: parentId } = child;
@@ -51,7 +68,7 @@ const EditAdvantagesSection = ({
       const temp = selectedAdvantages.filter((advantage) => {
         return advantage.parent_id !== parentId;
       });
-      onEdit(section.categoryID, "benefitList", [...temp, { ...child, img }]);
+      onEdit( "benefitList", [...temp, { ...child, img }]);
       return;
     }
 
@@ -59,15 +76,26 @@ const EditAdvantagesSection = ({
       const temp = selectedAdvantages.filter((advantage) => {
         return advantage.id !== child.id;
       });
-      onEdit(section.categoryID, "benefitList", temp);
+      onEdit( "benefitList", temp);
       return;
     }
 
-    onEdit(section.categoryID, "benefitList", [
+    onEdit( "benefitList", [
       ...selectedAdvantages,
-      { ...child, img, parentId },
+      { ...child, img, parent_id: parentId },
     ]);
   };
+
+  useEffect(() => {
+    const {parameters} = section.element || {}
+    if (parameters) {
+      setChangingState(parameters)
+    }
+  }, [section]);
+
+  console.log("changing state", changingState);
+  console.log("selectedParentsIds", selectedParentsIds);
+  console.log("selectedAdvantagesIds", selectedAdvantagesIds);
   return (
     <>
       <div className={s.container}>
@@ -86,17 +114,17 @@ const EditAdvantagesSection = ({
           ))}
         </div>
         <h2 className={s.title}>Редагування блоку</h2>
-        {section.categoryParameters.map(({ name, type, id }) => {
+        {section.categoryParameters.map(({ name, type, id, key }) => {
           return (
             type === "text" && (
               <Input
                 containerClass={s.field__container}
-                value={sectionName}
+                value={changingState[key]}
                 label={name}
                 placeholder={name}
                 key={id}
                 onChange={({ target: { value } }) => {
-                  onEdit(section.categoryID, "section_name", value);
+                  onEdit( key, value);
                 }}
               />
             )
@@ -104,7 +132,7 @@ const EditAdvantagesSection = ({
         })}
         <div className={s.section}>
           <Accordion allowZeroExpanded>
-            {benefitList.value.map((benefit) => {
+            {benefitList.value?.map((benefit) => {
               const { children, id, img } = benefit;
               return (
                 <AccordionItem key={id}>
@@ -114,7 +142,7 @@ const EditAdvantagesSection = ({
                     </AccordionItemButton>
                   </AccordionItemHeading>
                   <AccordionItemPanel>
-                    {children.map((child) => (
+                    {children?.map((child) => (
                       <div className={s.benefit__child}>
                         <div className={s.benefit__child__row}>
                           <p>{child.desc}</p>
@@ -158,6 +186,9 @@ const EditAdvantagesSection = ({
               );
             })}
           </Accordion>
+        </div>
+        <div className={s.buttons}>
+          <Button onClick={onSaveButtonClick} size="lg" className={s.save__button} title="Зберегти" />
         </div>
       </div>
       <div className={s.overlay} onClick={hide} />

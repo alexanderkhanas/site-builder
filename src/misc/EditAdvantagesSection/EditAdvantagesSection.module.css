@@ -126,6 +126,15 @@
     margin-top: 10px;
 }
 
+.buttons {
+    margin-top: 40px;
+    display: flex;
+}
+
+.save__button {
+    justify-content: center;
+}
+
 @media(max-width: 500px) {
     .container {
         padding: 40px 20px 100px 20px;

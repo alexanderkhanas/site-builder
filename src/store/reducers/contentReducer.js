@@ -9,6 +9,7 @@ const initialState = {
     home: {},
     about: {},
     login: {},
+    gallery: {}
   },
   tariffs: [],
   services: [],

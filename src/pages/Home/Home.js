@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import TariffCard from "../../misc/TariffCard/TariffCard";
 import ServiceCard from "../../misc/ServiceCard/ServiceCard";
 import ReviewCard from "../../misc/ReviewCard/ReviewCard";
+import HomeHeader from "../../misc/HomeHeader/HomeHeader";
 
 const Home = ({ getContent, content, lang }) => {
   const {
@@ -20,33 +21,33 @@ const Home = ({ getContent, content, lang }) => {
 
   return (
     <div className={s.container}>
-      <Carousel
-        showStatus={false}
-        showIndicators={false}
-        showThumbs={false}
-        infiniteLoop
-        useKeyboardArrows
-        autoPlay
-        emulateTouch
-      >
-        {[...Array(3)].map((_, i) => (
-          <div className={s.carousel__img__container}>
-            <img
-              className={s.carousel__img}
-              src={`https://topfractal.com/images/slider${i + 1}.jpg`}
-              alt="loading"
-            />
-            <div className={s.carousel__content}>
-              <h3 className={s.carousel__title}>
-                {homeContent[`header_${i + 1}`]}
-              </h3>
-              <p className={s.carousel__text}>
-                {homeContent[`header_text_${i + 1}`]}
-              </p>
-            </div>
-          </div>
-        ))}
-      </Carousel>
+      {/*<Carousel*/}
+      {/*  showStatus={false}*/}
+      {/*  showIndicators={false}*/}
+      {/*  showThumbs={false}*/}
+      {/*  infiniteLoop*/}
+      {/*  useKeyboardArrows*/}
+      {/*  autoPlay*/}
+      {/*  emulateTouch*/}
+      {/*>*/}
+      {/*  {[...Array(3)].map((_, i) => (*/}
+      {/*    <div className={s.carousel__img__container}>*/}
+      {/*      <img*/}
+      {/*        className={s.carousel__img}*/}
+      {/*        src={`https://topfractal.com/images/slider${i + 1}.jpg`}*/}
+      {/*        alt="loading"*/}
+      {/*      />*/}
+      {/*      <div className={s.carousel__content}>*/}
+      {/*        <h3 className={s.carousel__title}>*/}
+      {/*          {homeContent[`header_${i + 1}`]}*/}
+      {/*        </h3>*/}
+      {/*        <p className={s.carousel__text}>*/}
+      {/*          {homeContent[`header_text_${i + 1}`]}*/}
+      {/*        </p>*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*  ))}*/}
+      {/*</Carousel>*/}
       <div className={s.section}>
         <h2 className={s.section__title}>{homeContent.templates}</h2>
         <FixedWrapper className={s.cards__container}>
@@ -68,7 +69,7 @@ const Home = ({ getContent, content, lang }) => {
             <AdvantagesCard
               title={homeContent[`BenefitsName${i + 1}`]}
               desc={homeContent[`BenefitsText${i + 1}`]}
-              img={`https://topfractal.com/images/ben${i + 1}.png`}
+              img={`https://topfractal.com/images/icon${i + 1}.png`}
             />
           ))}
         </FixedWrapper>

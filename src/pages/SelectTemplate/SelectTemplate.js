@@ -12,6 +12,7 @@ import {
 import { connect } from "react-redux";
 import classnames from "classnames";
 import { useHistory } from "react-router";
+import FullPageLoader from "../../misc/FullPageLoader/FullPageLoader";
 
 const SelectTemplate = ({
   getDirections,
@@ -24,28 +25,32 @@ const SelectTemplate = ({
   const [selectedDirection, setSelectedDirection] = useState(
     templates[0] || {}
   );
-  const onDirectionSelect = (direction) => {
-    setSelectedDirection(direction);
-  };
+  const [isLoading, setLoading] = useState(false);
+
+  // const onDirectionSelect = (direction) => {
+  //   setSelectedDirection(direction);
+  // };
 
   const { select, demo } = homeContent;
 
   useEffect(() => {
     const { id } = selectedDirection;
     if (id && !templates[id]) {
-      getTemplates(id);
+      setLoading(true);
+      getTemplates(id).finally(() => setLoading(false));
     }
   }, [directions, selectedDirection]);
 
   useEffect(() => {
-    getDirections();
+    setLoading(true);
+    getDirections().finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
     setSelectedDirection(directions[0] || {});
   }, [directions]);
 
-  return (
+  return !isLoading ? (
     <FixedWrapper>
       <div className={s.container}>
         <div className={s.tabs__container}>
@@ -65,25 +70,29 @@ const SelectTemplate = ({
           {templates[selectedDirection.id]?.map((template) => {
             const { id } = template;
             return (
-              <TemplateCard
-                selectText={select}
-                demoText={demo}
-                onSubmit={() => history.push(`/create-site/${id}`)}
-                {...{ template }}
-                key={id}
-              />
+              <div className={s.card__container}>
+                <TemplateCard
+                  selectText={select}
+                  demoText={demo}
+                  onSubmit={() => history.push(`/create-site/${id}`)}
+                  {...{ template }}
+                  key={id}
+                />
+              </div>
             );
           })}
         </div>
       </div>
     </FixedWrapper>
+  ) : (
+    <FullPageLoader />
   );
 };
 
 const mapStateToProps = (state) => ({
   directions: state.site.directions,
   templates: state.site.templates,
-  homeContent: state.content.home.page_content,
+  homeContent: state.content.page_content.home,
 });
 
 const mapDispatchToProps = (dispatch) => ({

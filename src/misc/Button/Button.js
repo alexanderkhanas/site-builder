@@ -1,6 +1,7 @@
 import React from "react";
 import s from "./Button.module.css";
 import classnames from "classnames";
+import Loader from "react-loader-spinner";
 
 const Button = ({
   onClick,
@@ -14,6 +15,7 @@ const Button = ({
   isCapitalize,
   isDisabled,
   isLink,
+  isLoading,
   ...rest
 }) => {
   const classes = classnames(s.button, className, {
@@ -30,6 +32,15 @@ const Button = ({
       className={`${classes} ${s[`button__${size}`]}`}
     >
       {children}
+      {!!isLoading && (
+        <Loader
+          className={s.loader}
+          type="Oval"
+          color="#fff"
+          height={15}
+          width={15}
+        />
+      )}
       {!!title && <span>{title}</span>}
     </button>
   ) : (

@@ -20,14 +20,15 @@ import EditServicesSection from "../../misc/EditServicesSection/EditServicesSect
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import DraggableSections from "../../misc/DraggableSections/DraggableSections";
+import { showModalAction } from "../../store/actions/assetsActions";
 
 const CreateSite = ({
   getSingleTemplate,
   sections,
   createSite,
-  uploadImage,
   getSectionVariations,
   sectionsVariations,
+  showModal,
 }) => {
   const { id } = useParams();
   const history = useHistory();
@@ -142,6 +143,14 @@ const CreateSite = ({
     }
   };
 
+  const onSitesLimit = () => {
+    showModal(
+      "Помилка при створенні сайту",
+      "Досягнуто ліміт створення безкоштовних сайтів, щоб створити сайт, підключіть тариф для одного з попередніх сайтів ",
+      () => history.push("/sites")
+    );
+  };
+
   const onSubmit = async () => {
     let headerIndex = null;
     const menu = [];
@@ -162,11 +171,14 @@ const CreateSite = ({
         return element;
       });
     elements[headerIndex].parameters.menu = menu;
-    const siteId = await createSite({
-      ...baseData,
-      elements,
-      phone: +baseData.phone,
-    });
+    const siteId = await createSite(
+      {
+        ...baseData,
+        elements,
+        phone: +baseData.phone,
+      },
+      onSitesLimit
+    );
     if (siteId) {
       history.push(`/site/${siteId}`);
     }
@@ -236,6 +248,8 @@ const CreateSite = ({
     activeEditingValue?.element?.link === "#advantages";
   const isServicesEditing = activeEditingValue?.element?.link === "#services";
 
+  console.log("section values ===", sectionsValues);
+
   return (
     <FixedWrapper className={s.container}>
       <div className={s.inner}>
@@ -288,6 +302,12 @@ const CreateSite = ({
               className={s.refresh__icon}
             />
           </Input>
+          <Button
+            size="lg"
+            title="Створити"
+            className={s.submit__button}
+            onClick={onSubmit}
+          />
           {/*<Button onClick={() => setSelectedTab(1)} title="Налаштування">*/}
           {/*  <FaCogs className={s.button__icon} />*/}
           {/*</Button>*/}
@@ -353,10 +373,13 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getSingleTemplate: (id) => dispatch(getSingleTemplateAction(id)),
-  createSite: (siteData) => dispatch(createSiteAction(siteData)),
+  createSite: (siteData, onSitesLimit) =>
+    dispatch(createSiteAction(siteData, onSitesLimit)),
   uploadImage: (imageFormData) => dispatch(uploadImageAction(imageFormData)),
   getSectionVariations: (sectionId, templateId) =>
     dispatch(getSectionVariationsAction(sectionId, templateId)),
+  showModal: (title, desc, onClose) =>
+    dispatch(showModalAction(title, desc, onClose, onClose)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateSite);

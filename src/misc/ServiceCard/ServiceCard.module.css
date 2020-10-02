@@ -1,7 +1,7 @@
 .container {
     background: #fff;
-    margin-right: 20px;
-    flex-basis: 32%;
+    margin-right: 4%;
+    /*flex-basis: 32%;*/
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -18,7 +18,7 @@
 
 .header {
     padding: 20px 30px;
-    background: #51608a;
+    background: #4048f0;
 }
 
 .main__content {

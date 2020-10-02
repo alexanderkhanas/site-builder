@@ -57,15 +57,16 @@ export const googleLoginAction = (data) => {
 };
 
 export const registerAction = (data) => {
-  return async (dispatch) => {
-    const response = await registerRequest(data);
-    if (response?.data) {
-      const { user, token } = response.data;
-      localStorage.setItem("_token", token);
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-      dispatch({ type: SET_USER, user });
-    }
-    return response?.status === 200;
+  return async (dispatch, getState) => {
+    const {lang} = getState().content
+    return registerRequest({...data, lang}, ).then((res) => {
+        const { user, token } = res.data;
+        localStorage.setItem("_token", token);
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+        dispatch({ type: SET_USER, user });
+        return true
+    }).catch(() => false)
+
   };
 };
 

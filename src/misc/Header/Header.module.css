@@ -1,5 +1,4 @@
 .container {
-    background: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -12,28 +11,34 @@
 }
 
 .logo {
-    width: 70px;
+    /*width: 70px;*/
     height: 37px;
     margin-right: 40px;
 }
 
 .header__item {
-    margin-right: 30px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 18px;
     padding: 3px 0;
     transition: color 0.15s;
-    color: #000;
-    text-transform: uppercase;
+    margin-right: 30px;
+    text-transform: capitalize;
+    color: #fff;
 }
+
 
 .header__item:hover {
     border-bottom: 1px solid #ccc;
-    color: #8a8a8a;
+    /*color: #8a8a8a;*/
 }
 
 .create__btn {
     border-radius: 25px;
+    padding: 12px 25px;
+}
+
+.burger__icon {
+    color: #fff;
 }
 
 .burger__icon__entering,
@@ -41,6 +46,7 @@
     transform: rotate(45deg);
     opacity: 0.4;
 }
+
 .burger__icon__entered,
 .burger__icon__exited {
     transform: rotate(0);
@@ -61,15 +67,16 @@
     /* padding: 2.5em 1.5em 0; */
     /* font-size: 1.15em; */
     height: 100%;
+    padding-top: 50px;;
     box-sizing: border-box;
-    overflow: auto;
+    /*overflow: auto;*/
 }
+
 .menu_hidden,
 .exit_hidden {
     visibility: hidden;
     display: none;
 }
-
 
 
 .menu_width {
@@ -83,7 +90,7 @@
     justify-content: space-between;
 }
 
-.display_none{
+.display_none {
     display: none;
 }
 
@@ -92,9 +99,11 @@
     align-items: center;
     position: relative;
 }
+
 .small_menu_item button:hover {
     color: #2bbd86;
 }
+
 .small_menu_button button {
     color: #404040;
 }
@@ -107,7 +116,7 @@
     font-family: "Montserrat", sans-serif;
     font-weight: 200;
     padding: 15px 25px;
-    border-bottom: 1px solid #ccc;
+    /*border-bottom: 1px solid #ccc;*/
 }
 
 .burger__icon {
@@ -143,25 +152,98 @@
     box-sizing: border-box;
 }
 
+.header__container {
+    /*height: 70vh;*/
+    background: linear-gradient(289deg, #4fc5fe, #4048f0 72%, #3d35ee);
+    position: relative;
+    z-index: 10;
+    padding: 30px 40px 100px;
+    box-sizing: border-box;
+}
+
+.header__container.header__small {
+    padding: 7px 40px;
+}
+
+.header__container:before {
+    position: absolute;
+    content: "";
+    left: 0;
+    z-index: -1;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: url(https://contentstudio.io/assets/img/head_background.8fa71e8b.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center -45px;
+}
+
+.home__header__inner {
+    display: flex;
+    z-index: 10;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    margin-top: 70px;
+    flex-wrap: wrap;
+}
+
+.home__header__image {
+    width: 30%;
+    min-width: 300px;
+    z-index: 10;
+}
+
+.home__header__main__content {
+    flex-basis: 55%;
+}
+
+.home__header__title {
+    font-size: 50px;
+    font-weight: 800;
+    line-height: 1.46;
+    color: #fff;
+    margin-bottom: 35px;
+}
+
+.home__header__desc {
+    line-height: 2;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.close__icon__mobile {
+    position: absolute;
+    top: 10px;
+    font-size: 25px;
+    right: 10px;
+}
+
+.mobile__header__container {
+    display: none;
+}
+
 
 @media (max-width: 1050px) {
     .container {
         display: none;
     }
+
     .mobile__header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
         z-index: 20;
-        background-color: #fff;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 10px 20px;
         height: 52px;
         box-sizing: border-box;
     }
+
+    .mobile__header__container {
+        display: block;
+    }
+
     .header_icon {
         fill: #404040;
         /* color: #404040; */
@@ -169,4 +251,40 @@
     }
 }
 
+@media (max-width: 900px) {
+    .home__header__title {
+        font-size: 30px;
+        text-align: center;
+        margin-bottom: 20px;
+
+    }
+
+    .desktop__header {
+        display: none;
+    }
+
+    .home__header__desc {
+        font-size: 18px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .header__container {
+        padding: 10px 30px ;
+    }
+
+    .home__header__inner {
+        flex-direction: column-reverse;
+    }
+
+    .home__header__inner {
+        margin-top: 30px;
+    }
+
+    .create__btn {
+        flex-grow: 1;
+        font-weight: 600;
+    }
+
+}
 

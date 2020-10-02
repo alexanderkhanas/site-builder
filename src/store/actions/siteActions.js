@@ -34,6 +34,7 @@ export const getEditingSiteAction = (id) => {
   return (dispatch, getState) => {
     const { lang } = getState().content;
     fetchEditingSite(id, lang).then((res) => {
+      console.log("res ===", res.data);
       dispatch({ type: SET_EDITING_SITE, site: res.data });
     });
   };
@@ -81,7 +82,7 @@ export const getSingleTemplateAction = (templateId) => {
   };
 };
 
-export const createSiteAction = (siteData) => {
+export const createSiteAction = (siteData, onSitesLimit) => {
   return async (dispatch) => {
     return postSite(siteData)
       .then((res) => {
@@ -89,7 +90,13 @@ export const createSiteAction = (siteData) => {
         dispatch({ type: ADD_USER_SITE, site });
         return site.id;
       })
-      .catch(() => false);
+      .catch((e) => {
+        console.log("e ===", e.response.status);
+        if (e.response.status === 402) {
+          onSitesLimit();
+        }
+        return false;
+      });
   };
 };
 

@@ -1,21 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;700&family=Roboto:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500600;700&family=Roboto:wght@300;400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;800&display=swap');
 
 body {
-  background: #f0f0f0;
+  background: linear-gradient(180deg,#fff,#f3f6ff);
   padding: 0;
-  margin: 0
+  margin: 0;
+  min-height: 100vh;
 }
 
 div, h1, h2, h3, h4, h5, h6, p {
   margin: 0;
   padding: 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Raleway', sans-serif;
 }
 
 button {
   border: none;
   outline: none;
+}
+
+span {
+  font-family: 'Raleway', sans-serif;
 }
 
 a {
@@ -37,7 +43,7 @@ button:focus {
 }
 
 .bm-menu-wrap, .bm-overlay {
-  top: 50px;
+  top: 0;
 }
 
 @media (min-width: 950px) {

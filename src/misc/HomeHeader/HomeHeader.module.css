@@ -1,0 +1,51 @@
+.container {
+    height: 70vh;
+    background: linear-gradient(289deg,#4fc5fe,#4048f0 72%,#3d35ee);
+    position: relative;
+}
+
+.container:after {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: url(https://contentstudio.io/assets/img/head_background.8fa71e8b.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center -45px;
+}
+
+.inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 30px 50px;
+    box-sizing: border-box;
+}
+
+.image {
+   width: 30%;
+    z-index: 10;
+}
+
+.main__content {
+    flex-basis: 55%;
+}
+
+.title {
+    font-size: 50px;
+    font-weight: 800;
+    line-height: 1.46;
+    color: #fff;
+    margin-bottom: 35px;
+}
+
+.desc {
+    line-height: 2;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+}

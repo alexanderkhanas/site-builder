@@ -13,7 +13,8 @@
 }
 
 .tab__active {
-    background: #51608a;
+    /*background: linear-gradient(200deg,#2dd87e,#14c4a4);;*/
+    background: #4048f0;
     color: #fff;
 }
 

@@ -161,6 +161,7 @@ const EditSite = ({
         }
         return element;
       });
+    console.log("menu ===", menu)
     elements[headerIndex].parameters.menu = menu;
     const siteId = await editSite({
       ...baseData,
@@ -172,6 +173,8 @@ const EditSite = ({
     }
   };
 
+  console.log("section values ===", sectionsValues)
+
   useEffect(() => {
     const { elements, templateName, templateId } = site;
     if (!site.elements) return;
@@ -180,10 +183,11 @@ const EditSite = ({
       organizationName: templateName,
       templateId,
     }));
+
     const tempActiveSections = [];
     const temp = elements.map((section) => {
       const { element, categoryParameters } = section;
-      const parameters = {};
+      const parameters = {section_name: element.name};
       categoryParameters.forEach(({ key, value }) => {
         if (key === "servicesList") {
           const defaultSelectedServices = [];
@@ -209,6 +213,9 @@ const EditSite = ({
           });
           parameters[key] = defaultSelectedAdvantages;
           return;
+        }
+        if (key === "section_name") {
+          return
         }
         parameters[key] = value;
       });

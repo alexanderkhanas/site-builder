@@ -1,9 +1,11 @@
 
 .button {
-    background: #1F2C4F;
+    background: linear-gradient(252deg,#2dd87e,#14c4a4);;
     color: #fff;
     padding: 16px 25px;
     border-radius: 5px;
+    display: flex;
+    align-items: center;
     cursor: pointer;
     transition: 0.2s;
     flex-grow: 1;
@@ -13,8 +15,12 @@
     letter-spacing: 1px;
 }
 
+.loader {
+    margin-right: 7px;
+}
+
 .button:hover {
-    background: #1F2C4F;
+    background: linear-gradient(200deg,#2dd87e,#14c4a4);;
 }
 
 .button__round {
@@ -60,12 +66,12 @@
 }
 
 .disabled {
-    background: #51608a;
+    background: #14c4a490;
     cursor: default;
 }
 
 .disabled:hover {
-    background: #51608a;
+    background: #14c4a490;
 }
 
 .capitalize {

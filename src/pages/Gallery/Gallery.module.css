@@ -2,8 +2,14 @@
     padding-top: 10px;
 }
 
+.title {
+    font-weight: 300;
+    margin: 10px 0 30px;
+    text-align: center;
+}
+
 .container .tab__list {
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 
 .items__container {
@@ -28,7 +34,7 @@
 }
 
 .upload__input {
-    margin: 20px 0;
+    margin: 30px 0;
 }
 
 .delete__icon {

@@ -4,12 +4,20 @@ import Button from "../Button/Button";
 import CardWrapper from "../../wrappers/CardWrapper/CardWrapper";
 import { useHistory } from "react-router";
 
-const TemplateCard = ({ onSubmit, template, demoText, selectText }) => {
+const TemplateCard = ({
+  onSubmit,
+  template,
+  demoText,
+  selectText,
+  containerClass,
+}) => {
   const history = useHistory();
   const { name, img, demo, desc, id } = template;
   const redirectToSingle = () => history.push(`/create-site/${id}`);
   return (
-    <CardWrapper>
+    <CardWrapper
+      className={`${s.wrapper} ${s.card__wrapper} ${containerClass}`}
+    >
       <div className={s.container}>
         <img
           className={s.img}
@@ -26,11 +34,14 @@ const TemplateCard = ({ onSubmit, template, demoText, selectText }) => {
             {!!desc && <p className={s.footer__desc}>{desc}</p>}
           </div>
           <div className={s.buttons__container}>
-            <Button
-              title={selectText}
-              className={s.button}
-              onClick={redirectToSingle}
-            />
+            <div>
+              <Button
+                title={selectText}
+                className={s.button}
+                size="lg"
+                onClick={redirectToSingle}
+              />
+            </div>
             {!!demo && (
               <Button
                 title={demoText}

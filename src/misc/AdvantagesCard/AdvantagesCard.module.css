@@ -1,6 +1,7 @@
 .container {
     background: #fff;
-    flex-basis: 24%;
+    flex-basis: 22.5%;
+    border-radius: 25px;
     box-sizing: border-box;
     padding: 40px 30px;
     display: flex;
@@ -15,6 +16,7 @@
 
 .image {
     width: 60px;
+    object-fit: cover;
     height: 60px;
     margin-bottom: 20px;
 }
@@ -22,9 +24,13 @@
 .title {
     text-align: center;
     margin-bottom: 20px;
+    color: #455164;
+    font-weight: 400;
 }
 
 .desc {
     text-align: center;
     font-weight: 300;
+    color: #45516499;
+    line-height: 25px;
 }

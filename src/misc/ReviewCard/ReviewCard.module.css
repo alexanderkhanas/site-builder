@@ -2,17 +2,22 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: initial !important;
+    margin-bottom: 40px !important;
 }
 
 .desc__container {
     padding: 35px 40px 20px 40px;
     background: #fff;
+    border-radius: 25px;
     flex-grow: 1;
 }
 
 .title__container {
-    padding: 10px 40px;
-    background: #1F2C4F;
+    padding: 15px 40px;
+    background: #4048f0;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .title {
@@ -32,7 +37,7 @@
     top: -23px;
     padding: 11px;
     border-radius: 50%;
-    background: #51608a;
+    background: #4048f0;
     align-self: center;
     font-size: 25px;
     color: #fff;

@@ -22,17 +22,21 @@ const Modal = ({ title, desc, onResolve, onReject, hide, isVisible }) => {
           <h2 className={s.title}>{title}</h2>
           {!!desc && <p className={s.desc}>{desc}</p>}
           <div className={s.buttons__container}>
+            {/*<div>*/}
             <Button
               title="Підвердити"
               onClick={resolveHandler}
               className={s.button}
             />
+            {/*</div>*/}
+            {/*<div>*/}
             <Button
               title="Скасувати"
               onClick={rejectHandler}
               isSecondary
               className={s.button}
             />
+            {/*</div>*/}
           </div>
         </div>
         <div className={s.overlay} onClick={hide} />

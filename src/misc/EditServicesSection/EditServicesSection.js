@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import s from "./EditServicesSection.module.css";
 import { connect } from "react-redux";
 import classnames from "classnames";
@@ -16,16 +16,28 @@ import Button from "../Button/Button";
 import { Formik } from "formik";
 import { createServiceAction } from "../../store/actions/siteActions";
 import { ReactComponent as FaTimes } from "../../assets/times.svg";
+import {postPdf} from "../../store/api/api";
 
 const EditServicesSection = ({
   sectionsVariations,
   section,
   setSectionVariation,
   hide,
-  onEdit,
+  onEdit: saveState,
   createService,
 }) => {
-  const { element } = section;
+  const [changingState, setChangingState] = useState({})
+
+  const onEdit = (key, value) => {
+    setChangingState((prev) => ({...prev, [key]: value}))
+  }
+
+  const onSaveButtonClick = () => {
+    Object.entries(changingState).forEach(([key, value]) => {
+      saveState(section.categoryID, key, value)
+    });
+    hide();
+  }
 
   const servicesList = useMemo(() => {
     return section.categoryParameters.find(({ key }) => key === "servicesList");
@@ -33,8 +45,7 @@ const EditServicesSection = ({
 
   const {
     servicesList: selectedServices,
-    section_name: sectionName,
-  } = section.element.parameters;
+  } = changingState;
 
   const [selectedParentsIds, selectedChildrenIds] = useMemo(() => {
     const tempParentsIds = [];
@@ -49,18 +60,24 @@ const EditServicesSection = ({
     }
 
     return [tempParentsIds, tempChildrenIds];
-  }, [selectedServices]);
+  }, [changingState]);
 
   const onParentSelected = (parent, isSelected) => {
     if (!isSelected) {
       const filtered = selectedServices.filter((service) => {
         return service.id !== parent.id;
       });
-      onEdit(section.categoryID, "servicesList", filtered);
+      onEdit("servicesList", filtered);
       return;
     }
-    onEdit(section.categoryID, "servicesList", [...selectedServices, parent]);
+    onEdit("servicesList", [...selectedServices, parent]);
   };
+
+  const onPdfLoad = async (file) => {
+    postPdf({InputFile: file}).then((res) => {
+      onEdit("pdfFile", res.data)
+    })
+  }
 
   const removeChild = (parent, child) => {
     const parentCopy = { ...parent };
@@ -78,7 +95,7 @@ const EditServicesSection = ({
       });
     }
 
-    onEdit(section.categoryID, "servicesList", changedServices);
+    onEdit("servicesList", changedServices);
   };
 
   const addChild = (parent, child) => {
@@ -86,11 +103,11 @@ const EditServicesSection = ({
     const changedServices = selectedServices.map((service) => {
       return service.id === parent.id ? parent : service;
     });
-    onEdit(section.categoryID, "servicesList", changedServices);
+    onEdit("servicesList", changedServices);
   };
 
   const addParent = (parent, children = []) => {
-    onEdit(section.categoryID, "servicesList", [
+    onEdit("servicesList", [
       ...selectedServices,
       {
         ...parent,
@@ -124,8 +141,15 @@ const EditServicesSection = ({
     const changedServices = selectedServices.map((service) => {
       return service.id === parentId ? selectedParent : service;
     });
-    onEdit(section.categoryID, "servicesList", changedServices);
+    onEdit("servicesList", changedServices);
   };
+
+  useEffect(() => {
+    const {parameters} = section.element || {}
+    if (parameters) {
+      setChangingState(parameters)
+    }
+  }, [section]);
 
   return (
     <>
@@ -146,13 +170,13 @@ const EditServicesSection = ({
           ))}
         </div>
         <h2 className={s.title}>Редагування блоку</h2>
-        {section.categoryParameters.map(({ name, type, id, value, key }) => {
+        {section.categoryParameters.map(({ name, type, id, key }) => {
           const inputProps = {
             containerClass: s.field__container,
             label: name,
             placeholder: name,
             onChange: ({ target: { value } }) => {
-              onEdit(section.categoryID, key, value);
+              onEdit(key, value);
             },
             key: id,
           };
@@ -160,14 +184,15 @@ const EditServicesSection = ({
             return (
               <InputFile
                 {...inputProps}
+                  type="pdf"
                 onChange={(value) => {
-                  onEdit(section.categoryID, key, value);
+                  onPdfLoad(value);
                 }}
               />
             );
           }
           if (type === "text") {
-            return <Input {...inputProps} value={element.parameters[key]} />;
+            return <Input {...inputProps} value={changingState[key]} />;
           }
           return <div />;
         })}
@@ -243,6 +268,9 @@ const EditServicesSection = ({
               );
             })}
           </Accordion>
+        </div>
+        <div className={s.buttons}>
+          <Button onClick={onSaveButtonClick} size="lg" className={s.save__button} title="Зберегти" />
         </div>
       </div>
       <div className={s.overlay} onClick={hide} />

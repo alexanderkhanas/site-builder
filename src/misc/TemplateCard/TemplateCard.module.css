@@ -1,12 +1,16 @@
 .container {
-    flex-basis: 32%;
     position: relative;
     background: #fff;
     box-shadow: 0 2px 10px 5px rgba(150, 150, 150, .1);
     transition: 0.2s;
     min-width: 300px;
+
 }
 
+.card__wrapper.wrapper {
+    box-sizing: border-box;
+    background: initial;
+}
 
 .img {
     width: 100%;
@@ -18,16 +22,17 @@
 }
 
 .footer__info {
-    padding: 15px 20px;
+    padding: 13px 20px;
 }
 
 .footer__title {
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
 }
 
 .buttons__container {
     border-top: 1px solid #eeeeee;
-    padding: 10px 20px;
+    padding: 15px 20px;
+    display: flex;
 }
 
 .button {

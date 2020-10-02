@@ -140,6 +140,15 @@
     top: 18px
 }
 
+.buttons {
+    margin-top: 40px;
+    display: flex;
+}
+
+.save__button {
+    justify-content: center;
+}
+
 @media (max-width: 1050px) {
     .container {
         padding-top: 70px;

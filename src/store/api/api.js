@@ -95,7 +95,7 @@ export const fetchUserSites = () => {
 };
 
 export const fetchSiteDemo = (id) => {
-  return axios.get(`/site/preview/${id}`);
+  return axios.get(`/preview/${id}`);
 };
 
 export const fetchEditingSite = (id, lang) => {
@@ -145,3 +145,7 @@ export const changePasswordRequest = (data) => {
 export const loginGoogleRequest = (data) => {
   return axios.post("/google-login", data);
 };
+
+export const postPdf = (data) => {
+  return axios.post("/upload-pdf", data)
+}

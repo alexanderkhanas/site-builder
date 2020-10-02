@@ -12,7 +12,7 @@
     position: fixed;
     top: 20px;
     right: 20px;
-    font-size: 20px;
+    font-size: 25px;
 }
 
 .container {
@@ -28,6 +28,8 @@
     z-index: 22;
     box-sizing: border-box;
 }
+
+
 
 .title {
     margin-bottom: 30px;
@@ -133,6 +135,15 @@
 .delete__icon {
     font-size: 30px;
     cursor: pointer;
+}
+
+.buttons {
+    margin-top: 40px;
+    display: flex;
+}
+
+.save__button {
+    justify-content: center;
 }
 
 @media(max-width: 500px) {

@@ -8,14 +8,15 @@ import { ReactComponent as FaTimes } from "../../assets/times.svg";
 import { ReactComponent as FaBars } from "../../assets/bars.svg";
 import { stack as Menu } from "react-burger-menu";
 import { withRouter } from "react-router";
-import Select from "../Select/Select";
 import { changeLanguageAction } from "../../store/actions/contentActions";
+import classnames from "classnames";
 
 const Header = ({ user, history, content, changeLanguage }) => {
   const [isBarOpen, setBarOpen] = useState(null);
   const [isAnimation, setAnimation] = useState(false);
   const [sidebarIcon, setSidebarIcon] = useState(false);
   const [isFirstLoad, setFirstLoad] = useState(false);
+  const [isHomeScreen, setHomeScreen] = useState(true);
 
   const { lang, allLanguages } = content;
 
@@ -43,6 +44,11 @@ const Header = ({ user, history, content, changeLanguage }) => {
 
   useEffect(() => {
     window.scroll({ left: 0, top: 0 });
+    if (pathname === "/") {
+      setHomeScreen(true);
+    } else if (pathname !== "/" && isHomeScreen) {
+      setHomeScreen(false);
+    }
     if (!isFirstLoad) {
       setFirstLoad(true);
       return;
@@ -52,99 +58,165 @@ const Header = ({ user, history, content, changeLanguage }) => {
     }
   }, [pathname]);
 
+  const [isCreateButtonVisible] = useMemo(() => {
+    return [
+      !pathname?.includes("/create-site") &&
+        !pathname?.includes("/edit-site") &&
+        pathname !== "/sites",
+      pathname === "/",
+      pathname === "/",
+    ];
+  }, [pathname]);
+
   return (
     <>
-      <div className={s.container}>
-        <div className={s.left__container}>
-          <Link to="/">
-            <img
-              src={require("../../assets/logo.png")}
-              className={s.logo}
-              alt="loading"
-            />
-          </Link>
-          <div className={s.main__content}>
-            <Link className={s.header__item} to="/">
-              ГОЛОВНА
-            </Link>
-            <Link className={s.header__item} to="/about-us">
-              ПРО НАС
-            </Link>
-            <Link className={s.header__item} to="/tariffs">
-              ТАРИФИ
-            </Link>
-            <Link className={s.header__item} to="/advantages">
-              ПЕРЕВАГИ
-            </Link>
-            <Link className={s.header__item} to="/reviews">
-              ВІДГУКИ
-            </Link>
+      <div>
+        <div
+          className={classnames(s.header__container, s.desktop__header, {
+            [s.header__small]: !isHomeScreen,
+          })}
+        >
+          <div className={s.container}>
+            <div className={s.left__container}>
+              <Link to="/">
+                <img
+                  src={require("../../assets/logo.png")}
+                  className={s.logo}
+                  alt="loading"
+                />
+              </Link>
+              <div className={s.main__content}>
+                {!pathname.includes("/site/") && (
+                  <Link className={s.header__item} to="/">
+                    Головна
+                  </Link>
+                )}
+                {!pathname.includes("/site/") && (
+                  <Link className={s.header__item} to="/about-us">
+                    Про нас
+                  </Link>
+                )}
+                {!pathname.includes("/site/") && (
+                  <Link className={s.header__item} to="/tariffs">
+                    Тарифи
+                  </Link>
+                )}
+                {!pathname.includes("/site/") && (
+                  <Link className={s.header__item} to="/advantages">
+                    Переваги
+                  </Link>
+                )}
+                {!pathname.includes("/site/") && (
+                  <Link className={s.header__item} to="/reviews">
+                    Відгуки
+                  </Link>
+                )}
 
-            {!!user.id && (
-              <Link to="/gallery" className={s.header__item}>
-                ГАЛЕРЕЯ
-              </Link>
-            )}
-            {!!user.id && (
-              <Link to="/sites" className={s.header__item}>
-                МОЇ САЙТИ
-              </Link>
-            )}
-            {/*<a className={s.header__item} href="http://panel.topfractal.com/">*/}
-            {/*  ПАНЕЛЬ УПРАВЛІННЯ*/}
-            {/*</a>*/}
+                {!!user.id && (
+                  <Link to="/gallery" className={s.header__item}>
+                    Галерея
+                  </Link>
+                )}
+                {!!user.id && (
+                  <Link to="/sites" className={s.header__item}>
+                    Мої сайти
+                  </Link>
+                )}
+              </div>
+            </div>
+            <div className={s.action__container}>
+              {user.id ? (
+                <Link to="/profile" className={s.header__item}>
+                  Профіль
+                </Link>
+              ) : (
+                <Link to="/login" className={s.header__item}>
+                  Увійти
+                </Link>
+              )}
+              {isCreateButtonVisible && (
+                <Link to="/select-template">
+                  <Button
+                    size="lg"
+                    title="Створити"
+                    className={s.create__btn}
+                  />
+                </Link>
+              )}
+            </div>
           </div>
-        </div>
-        <div className={s.action__container}>
-          <Select
-            options={languageOptions}
-            containerClass={s.language__select}
-            value={lang}
-            onSelect={onLanguageSelect}
-            noDefaultValue
-            valueContainerClass={s.language__value__container}
-            menuClass={s.language__select__menu}
-          />
-          {user.id ? (
-            <Link to="/profile" className={s.header__item}>
-              Профіль
-            </Link>
-          ) : (
-            <Link to="/login" className={s.header__item}>
-              Увійти
-            </Link>
+          {isHomeScreen && (
+            <div className={s.home__header__inner}>
+              <img
+                src={require("../../assets/home-header.png")}
+                alt="loading"
+                className={s.home__header__image}
+              />
+              <div className={s.home__header__main__content}>
+                <h1 className={s.home__header__title}>
+                  Streamline Your Social Media And Content Marketing
+                </h1>
+                <p className={s.home__header__desc}>
+                  Powerful content marketing and social media management
+                  platform for publishers, brands, agencies and, startups who
+                  want to share the best content consistently and increase their
+                  reach.
+                </p>
+              </div>
+            </div>
           )}
+        </div>
+      </div>
+      <div className={`${s.header__container} ${s.mobile__header__container}`}>
+        <div className={s.mobile__header}>
+          <CSSTransition
+            in={isAnimation}
+            timeout={500}
+            classNames={{
+              enterActive: s.burger__icon__entering,
+              enterDone: s.burger__icon__entered,
+              exitActive: s.burger__icon__exiting,
+              exitDone: s.burger__icon__exited,
+            }}
+          >
+            {sidebarIcon ? (
+              <FaTimes
+                onClick={isBarOpen ? closeSidebar : openSidebar}
+                className={s.burger__icon}
+              />
+            ) : (
+              <FaBars
+                className={s.burger__icon}
+                onClick={isBarOpen ? closeSidebar : openSidebar}
+              />
+            )}
+          </CSSTransition>
           <Link to="/select-template">
             <Button title="Створити" className={s.create__btn} />
           </Link>
         </div>
-      </div>
-      <div className={s.mobile__header}>
-        <CSSTransition
-          in={isAnimation}
-          timeout={500}
-          classNames={{
-            enterActive: s.burger__icon__entering,
-            enterDone: s.burger__icon__entered,
-            exitActive: s.burger__icon__exiting,
-            exitDone: s.burger__icon__exited,
-          }}
-        >
-          {sidebarIcon ? (
-            <FaTimes
-              onClick={isBarOpen ? closeSidebar : openSidebar}
-              className={s.burger__icon}
+        {isHomeScreen && (
+          <div className={s.home__header__inner}>
+            {/*<Link to="/select-template">*/}
+            <Button size="lg" title="Створити" className={s.create__btn} />
+            {/*</Link>*/}
+            <img
+              src={require("../../assets/home-header.png")}
+              alt="loading"
+              className={s.home__header__image}
             />
-          ) : (
-            <FaBars
-              className={s.burger__icon}
-              onClick={isBarOpen ? closeSidebar : openSidebar}
-            />
-          )}
-        </CSSTransition>
-        <Link to="/select-template">
-          <Button title="Створити" className={s.create__btn} />
-        </Link>
+            <div className={s.home__header__main__content}>
+              <h1 className={s.home__header__title}>
+                Streamline Your Social Media And Content Marketing
+              </h1>
+              <p className={s.home__header__desc}>
+                Powerful content marketing and social media management platform
+                for publishers, brands, agencies and, startups who want to share
+                the best content consistently and increase their reach.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       <Menu
@@ -160,13 +232,14 @@ const Header = ({ user, history, content, changeLanguage }) => {
         itemClassName={s.mobile__nav__item}
         onStateChange={onStateMenuChange}
       >
-        <Link to="/" className={s.mobile__logo__container}>
-          <img
-            src={require("../../assets/logo.png")}
-            className={s.mobile__logo}
-            alt="logo"
-          />
-        </Link>
+        {/*<Link to="/" className={s.mobile__logo__container}>*/}
+        {/*    <img*/}
+        {/*        src={require("../../assets/logo.png")}*/}
+        {/*        className={s.mobile__logo}*/}
+        {/*        alt="logo"*/}
+        {/*    />*/}
+        {/*</Link>*/}
+        <FaTimes className={s.close__icon__mobile} onClick={closeSidebar} />
         <Link to="/">ГОЛОВНА</Link>
         <Link to="/about-us">ПРО НАС</Link>
         <Link to="/tariffs">ТАРИФИ</Link>

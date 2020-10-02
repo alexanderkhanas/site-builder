@@ -9,6 +9,12 @@
 
 .buttons__container {
     display: flex;
+    justify-content: space-around;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
 }
 
 .container {

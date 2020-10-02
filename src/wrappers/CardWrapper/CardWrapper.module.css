@@ -1,10 +1,14 @@
 .container.wrapper{
     transition: 0.2s;
     margin-bottom: 20px;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 2.5px 24.3px 50px 0 rgba(206,217,227,.5);
 }
 
 .container {
-    flex-basis: 32%;
+    flex-basis: 30%;
+    background: #fff;
 }
 
 .container.wrapper:hover {

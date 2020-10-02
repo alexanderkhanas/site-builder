@@ -12,7 +12,7 @@ import FullPageLoader from "../../misc/FullPageLoader/FullPageLoader";
 import { ReactComponent as BiTrash } from "../../assets/trash.svg";
 import InputFile from "../../misc/InputFile/InputFile";
 
-const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
+const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery, content }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [isLoading, setLoading] = useState(true);
 
@@ -39,11 +39,12 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
   return !isLoading ? (
     <FixedWrapper>
       <div className={s.container}>
+        <h1 className={s.title}>{content.title}</h1>
         <CustomTabs
           tabListClass={s.tab__list}
           {...{ selectedTab }}
           {...{ setSelectedTab }}
-          tabs={["Логотипи", "Основні", "Про нас", "Команда", "Портфоліо"]}
+          tabs={[content.logo, content.main, content.about, content.team, content.img]}
         >
           {[...Array(5)].map((_, i) => {
             const [key, images] = Object.entries(gallery)[i] || [];
@@ -53,6 +54,7 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
                   onChange={(images) => onImageLoad(key, images)}
                   type="image"
                   multiple
+                  text={content.upload_button}
                   accept="image/*"
                   withPreview={false}
                   containerClass={s.upload__input}
@@ -74,7 +76,7 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
                       </div>
                     ))
                   ) : (
-                    <h3>Ви ще не завантажили фото для цієї категорії</h3>
+                    <h3>{content.no_images}</h3>
                   )}
                 </div>
               </div>
@@ -90,6 +92,7 @@ const Gallery = ({ deleteImage, uploadImage, getUserGallery, gallery }) => {
 
 const mapStateToProps = (state) => ({
   gallery: state.gallery,
+  content: state.content.page_content.gallery
 });
 const mapDispatchToProps = (dispatch) => ({
   getUserGallery: () => dispatch(getUserGalleryAction()),

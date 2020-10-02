@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import s from "./SiteSection.module.css";
 import Button from "../Button/Button";
 import classnames from "classnames";
@@ -16,7 +16,7 @@ const SiteSection = ({
 }) => {
   const { categoryID, element } = section || {};
 
-  const { demo: demoText } = content.home.page_content;
+  const { demo: demoText } = content.page_content.home;
 
   const onCheckboxChange = () => {
     if (isActive) {
@@ -53,13 +53,15 @@ const SiteSection = ({
           />
           <div className={s.element__main}>
             <h3 className={s.element__name}>{element.name}</h3>
-            <div>
-              <Button
-                title="Редагувати"
-                size="sm"
-                onClick={onEditClick}
-                className={s.element__button}
-              />
+            <div className={s.buttons}>
+              <div>
+                <Button
+                  title="Редагувати"
+                  size="md"
+                  onClick={onEditClick}
+                  className={s.element__button}
+                />
+              </div>
               <Button
                 title={demoText}
                 isSecondary

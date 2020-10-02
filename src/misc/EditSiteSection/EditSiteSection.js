@@ -18,7 +18,7 @@ import ImageSectionPicker from "../ImageSectionPicker/ImageSectionPicker";
 const EditSiteSection = ({
   section,
   setSectionVariation,
-  onEdit,
+  onEdit: saveState,
   hide,
   uploadImage,
   values = {},
@@ -28,39 +28,50 @@ const EditSiteSection = ({
   templateId,
 }) => {
   // const { id } = useParams();
+  const [changingState, setChangingState] = useState({});
 
+  const onEdit = (key, value) => {
+    setChangingState((prev) => ({...prev, [key]: value}))
+  }
+
+  const onSaveButtonClick = () => {
+    Object.entries(changingState).forEach(([key, value]) => {
+      saveState(section.categoryID, key, value)
+    });
+    hide();
+  }
   const templateImgs = images[templateId];
 
   const addGroupItem = (key, defaultValue) => {
-    onEdit(section.categoryID, key, [...values[key], defaultValue]);
+    onEdit(key, [...changingState[key], defaultValue]);
   };
 
   const deleteGroupItem = (key, index) => {
-    if (values[key]?.length <= 1) return;
-    const editedArray = [...values[key]].filter((_, i) => i !== index);
-    onEdit(section.categoryID, key, editedArray);
+    if (changingState[key?.length] <= 1) return;
+    const editedArray = [...changingState[key]].filter((_, i) => i !== index);
+    onEdit(key, editedArray);
   };
 
   const onArrayItemChangeText = (value, index, key) => {
-    const temp = [...values[key]];
+    const temp = [...changingState[key]];
     temp[index] = value;
-    onEdit(section.categoryID, key, temp);
+    onEdit(key, temp);
   };
 
   const onGroupInputChange = (value, index, key, type) => {
     const temp = [...values[type]];
     temp[index][key] = value;
-    onEdit(section.categoryID, type, temp);
+    onEdit(type, temp);
   };
 
   const onReviewChange = (value, index, key) => {
     const temp = [...values.reviews];
     temp[index][key] = value;
-    onEdit(section.categoryID, "reviews", temp);
+    onEdit("reviews", temp);
   };
 
   const onSingleImageSelect = (img, key) => {
-    onEdit(section.categoryID, key, img);
+    onEdit(key, img);
   };
 
   const onMultipleImagesSelect = (img, key, selectedImages, isSelected) => {
@@ -71,7 +82,7 @@ const EditSiteSection = ({
         selectedImages.filter((selectedImage) => selectedImage !== img)
       );
     } else {
-      onEdit(section.categoryID, key, [...selectedImages, img]);
+      onEdit(key, [...selectedImages, img]);
     }
   };
 
@@ -86,7 +97,7 @@ const EditSiteSection = ({
     const { data } = response;
     temp[index][key] = data?.url[0];
     if (data?.url) {
-      onEdit(section.categoryID, "teams", temp);
+      onEdit("teams", temp);
     }
   };
 
@@ -101,7 +112,7 @@ const EditSiteSection = ({
     const { data } = response;
     temp[index][key] = data?.url[0];
     if (data?.url) {
-      onEdit(section.categoryID, "social", temp);
+      onEdit("social", temp);
     }
   };
 
@@ -127,9 +138,10 @@ const EditSiteSection = ({
     const response = await fetchRefreshedText(templateId, "ua", type);
     if (response?.status === 200) {
       const { desc } = response.data.text;
-      onEdit(section.categoryID, type, desc);
+      onEdit(type, desc);
     }
   };
+
 
   useEffect(() => {
     section.categoryParameters.forEach((parameter) => {
@@ -139,10 +151,16 @@ const EditSiteSection = ({
         return;
       }
       if (type === "textareaArray" || type === "textArray") {
-        onEdit(section.categoryID, key, [""]);
+        onEdit(key, [""]);
       }
     });
   }, [section]);
+
+  useEffect(() => {
+    setChangingState(values)
+  }, [values])
+
+  console.log("changing state ===", changingState)
 
   return (
     <>
@@ -172,10 +190,10 @@ const EditSiteSection = ({
           const inputProps = {
             containerClass: s.field__container,
             label: name,
-            value: values[key],
+            value: changingState[key],
             key: `${id}${i}${name}`,
             onChange: ({ target: { value } }) => {
-              onEdit(section.categoryID, key, value);
+              onEdit(key, value);
             },
             isTextarea: type === "textarea" || type === "textareaArray",
             type: type.startsWith("color") ? "color" : "text",
@@ -217,12 +235,12 @@ const EditSiteSection = ({
                 <p className={s.label}>{name}</p>
                 {type === "img" ? (
                   <img
-                    src={`https://topfractal.com/${values[key]}`}
+                    src={`https://topfractal.com/${changingState[key]}`}
                     className={`${s.image} ${s.image__active}`}
                     alt="loading"
                   />
                 ) : (
-                  values[key].map((img, imgIndex) => {
+                  changingState[key]?.map((img, imgIndex) => {
                     return (
                       <img
                         src={`https://topfractal.com/${img}`}
@@ -240,7 +258,7 @@ const EditSiteSection = ({
                         onMultipleImagesSelect(
                           img,
                           key,
-                          values[key] || [],
+                            changingState[key] || [],
                           isSelected
                         );
                         return;
@@ -248,7 +266,7 @@ const EditSiteSection = ({
                       onSingleImageSelect(img, key);
                     }}
                     activeImages={
-                      type === "imgArray" ? values[key] || [] : [values[key]]
+                      type === "imgArray" ? changingState[key] || [] : [changingState[key]]
                     }
                     userImages={templateImgs[key]?.user}
                     adminImages={templateImgs[key]?.admin}
@@ -262,7 +280,7 @@ const EditSiteSection = ({
           if (type === "textArray") {
             return (
               <div className={s.field__container}>
-                {values[key]?.map((_, i) => (
+                {changingState[key]?.map((_, i) => (
                   <Input
                     {...inputProps}
                     onChange={({ target: { value } }) => {
@@ -276,7 +294,7 @@ const EditSiteSection = ({
                   className={s.add__button}
                   isRound
                   onClick={() => {
-                    onEdit(section.categoryID, key, [...values[key], ""]);
+                    onEdit(key, [...changingState[key], ""]);
                   }}
                 >
                   <AiOutlinePlus className={s.icon} />
@@ -287,10 +305,10 @@ const EditSiteSection = ({
           if (type === "textareaArray") {
             return (
               <div className={s.field__container}>
-                {values[key]?.map((_, i) => (
+                {changingState[key]?.map((_, i) => (
                   <Input
                     {...inputProps}
-                    value={values[key][i]}
+                    value={changingState[key][i]}
                     onChange={({ target: { value } }) => {
                       onArrayItemChangeText(value, i, key);
                     }}
@@ -302,7 +320,7 @@ const EditSiteSection = ({
                   className={s.add__button}
                   isRound
                   onClick={() => {
-                    onEdit(section.categoryID, key, [...values[key], ""]);
+                    onEdit(key, [...changingState[key], ""]);
                   }}
                 >
                   <AiOutlinePlus className={s.icon} />
@@ -314,7 +332,7 @@ const EditSiteSection = ({
             return (
               <div className={s.field__container}>
                 <div className={s.field}>
-                  {values.reviews.map((review, i) => (
+                  {changingState.reviews?.map((review, i) => (
                     <div className={s.group}>
                       <div className={s.group__main__content}>
                         <div className={s.field__container} key={`${type}${i}`}>
@@ -361,7 +379,7 @@ const EditSiteSection = ({
             return (
               <div className={s.field__container}>
                 <div className={s.field}>
-                  {values.teams.map((team, i) => {
+                  {changingState.teams?.map((team, i) => {
                     return (
                       <div className={s.group} key={`${type}${i}`}>
                         <div className={s.group__main__content}>
@@ -424,7 +442,7 @@ const EditSiteSection = ({
               <div className={s.field__container}>
                 <h4 className={s.section__subtitle}>Соціальні мережі</h4>
                 <div className={s.field}>
-                  {values.social.map((socialObj, i) => (
+                  {changingState.social?.map((socialObj, i) => (
                     <div className={s.group} key={`${type}${i}`}>
                       <div className={s.group__main__content}>
                         <InputFile
@@ -441,10 +459,11 @@ const EditSiteSection = ({
                           {...inputProps}
                           isTextarea
                           onChange={({ target: { value } }) => {
-                            onGroupInputChange(value, i, "url", key);
+                            onGroupInputChange(value, i, "value", key);
                           }}
+                          placeholder={socialObj.placeholder}
                           label="Посилання на соціальну мережу"
-                          value={socialObj.url}
+                          value={socialObj.value}
                         />
                         <Input
                           {...inputProps}
@@ -478,6 +497,9 @@ const EditSiteSection = ({
           }
           return <div />;
         })}
+        <div className={s.buttons}>
+          <Button onClick={onSaveButtonClick} size="lg" className={s.save__button} title="Зберегти" />
+        </div>
       </div>
       <div className={s.overlay} onClick={hide} />
     </>

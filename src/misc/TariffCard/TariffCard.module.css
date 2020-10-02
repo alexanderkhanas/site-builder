@@ -1,7 +1,6 @@
 .container {
     display: flex;
     flex-direction: column;
-    flex-basis: 32%;
     background: #fff;
     justify-content: space-between;
     padding-bottom: 30px;
@@ -14,12 +13,10 @@
 
 .header {
     padding: 30px;
-    background: #51608a;
+    background: #4048f0;
 }
 
 .header__primary {
-    background: #1F2C4F;
-
 }
 
 .title {

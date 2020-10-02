@@ -22,7 +22,7 @@
     content:'';
     -webkit-appearance: none;
     background-color: transparent;
-    border: 2px solid #0079bf;
+    border: 2px solid #2dd87e;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
     padding: 10px;
     display: inline-block;
@@ -39,7 +39,7 @@
     left: 9px;
     width: 6px;
     height: 14px;
-    border: solid #0079bf;
+    border: solid  #2dd87e;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }

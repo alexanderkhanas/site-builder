@@ -1,7 +1,8 @@
 .container {
     margin: 0 0 15px 0;
     /*transition: 0.2s;*/
-    box-shadow: 5px 5px 20px #40404000;
+    /*box-shadow: 5px 5px 20px #40404000;*/
+    border-radius: 15px;
 }
 
 .container:last-child {
@@ -9,13 +10,14 @@
 }
 
 .container__active {
-    box-shadow: 5px 5px 20px #40404030;
+    box-shadow: 2.5px 10.3px 50px 0 rgba(206,217,227,.5);
 }
 
 
 .element {
     padding: 20px 40px;
     background: #fff;
+    border-radius: 15px;
     display: flex;
 
     cursor: pointer;
@@ -96,6 +98,10 @@
     border: solid #0079bf;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
+}
+
+.buttons {
+    display: flex;
 }
 
 @media (max-width: 550px) {

@@ -13,6 +13,7 @@
     background: #fff;
     border-radius: 40px;
     overflow: hidden;
+    box-shadow: 2.5px 24.3px 50px 0 rgba(206,217,227,.5);
 }
 
 .input__container {
@@ -39,7 +40,7 @@
 }
 
 .save__profile__btn {
-    background-color: #1F2C4F;
+    background: linear-gradient(252deg,#2dd87e,#14c4a4);
     border: none;
     border-radius: 0 0 40px 40px;
     padding: 10px 20px;
@@ -69,7 +70,7 @@
     bottom: -100%;
     left: 0;
     z-index: 20;
-    background-color: #51608a;
+    background: linear-gradient(200deg,#2dd87e,#14c4a4);
     transition: 0.2s ease;
     display: flex;
     align-items: center;
