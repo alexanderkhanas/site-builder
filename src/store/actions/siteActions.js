@@ -129,37 +129,39 @@ export const getSectionVariationsAction = (sectionId, templateId) => {
 
 export const createServiceAction = (service) => {
   return (dispatch, getState) => {
-    postService(service)
+    return postService(service)
       .then((res) => {
-        const { sections } = getState().site;
-        const editedSections = sections.map((section) => {
-          const categoryParameters = section.categoryParameters.map((param) => {
-            return param.key === "servicesList"
-              ? { ...param, value: res.data.services }
-              : param;
-          });
-          return { ...section, categoryParameters };
-        });
-        dispatch({ type: SET_ELEMENTS, elements: editedSections });
+        // const { sections } = getState().site;
+        // const editedSections = sections.map((section) => {
+        //   const categoryParameters = section.categoryParameters.map((param) => {
+        //     return param.key === "servicesList"
+        //       ? { ...param, value: res.data.services }
+        //       : param;
+        //   });
+        //   return { ...section, categoryParameters };
+        // });
+        return res.data.service;
+        // dispatch({ type: SET_ELEMENTS, elements: editedSections });
       })
-      .catch(console.error);
+      .catch(() => false);
   };
 };
 
 export const createAdvantageAction = (advantage) => {
   return async (dispatch, getState) => {
-    postAdvantage(advantage)
+    return postAdvantage(advantage)
       .then((res) => {
-        const { sections } = getState().site;
-        const editedSections = sections.map((section) => {
-          const categoryParameters = section.categoryParameters.map((param) => {
-            return param.key === "benefitList"
-              ? { ...param, value: res.data.benefits }
-              : param;
-          });
-          return { ...section, categoryParameters };
-        });
-        dispatch({ type: SET_ELEMENTS, elements: editedSections });
+        return res.data.benefit;
+        // const { sections } = getState().site;
+        // const editedSections = sections.map((section) => {
+        //   const categoryParameters = section.categoryParameters.map((param) => {
+        //     return param.key === "benefitList"
+        //       ? { ...param, value: res.data.benefits }
+        //       : param;
+        //   });
+        //   return { ...section, categoryParameters };
+        // });
+        // dispatch({ type: SET_ELEMENTS, elements: editedSections });
       })
       .catch(console.error);
   };

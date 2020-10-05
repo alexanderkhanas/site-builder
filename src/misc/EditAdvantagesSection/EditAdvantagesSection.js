@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import s from "./EditAdvantagesSection.module.css";
 import { connect } from "react-redux";
 import classnames from "classnames";
@@ -27,19 +27,17 @@ const EditAdvantagesSection = ({
   const [changingState, setChangingState] = useState({});
 
   const onEdit = (key, value) => {
-    setChangingState((prev) => ({...prev, [key]: value}))
-  }
+    setChangingState((prev) => ({ ...prev, [key]: value }));
+  };
 
   const onSaveButtonClick = () => {
     Object.entries(changingState).forEach(([key, value]) => {
-      saveState(section.categoryID, key, value)
+      saveState(section.categoryID, key, value);
     });
     hide();
-  }
+  };
 
-  const {
-    benefitList: selectedAdvantages,
-  } = changingState;
+  const { benefitList: selectedAdvantages } = changingState;
 
   const benefitList = useMemo(() => {
     return section.categoryParameters.find(
@@ -47,10 +45,10 @@ const EditAdvantagesSection = ({
     );
   }, [section]);
 
-  const [selectedParentsIds, selectedAdvantagesIds ] = useMemo(() => {
+  const [selectedParentsIds, selectedAdvantagesIds] = useMemo(() => {
     const tempParentsIds = [];
     const tempChildrenIds = [];
-    console.log("selected advantages ===", selectedAdvantages)
+    console.log("selected advantages ===", selectedAdvantages);
     if (selectedAdvantages?.length) {
       selectedAdvantages.forEach(({ id, children, parent_id: parentId }) => {
         tempParentsIds.push(parentId);
@@ -61,14 +59,13 @@ const EditAdvantagesSection = ({
     return [tempParentsIds, tempChildrenIds];
   }, [selectedAdvantages]);
 
-
   const onAdvantageCheckboxChange = (child, img, value) => {
     const { parent_id: parentId } = child;
     if (value && selectedParentsIds.includes(parentId)) {
       const temp = selectedAdvantages.filter((advantage) => {
         return advantage.parent_id !== parentId;
       });
-      onEdit( "benefitList", [...temp, { ...child, img }]);
+      onEdit("benefitList", [...temp, { ...child, img }]);
       return;
     }
 
@@ -76,20 +73,20 @@ const EditAdvantagesSection = ({
       const temp = selectedAdvantages.filter((advantage) => {
         return advantage.id !== child.id;
       });
-      onEdit( "benefitList", temp);
+      onEdit("benefitList", temp);
       return;
     }
 
-    onEdit( "benefitList", [
+    onEdit("benefitList", [
       ...selectedAdvantages,
       { ...child, img, parent_id: parentId },
     ]);
   };
 
   useEffect(() => {
-    const {parameters} = section.element || {}
+    const { parameters } = section.element || {};
     if (parameters) {
-      setChangingState(parameters)
+      setChangingState(parameters);
     }
   }, [section]);
 
@@ -124,7 +121,7 @@ const EditAdvantagesSection = ({
                 placeholder={name}
                 key={id}
                 onChange={({ target: { value } }) => {
-                  onEdit( key, value);
+                  onEdit(key, value);
                 }}
               />
             )
@@ -159,11 +156,12 @@ const EditAdvantagesSection = ({
                     <Formik
                       initialValues={{ name: "" }}
                       onSubmit={async (values, { resetForm }) => {
-                        await createAdvantage({
+                        const benefit = await createAdvantage({
                           parent_id: id,
                           value: values.name,
                           lang: "ua",
                         });
+                        onAdvantageCheckboxChange(benefit, img, true);
                         resetForm({ name: "" });
                       }}
                     >
@@ -188,7 +186,12 @@ const EditAdvantagesSection = ({
           </Accordion>
         </div>
         <div className={s.buttons}>
-          <Button onClick={onSaveButtonClick} size="lg" className={s.save__button} title="Зберегти" />
+          <Button
+            onClick={onSaveButtonClick}
+            size="lg"
+            className={s.save__button}
+            title="Зберегти"
+          />
         </div>
       </div>
       <div className={s.overlay} onClick={hide} />

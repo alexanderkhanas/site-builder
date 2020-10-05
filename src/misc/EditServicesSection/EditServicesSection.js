@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import s from "./EditServicesSection.module.css";
 import { connect } from "react-redux";
 import classnames from "classnames";
@@ -16,7 +16,7 @@ import Button from "../Button/Button";
 import { Formik } from "formik";
 import { createServiceAction } from "../../store/actions/siteActions";
 import { ReactComponent as FaTimes } from "../../assets/times.svg";
-import {postPdf} from "../../store/api/api";
+import { postPdf } from "../../store/api/api";
 
 const EditServicesSection = ({
   sectionsVariations,
@@ -26,26 +26,24 @@ const EditServicesSection = ({
   onEdit: saveState,
   createService,
 }) => {
-  const [changingState, setChangingState] = useState({})
+  const [changingState, setChangingState] = useState({});
 
   const onEdit = (key, value) => {
-    setChangingState((prev) => ({...prev, [key]: value}))
-  }
+    setChangingState((prev) => ({ ...prev, [key]: value }));
+  };
 
   const onSaveButtonClick = () => {
     Object.entries(changingState).forEach(([key, value]) => {
-      saveState(section.categoryID, key, value)
+      saveState(section.categoryID, key, value);
     });
     hide();
-  }
+  };
 
   const servicesList = useMemo(() => {
     return section.categoryParameters.find(({ key }) => key === "servicesList");
   }, [section]);
 
-  const {
-    servicesList: selectedServices,
-  } = changingState;
+  const { servicesList: selectedServices } = changingState;
 
   const [selectedParentsIds, selectedChildrenIds] = useMemo(() => {
     const tempParentsIds = [];
@@ -74,10 +72,10 @@ const EditServicesSection = ({
   };
 
   const onPdfLoad = async (file) => {
-    postPdf({InputFile: file}).then((res) => {
-      onEdit("pdfFile", res.data)
-    })
-  }
+    postPdf({ InputFile: file }).then((res) => {
+      onEdit("pdfFile", res.data);
+    });
+  };
 
   const removeChild = (parent, child) => {
     const parentCopy = { ...parent };
@@ -145,9 +143,9 @@ const EditServicesSection = ({
   };
 
   useEffect(() => {
-    const {parameters} = section.element || {}
+    const { parameters } = section.element || {};
     if (parameters) {
-      setChangingState(parameters)
+      setChangingState(parameters);
     }
   }, [section]);
 
@@ -184,7 +182,7 @@ const EditServicesSection = ({
             return (
               <InputFile
                 {...inputProps}
-                  type="pdf"
+                type="pdf"
                 onChange={(value) => {
                   onPdfLoad(value);
                 }}
@@ -241,11 +239,13 @@ const EditServicesSection = ({
                     <Formik
                       initialValues={{ name: "" }}
                       onSubmit={async (values, { resetForm }) => {
-                        await createService({
+                        const service = await createService({
                           parent_id: parent.id,
                           value: values.name,
                           lang: "ua",
                         });
+                        onChildSelected(service, parent, true);
+
                         resetForm({ name: "" });
                       }}
                     >
@@ -270,7 +270,12 @@ const EditServicesSection = ({
           </Accordion>
         </div>
         <div className={s.buttons}>
-          <Button onClick={onSaveButtonClick} size="lg" className={s.save__button} title="Зберегти" />
+          <Button
+            onClick={onSaveButtonClick}
+            size="lg"
+            className={s.save__button}
+            title="Зберегти"
+          />
         </div>
       </div>
       <div className={s.overlay} onClick={hide} />
