@@ -1,4 +1,5 @@
 export const SET_USER = "SET_USER";
+export const ADD_DEFAULT_IMAGE = "ADD_DEFAULT_IMAGE";
 export const CLEAR_USER = "CLEAR_USER";
 export const SET_LOGGING = "SET_LOGGING";
 export const SET_USER_AVATAR = "SET_USER_AVATAR";

@@ -12,7 +12,10 @@ import { ReactComponent as BiTrash } from "../../assets/trash.svg";
 import { fetchRefreshedText, postImage } from "../../store/api/api";
 import Button from "../Button/Button";
 import PhoneNumberInput from "../PhoneNumberinput/PhoneNumberInput";
-import { getDefaultImagesAction } from "../../store/actions/siteActions";
+import {
+  addDefaultImageAction,
+  getDefaultImagesAction,
+} from "../../store/actions/siteActions";
 import ImageSectionPicker from "../ImageSectionPicker/ImageSectionPicker";
 
 const EditSiteSection = ({
@@ -26,6 +29,7 @@ const EditSiteSection = ({
   getDefaultImages,
   images,
   templateId,
+  addDefaultImage,
 }) => {
   // const { id } = useParams();
   const [changingState, setChangingState] = useState({});
@@ -123,6 +127,13 @@ const EditSiteSection = ({
     });
     formData.append("type", type);
     const data = await uploadImage(formData, type);
+    addDefaultImage(
+      Array.isArray(data?.url) && data?.url.length === 1
+        ? data?.url[0]
+        : data?.url,
+      type,
+      templateId
+    );
     if (data?.url) {
       onEdit(
         section.categoryID,
@@ -522,6 +533,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(uploadImageAction(imageFormData, type)),
   getDefaultImages: (templateId, type) =>
     dispatch(getDefaultImagesAction(templateId, type)),
+  addDefaultImage: (image, type, templateId) =>
+    dispatch(addDefaultImageAction(image, type, templateId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditSiteSection);

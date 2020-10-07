@@ -1,4 +1,5 @@
 import {
+  ADD_DEFAULT_IMAGE,
   SET_DEFAULT_IMAGES,
   SET_DIRECTIONS,
   SET_EDITING_SITE,
@@ -71,6 +72,10 @@ export default (state = initialState, action) => {
           },
         },
       };
+    case ADD_DEFAULT_IMAGE:
+      let copy = { ...state };
+      copy.images[action.templateId][action.key].push(action.image);
+      return copy;
     default:
       return state;
   }

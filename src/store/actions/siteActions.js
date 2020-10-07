@@ -27,6 +27,7 @@ import {
   SET_DEFAULT_IMAGES,
   ADD_USER_SITE,
   REPLACE_USER_SITE,
+  ADD_DEFAULT_IMAGE,
 } from "./actionTypes";
 import rootReducer from "../reducers/rootReducer";
 
@@ -179,6 +180,15 @@ export const getDefaultImagesAction = (templateId, type) => {
         key: type,
       });
     });
+  };
+};
+
+export const addDefaultImageAction = (image, type, templateId) => {
+  return {
+    type: ADD_DEFAULT_IMAGE,
+    templateId,
+    image,
+    key: type,
   };
 };
 
