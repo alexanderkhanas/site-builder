@@ -11,6 +11,7 @@ import {
   registerRequest,
 } from "../api/api";
 import {
+  ADD_USER_IMAGES,
   CLEAR_USER,
   SET_LOGGING,
   SET_USER,
@@ -58,15 +59,16 @@ export const googleLoginAction = (data) => {
 
 export const registerAction = (data) => {
   return async (dispatch, getState) => {
-    const {lang} = getState().content
-    return registerRequest({...data, lang}, ).then((res) => {
+    const { lang } = getState().content;
+    return registerRequest({ ...data, lang })
+      .then((res) => {
         const { user, token } = res.data;
         localStorage.setItem("_token", token);
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
         dispatch({ type: SET_USER, user });
-        return true
-    }).catch(() => false)
-
+        return true;
+      })
+      .catch(() => false);
   };
 };
 
@@ -84,10 +86,11 @@ export const getUserAction = () => {
   };
 };
 
-export const uploadImageAction = (imageFormData) => {
+export const uploadImageAction = (imageFormData, type) => {
   return async (dispatch) => {
     const response = await postImage(imageFormData);
     if (response.status === 200) {
+      dispatch({ type: ADD_USER_IMAGES, images: response.data.url, key: type });
     }
     return response?.data;
   };

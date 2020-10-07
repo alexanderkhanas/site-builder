@@ -31,15 +31,15 @@ const EditSiteSection = ({
   const [changingState, setChangingState] = useState({});
 
   const onEdit = (key, value) => {
-    setChangingState((prev) => ({...prev, [key]: value}))
-  }
+    setChangingState((prev) => ({ ...prev, [key]: value }));
+  };
 
   const onSaveButtonClick = () => {
     Object.entries(changingState).forEach(([key, value]) => {
-      saveState(section.categoryID, key, value)
+      saveState(section.categoryID, key, value);
     });
     hide();
-  }
+  };
   const templateImgs = images[templateId];
 
   const addGroupItem = (key, defaultValue) => {
@@ -122,7 +122,7 @@ const EditSiteSection = ({
       formData.append("imageFile[]", image);
     });
     formData.append("type", type);
-    const data = await uploadImage(formData);
+    const data = await uploadImage(formData, type);
     if (data?.url) {
       onEdit(
         section.categoryID,
@@ -142,7 +142,6 @@ const EditSiteSection = ({
     }
   };
 
-
   useEffect(() => {
     section.categoryParameters.forEach((parameter) => {
       const { type, key } = parameter;
@@ -157,10 +156,10 @@ const EditSiteSection = ({
   }, [section]);
 
   useEffect(() => {
-    setChangingState(values)
-  }, [values])
+    setChangingState(values);
+  }, [values]);
 
-  console.log("changing state ===", changingState)
+  console.log("changing state ===", changingState);
 
   return (
     <>
@@ -258,7 +257,7 @@ const EditSiteSection = ({
                         onMultipleImagesSelect(
                           img,
                           key,
-                            changingState[key] || [],
+                          changingState[key] || [],
                           isSelected
                         );
                         return;
@@ -266,7 +265,9 @@ const EditSiteSection = ({
                       onSingleImageSelect(img, key);
                     }}
                     activeImages={
-                      type === "imgArray" ? changingState[key] || [] : [changingState[key]]
+                      type === "imgArray"
+                        ? changingState[key] || []
+                        : [changingState[key]]
                     }
                     userImages={templateImgs[key]?.user}
                     adminImages={templateImgs[key]?.admin}
@@ -498,7 +499,12 @@ const EditSiteSection = ({
           return <div />;
         })}
         <div className={s.buttons}>
-          <Button onClick={onSaveButtonClick} size="lg" className={s.save__button} title="Зберегти" />
+          <Button
+            onClick={onSaveButtonClick}
+            size="lg"
+            className={s.save__button}
+            title="Зберегти"
+          />
         </div>
       </div>
       <div className={s.overlay} onClick={hide} />
@@ -512,7 +518,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  uploadImage: (imageFormData) => dispatch(uploadImageAction(imageFormData)),
+  uploadImage: (imageFormData, type) =>
+    dispatch(uploadImageAction(imageFormData, type)),
   getDefaultImages: (templateId, type) =>
     dispatch(getDefaultImagesAction(templateId, type)),
 });
